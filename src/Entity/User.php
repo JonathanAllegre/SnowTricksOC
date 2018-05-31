@@ -3,72 +3,92 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity
+ * @UniqueEntity(fields="email", message="Email already taken")
+ * @UniqueEntity(fields="username", message="Username already taken")
  * @ORM\Table(name="app_users")
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
      * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
      */
     private $username;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     */
+    private $plainPassword;
+
+    /**
+     * The below length depends on the "algorithm" you use for encoding
+     * the password, but this works well with bcrypt.
+     *
      * @ORM\Column(type="string", length=64)
      */
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=254, unique=true)
+     * @ORM\Column(type="array")
      */
-    private $email;
-
-    /**
-     * @ORM\Column(name="is_active", type="boolean")
-     */
-    private $isActive;
+    private $roles;
 
     public function __construct()
     {
-        $this->isActive = true;
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid('', true));
+        $this->roles = array('ROLE_USER');
     }
 
+    // other properties and methods
 
-
-    public function getId()
+    public function getEmail()
     {
-        return $this->id;
+        return $this->email;
     }
 
-    public function getUsername(): ?string
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    public function getUsername()
     {
         return $this->username;
     }
 
-    public function setUsername(string $username): self
+    public function setUsername($username)
     {
         $this->username = $username;
-
-        return $this;
     }
 
-    public function getSalt()
+    public function getPlainPassword()
     {
-        // you *may* need a real salt depending on your encoder
-        // see section on salt below
-        return null;
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
     }
 
     public function getPassword()
@@ -76,70 +96,24 @@ class User implements UserInterface, \Serializable
         return $this->password;
     }
 
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function getSalt()
+    {
+        // The bcrypt and argon2i algorithms don't require a separate salt.
+        // You *may* need a real salt if you choose a different encoder.
+        return null;
+    }
+
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return $this->roles;
     }
 
     public function eraseCredentials()
     {
     }
-
-    /** @see \Serializable::serialize() */
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-            $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt,
-        ));
-    }
-
-    /** @see \Serializable::unserialize() */
-    public function unserialize($serialized)
-    {
-        list (
-            $this->id,
-            $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt
-            ) = unserialize($serialized, ['allowed_classes' => false]);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param mixed $email
-     */
-    public function setEmail($email): void
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getisActive()
-    {
-        return $this->isActive;
-    }
-
-    /**
-     * @param mixed $isActive
-     */
-    public function setIsActive($isActive): void
-    {
-        $this->isActive = $isActive;
-    }
-
-
 }
