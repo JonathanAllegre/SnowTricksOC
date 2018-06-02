@@ -20,7 +20,7 @@ security:
             provider: db_provider
             logout:
                 path: /logout
-                target: /home
+                target: /
 
             # activate different ways to authenticate
 
