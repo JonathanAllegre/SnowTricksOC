@@ -1,17 +1,47 @@
 <!-- NAV FOOTER DESKTOP -->
-<nav class="navbar fixed-bottom navbar-dark navbBlack" id="navBottomDesktop">
+<div class="col-12 fixed-bottom navbBlack text-center" id="navBottomDesktop">
+    <div class="linkCopirighFooter"><a href="#" class="linkCopirighFooter">Copiright © 2018</a></div>
+</div>
+<!--
+<nav class="navbar fixed-bottom navbar-dark navbBlack text-center" id="navBottomDesktop">
     <ul class="navbar-nav text-center">
         <li class="nav-item">
             <a href="#tricks">Copiright © 2018</a>
         </li>
     </ul>
 </nav>
+-->
 <!-- NAV FOOTER MOBIL -->
-<nav class="navbar fixed-bottom navbar-dark navbBlack text-center" id="navBottomMobil">
-    <ul class="navbar-nav">
+<div class="col-12 fixed-bottom navbBlack text-center" id="navBottomMobil">
+    <div class="row">
+        <div class="col-4 text-center">
+            <a href="{{ path('home') }}"><i class="fas fa-home fa-2x"></i></a>
+        </div>
+        <div class="col-4 text-center">
+            <a href="kjm"><i class="fas fa-bookmark fa-2x"></i></a>
+        </div>
+        <div class="col-4 text-center">
+            <a href="{{ path('user_registration') }}"><i class="fas fa-sign-in-alt fa-2x"></i></a>
+        </div>
+    </div>
+        <!--
+        <div class="offset-2 col-1">
+            <a href="kjm"><i class="fas fa-home fa-2x"></i></a>
+        </div>
+        <div class="offset-2 col-1">
+            <a href="kjm"><i class="fas fa-bookmark fa-2x"></i></a>
+        </div>
+        <div class="offset-2 col-1">
+            <a href="kjm"><i class="fas fa-sign-in-alt fa-2x"></i></a>
+        </div>
+    </div>
+    -->
+
+    <!--
+    <ul class="navbar-nav ulPictoFooter">
         <ul class="list-inline listMobilFooter text-center">
             <li class="list-inline-item">
-                <a href="kjm"><i class="fas fa-home fa-1x"></i></a>
+
             </li>
             <li class="list-inline-item">
                 <a href="kjm"><i class="fas fa-bookmark fa-1x"></i></a>
@@ -21,4 +51,5 @@
             </li>
         </ul>
     </ul>
-</nav>
+    -->
+</div>

@@ -36,6 +36,30 @@ a:hover{
     margin-bottom:50px;
 }
 
+/* FOOTER */
 #navBottomMobil{
     text-align:center;
+    min-height:40px;
+}
+#navBottomDesktop{
+    text-align:center;
+    min-height:40px;
+}
+.linkCopirighFooter{
+    margin-top:10px;
+}
+.ulPictoFooter{
+    padding-top:8px;
+}
+.listMobilFooter a{
+    margin-right:60px;
+}
+#navBottomMobil>.row{
+    margin-top:5px;
+}
+
+@media (min-width: 1200px) {
+    #navBottomMobil{
+        display:none;
+    }
 }
