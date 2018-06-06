@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}SnowTricksOC - Créer un compte{% endblock %}
-
+{% block css %}<link rel="stylesheet" href="{{ asset('custom/register/style.css') }}">{% endblock %}
 {% form_theme form _self %}
 
 {# form_errors.html.twig #}
@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="col-12 text-center">
-        <div class="offset-4 col-4">
+        <div class="offset-xl-4 col-xl-4 offset-sm-0 col-sm-12">
             <h1 class="h3 mb-3 font-weight-normal">Créer mon compte</h1>
             <hr>
             {{ form_start(form, {'attr':{'class':'form-signin'}}) }}
@@ -54,7 +54,7 @@
                 {{ form_errors(form.plainPassword.second, {'attr' : {'class': 'form-text text-muted'}}) }}
             </div>
             <hr>
-            <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Créer mon compte !</button>
+            <button type="submit" class="btn btn-outline-secondary btn-lg">Créer mon compte !</button>
             {{ form_end(form) }}
 
         </div>

@@ -1,0 +1,41 @@
+/* ALL CSS */
+.spacertop50{
+    padding-top:50px;
+}
+.spacerBottom50{
+    padding-bottom: 50px;
+}
+
+.invalid{
+    color:red;
+    text-align: left;
+}
+.form-control{
+    border: solid 1px #567398;
+}
+
+a{
+    color:white;
+}
+a:hover{
+    color: #567398;
+}
+
+.listMobilFooter a{
+    margin-right:50px;
+}
+
+.nav-link{
+    cursor:pointer;
+}
+.navbBlack{
+    background-color: black;
+}
+.containerAcc{
+    margin-top:100px;
+    margin-bottom:50px;
+}
+
+#navBottomMobil{
+    text-align:center;
+}
