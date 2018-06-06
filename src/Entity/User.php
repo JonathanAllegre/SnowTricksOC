@@ -9,8 +9,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
- * @UniqueEntity(fields="email", message="Email already taken")
- * @UniqueEntity(fields="username", message="Username already taken")
+ * @UniqueEntity(fields="email", message="Email déjà enregistré")
+ * @UniqueEntity(fields="username", message="Utilisateur déjà enregistré")
  * @ORM\Table(name="app_users")
  */
 class User implements UserInterface
@@ -36,7 +36,7 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Ce message")
      * @Assert\Length(max=4096)
      */
     private $plainPassword;

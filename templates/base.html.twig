@@ -3,20 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('bootstrap/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('custom/style.css') }}">
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
 </head>
 <body>
 {% include 'nav.html.twig' %}
-<!-- IMG TOP -->
-<div class="col-12" style="margin:0; padding:0;">
-    <div id="linkTricks" style="position: absolute; z-index: 2">
-        <a href="#tricks"><i class="fas fa-arrow-alt-circle-down fa-3x"></i></i></a>
-    </div>
-    <img src="{{ asset('img/back.jpg') }}" alt="" style="width:100%;" id="bgImg">
-</div>
 {% block content %}{% endblock %}
 {% include 'footer.html.twig' %}
 </body>

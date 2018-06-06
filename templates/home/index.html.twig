@@ -1,8 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block title %}SnowTricksOC - Acceuil{% endblock %}
 
 {% block content %}
+    <!-- IMG TOP -->
+    <div class="col-12" style="margin:0; padding:0;">
+        <div id="linkTricks" style="position: absolute; z-index: 2">
+            <a href="#tricks"><i class="fas fa-arrow-alt-circle-down fa-3x"></i></i></a>
+        </div>
+        <img src="{{ asset('img/back.jpg') }}" alt="" style="width:100%;" id="bgImg">
+    </div>
     <!-- CONTAINER TRICKS -->
     <div class="container containerAcc" id="tricks">
         <div class="row">
