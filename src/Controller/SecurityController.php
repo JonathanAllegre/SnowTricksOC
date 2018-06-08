@@ -104,40 +104,38 @@ class SecurityController extends Controller
         );
     }
 
-
     /**
-     * @param Request $request
+     * @param string $username
+     * @param string $token
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
      */
-    public function accountConfirmation(Request $request)
+    public function accountConfirmation(string $username, string $token)
     {
-        // GET USERNAME & TOKEN
-        $username = urldecode($request->get('username'));
-        $token = urldecode($request->get('token'));
 
         // GET USER
-        $user = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->findOneBy(['username' => $username]);
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $username]);
 
-        // EM
-        $em = $this->getDoctrine()->getManager();
+        if (null === $user || $user->getToken() !== $token) {
+            $this->addFlash('warning', 'Une erreur est survenue durant la vérification..');
 
-        if ($user) {
-            if ($user->getToken() === $token) {
-                if ($user->getActive() === 0) {
-                    // WE VALIDATE
-                    $user->setActive(1);
-                    $em->persist($user);
-                    $em->flush();
-
-                    $this->addFlash('success', 'Votre compte est maintenant activé.');
-                    return $this->redirectToRoute('home');
-                }
-                $this->addFlash('warning', 'Votre compte est déjà actif.');
-            }
+            return $this->redirectToRoute('home');
         }
+
+        if ($user->getActive() === 1) {
+            $this->addFlash('warning', 'Votre compte est déjà actif.');
+
+            return $this->redirectToRoute('home');
+        }
+
+        // WE VALIDATE
+        $user->setActive(1);
+
+        //$em->persist($user);
+        // EM
+        $this->getDoctrine()->getManager()->flush();
+        $this->addFlash('success', 'Votre compte est maintenant activé.');
+
         return $this->redirectToRoute('home');
     }
 }
