@@ -2,8 +2,8 @@
 .spacertop50{
     padding-top:50px;
 }
-.spacerBottom50{
-    padding-bottom: 50px;
+.spacerbottom50{
+    padding-bottom: 100px;
 }
 
 .invalid{
@@ -15,7 +15,7 @@
 }
 
 a{
-    color:white;
+    color: #567398;
 }
 a:hover{
     color: #567398;
@@ -47,6 +47,7 @@ a:hover{
 }
 .linkCopirighFooter{
     margin-top:10px;
+    color:white;
 }
 .ulPictoFooter{
     padding-top:8px;
@@ -58,7 +59,11 @@ a:hover{
     margin-top:5px;
 }
 
-@media (min-width: 1200px) {
+.pictoFooter{
+    color:white;
+}
+
+@media (min-width: 767.98px) {
     #navBottomMobil{
         display:none;
     }

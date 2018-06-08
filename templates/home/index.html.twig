@@ -5,8 +5,8 @@
 {% block content %}
     <!-- IMG TOP -->
     <div class="col-12" style="margin:0; padding:0;">
-        <div id="linkTricks" style="position: absolute; z-index: 2">
-            <a href="#tricks"><i class="fas fa-arrow-alt-circle-down fa-3x"></i></i></a>
+        <div id="linkTricks">
+            <a href="#tricks" class="linkTricksLinks"><i class="fas fa-arrow-alt-circle-down fa-3x"></i></a>
         </div>
         <img src="{{ asset('img/back.jpg') }}" alt="" style="width:100%;" id="bgImg">
     </div>
@@ -37,3 +37,4 @@
     </div>
 {% endblock %}
 {% block script %}<script src="{{ asset('custom/home/scriptHome.js') }}"></script>{% endblock %}
+
