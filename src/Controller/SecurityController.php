@@ -68,8 +68,10 @@ class SecurityController extends Controller
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Votre compte à bien été créer.');
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
+
 
             return $this->redirectToRoute('login');
         }

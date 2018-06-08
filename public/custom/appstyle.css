@@ -68,3 +68,12 @@ a:hover{
         display:none;
     }
 }
+
+/* FLASH MESSAGES */
+
+.flash-success{
+    background-color: #567398;
+    color:white;
+    height:30px;
+    padding-top:3px;
+}

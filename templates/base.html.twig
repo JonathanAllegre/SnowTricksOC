@@ -11,6 +11,13 @@
 </head>
 <body>
 {% include 'nav.html.twig' %}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="col-12 flash-{{ label }} text-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
 {% block content %}{% endblock %}
 {% include 'footer.html.twig' %}
 </body>
