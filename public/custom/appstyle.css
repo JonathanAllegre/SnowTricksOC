@@ -77,3 +77,9 @@ a:hover{
     height:30px;
     padding-top:3px;
 }
+.flash-warning{
+    background-color: #98474d;
+    color:white;
+    height:30px;
+    padding-top:3px;
+}

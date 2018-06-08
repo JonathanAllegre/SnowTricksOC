@@ -54,6 +54,16 @@ class User implements UserInterface
      */
     private $roles;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $token;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $active;
+
     public function __construct()
     {
         $this->roles = array('ROLE_USER');
@@ -112,6 +122,39 @@ class User implements UserInterface
     {
         return $this->roles;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param mixed $token
+     */
+    public function setToken($token): void
+    {
+        $this->token = $token;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param mixed $active
+     */
+    public function setActive($active): void
+    {
+        $this->active = $active;
+    }
+
 
     public function eraseCredentials()
     {
