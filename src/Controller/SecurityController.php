@@ -25,11 +25,10 @@ class SecurityController extends Controller
 
     /**
      * @Route("/login", name="login")
-     * @param Request $request
      * @param AuthenticationUtils $authenticationUtils
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function login(Request $request, AuthenticationUtils $authenticationUtils)
+    public function login(AuthenticationUtils $authenticationUtils)
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -105,7 +104,10 @@ class SecurityController extends Controller
         );
     }
 
+
     /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
      */
     public function accountConfirmation(Request $request)
