@@ -50,7 +50,7 @@ class SecurityController extends Controller
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @Route("/register", name="user_registration")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
     {
         // 1) build the form
         $user = new User();
@@ -69,9 +69,19 @@ class SecurityController extends Controller
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre compte à bien été créer.');
-            // ... do any other work - like sending them an email, etc
-            // maybe set a "flash" success message for the user
 
+            // 5) Mailer
+            $message = (new \Swift_Message('Hello Email'))
+                ->setFrom('send@example.com')
+                ->setTo('jonathan.allegre258@orange.fr')
+                ->setBody(
+                    $this->renderView('mailer/register.html.twig', [
+                    'name' => $user->getUsername(),
+                    ]),
+                    'text/html'
+                );
+
+            $mailer->send($message);
 
             return $this->redirectToRoute('login');
         }
