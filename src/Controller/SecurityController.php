@@ -41,7 +41,6 @@ class SecurityController extends Controller
         return $this->render('security/login.html.twig', array('last_username' => $lastUsername, 'error' => $error,));
     }
 
-
     /**
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -83,6 +82,7 @@ class SecurityController extends Controller
      * @param string $username
      * @param string $token
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Exception
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
      */
     public function accountConfirmation(string $username, string $token)
@@ -105,6 +105,7 @@ class SecurityController extends Controller
 
         // WE VALIDATE
         $user->setActive(1);
+        $user->setToken($user->generateToken());
 
         //$em->persist($user);
         // EM
