@@ -67,12 +67,17 @@ class User implements UserInterface
      */
     private $active;
 
+    /**
+     * User constructor.
+     * @throws \Exception
+     */
     public function __construct()
     {
-        $this->roles = array('ROLE_USER');
+        $this->roles  = array('ROLE_USER');
+        $this->token  = $this->generateToken();
+        $this->active = 0;
     }
 
-    // other properties and methods
 
     public function getEmail()
     {
@@ -165,6 +170,15 @@ class User implements UserInterface
     public function isEnabled()
     {
         return (bool) $this->active;
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function generateToken()
+    {
+        return md5(random_bytes(40));
     }
 
 

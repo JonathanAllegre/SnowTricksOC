@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\Mailer\Mailer;
 use App\Service\Security\UserChecker;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,7 +25,6 @@ class SecurityController extends Controller
         ]);
     }
 
-
     /**
      * @Route("/login", name="login")
      * @param AuthenticationUtils $authenticationUtils
@@ -35,76 +35,48 @@ class SecurityController extends Controller
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
-
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', array(
-            'last_username' => $lastUsername,
-            'error'         => $error,
-        ));
+        return $this->render('security/login.html.twig', array('last_username' => $lastUsername, 'error' => $error,));
     }
 
 
     /**
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param \Swift_Mailer $mailer
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      * @Route("/register", name="user_registration")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, Mailer $mailer)
     {
         // BUILD THE FORM
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
-
         // HANDLE THE SUBMIT
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // GENERATE TOKEN
-            $random = md5(random_bytes(40));
-
             // ENCODE PASSWORD
             $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
-
-            // SET USER TOKEN & ACTIVE = 0
-            $user->setToken($random);
-            $user->setActive(0);
-
 
             // SAVE THE USER
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
+            // MAILER
+            $mailer->sendRegisterConfirmation($user);
+
             //FLASH
             $this->addFlash('success', 'Votre compte à bien été crée.');
-
-            // MAILER
-            $message = (new \Swift_Message('Snowtricks - Confirmation'))
-                ->setFrom('snowtricks@snowtricks.com')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    $this->renderView('mailer/register.html.twig', [
-                        'name' => $user->getUsername(),
-                        'token' => $random,
-                    ]),
-                    'text/html'
-                );
-
-            $mailer->send($message);
 
             return $this->redirectToRoute('home');
         }
 
-        return $this->render(
-            'security/register.html.twig',
-            array('form' => $form->createView())
-        );
+        return $this->render('security/register.html.twig', array('form' => $form->createView()));
     }
 
     /**
