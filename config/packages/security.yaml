@@ -17,10 +17,12 @@ security:
             form_login:
                 login_path: login
                 check_path: login
+            user_checker: App\Service\Security\UserChecker
             provider: db_provider
             logout:
                 path: /logout
                 target: /
+
 
             # activate different ways to authenticate
 

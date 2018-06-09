@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\Security\UserChecker;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends Controller
@@ -32,6 +34,7 @@ class SecurityController extends Controller
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
+
 
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
