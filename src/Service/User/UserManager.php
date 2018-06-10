@@ -68,5 +68,4 @@ class UserManager
         //EM
         $this->doctrine->getManager()->flush();
     }
-
 }

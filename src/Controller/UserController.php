@@ -50,7 +50,6 @@ class UserController extends Controller
      */
     public function register(Request $request, UserManager $userManager)
     {
-
         // BUILD THE FORM
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -59,7 +58,10 @@ class UserController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // REGISTER USER
-            $userManager->registerUser($user);
+            $register = $userManager->registerUser($user);
+        }
+
+        if (isset($register) && true === $register) {
             $this->addFlash('success', 'Votre compte à bien été crée.');
 
             return $this->redirectToRoute('home');
@@ -68,9 +70,11 @@ class UserController extends Controller
         return $this->render('user/register.html.twig', array('form' => $form->createView()));
     }
 
+
     /**
      * @param string $username
      * @param string $token
+     * @param UserManager $userManager
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
@@ -102,16 +106,17 @@ class UserController extends Controller
         return $this->redirectToRoute('home');
     }
 
+
     /**
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
      * @Route("forgot/password", name="forgotPassword")
      */
     public function forgotPassword(Request $request)
     {
         // CHECK METHOD
         if ('POST' !== $request->getMethod()) {
-            return $this->render('security/forgotPassword.html.twig');
+            return $this->render('user/forgotPassword.html.twig');
         }
 
         // CHECK CSRF
@@ -121,12 +126,11 @@ class UserController extends Controller
             return $this->render('user/forgotPassword.html.twig');
         }
 
-        $user = $this->getDoctrine()
+        /*$user = $this->getDoctrine()
             ->getRepository(User::class)
             ->findOneBy(['username' => $request->request->get('username')]);
 
-        $this->addFlash('success', 'ok');
-        return $this->render('security/forgotPassword.html.twig');
+        $this->addFlash('success', 'ok');*/
+        return $this->render('user/forgotPassword.html.twig');
     }
-
 }
