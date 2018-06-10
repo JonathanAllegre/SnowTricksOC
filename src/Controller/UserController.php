@@ -10,15 +10,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class SecurityController extends Controller
+class UserController extends Controller
 {
     /**
-     * @Route("/security", name="security")
+     * @Route("/user", name="user")
      */
     public function index()
     {
-        return $this->render('security/index.html.twig', [
-            'controller_name' => 'SecurityController',
+        return $this->render('user/index.html.twig', [
+            'controller_name' => 'UserController',
         ]);
     }
 
@@ -35,7 +35,7 @@ class SecurityController extends Controller
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', array('last_username' => $lastUsername, 'error' => $error,));
+        return $this->render('user/login.html.twig', array('last_username' => $lastUsername, 'error' => $error,));
     }
 
     /**
@@ -65,7 +65,7 @@ class SecurityController extends Controller
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('security/register.html.twig', array('form' => $form->createView()));
+        return $this->render('user/register.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -118,7 +118,7 @@ class SecurityController extends Controller
         if (!$this->isCsrfTokenValid('forgotPass', $request->request->get('_csrf_token'))) {
             $this->addFlash('warning', 'Une erreur est survenue');
 
-            return $this->render('security/forgotPassword.html.twig');
+            return $this->render('user/forgotPassword.html.twig');
         }
 
         $user = $this->getDoctrine()
@@ -128,4 +128,5 @@ class SecurityController extends Controller
         $this->addFlash('success', 'ok');
         return $this->render('security/forgotPassword.html.twig');
     }
+
 }
