@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Service\Mailer\Mailer;
-use App\Service\Security\UserChecker;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -108,7 +107,7 @@ class SecurityController extends Controller
         $user->setToken($user->generateToken());
 
         //$em->persist($user);
-        // EM
+        //EM
         $this->getDoctrine()->getManager()->flush();
         $this->addFlash('success', 'Votre compte est maintenant activé.');
 
@@ -120,12 +119,26 @@ class SecurityController extends Controller
      * @throws \Exception
      * @Route("forgot/password", name="forgotPassword")
      */
-    public function forgotPassword(UserType $userType)
+    public function forgotPassword(Request $request)
     {
+        // CHECK METHOD
+        if ('POST' !== $request->getMethod()) {
+            return $this->render('security/forgotPassword.html.twig');
+        }
+
+        // CHECK CSRF
+        if (!$this->isCsrfTokenValid('forgotPass', $request->request->get('_csrf_token'))) {
+            $this->addFlash('warning', 'Une erreur est survenue');
+
+            return $this->render('security/forgotPassword.html.twig');
+        }
 
 
-        return $this->render('security/forgotPassword.html.twig', [
+        $user = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->findOneBy(['username' => $request->request->get('username')]);
 
-        ]);
+        $this->addFlash('success', 'ok');
+        return $this->render('security/forgotPassword.html.twig');
     }
 }
