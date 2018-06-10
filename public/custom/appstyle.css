@@ -5,6 +5,12 @@
 .spacerbottom50{
     padding-bottom: 100px;
 }
+.spacebottom25{
+    padding-bottom:25px;
+}
+.spacertop25{
+    padding-top:25px;
+}
 
 .invalid{
     color:red;

@@ -103,7 +103,7 @@ class SecurityController extends Controller
             return $this->redirectToRoute('home');
         }
 
-        // WE VALIDATE
+        // WE VALIDATE & RENGENERATE TOKEN
         $user->setActive(1);
         $user->setToken($user->generateToken());
 
@@ -113,5 +113,19 @@ class SecurityController extends Controller
         $this->addFlash('success', 'Votre compte est maintenant activé.');
 
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     * @Route("forgot/password", name="forgotPassword")
+     */
+    public function forgotPassword(UserType $userType)
+    {
+
+
+        return $this->render('security/forgotPassword.html.twig', [
+
+        ]);
     }
 }
