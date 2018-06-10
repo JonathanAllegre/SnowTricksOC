@@ -4,12 +4,10 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Service\Mailer\Mailer;
+use App\Service\User\UserManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends Controller
@@ -42,13 +40,17 @@ class SecurityController extends Controller
 
     /**
      * @param Request $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param UserManager $userManager
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws \Exception
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      * @Route("/register", name="user_registration")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, Mailer $mailer)
+    public function register(Request $request, UserManager $userManager)
     {
+
         // BUILD THE FORM
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -56,19 +58,8 @@ class SecurityController extends Controller
         // HANDLE THE SUBMIT
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // ENCODE PASSWORD
-            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-
-            // SAVE THE USER
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // MAILER
-            $mailer->sendRegisterConfirmation($user);
-
-            //FLASH
+            // REGISTER USER
+            $userManager->registerUser($user);
             $this->addFlash('success', 'Votre compte à bien été crée.');
 
             return $this->redirectToRoute('home');
@@ -84,31 +75,28 @@ class SecurityController extends Controller
      * @throws \Exception
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
      */
-    public function accountConfirmation(string $username, string $token)
+    public function accountConfirmation(string $username, string $token, UserManager $userManager)
     {
-
         // GET USER
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $username]);
 
+        // IF TOKEN NOT MATCH
         if (null === $user || $user->getToken() !== $token) {
-            $this->addFlash('warning', 'Une erreur est survenue durant la vérification..');
+            $this->addFlash('warning', 'Une erreur est survenue durant la validation..');
 
             return $this->redirectToRoute('home');
         }
 
+        // IF USER ALREADY ACTIVE
         if ($user->getActive() === 1) {
             $this->addFlash('warning', 'Votre compte est déjà actif.');
 
             return $this->redirectToRoute('home');
         }
 
-        // WE VALIDATE & RENGENERATE TOKEN
-        $user->setActive(1);
-        $user->setToken($user->generateToken());
+        // VALIDATION
+        $userManager->accountConfirmation($user);
 
-        //$em->persist($user);
-        //EM
-        $this->getDoctrine()->getManager()->flush();
         $this->addFlash('success', 'Votre compte est maintenant activé.');
 
         return $this->redirectToRoute('home');
@@ -132,7 +120,6 @@ class SecurityController extends Controller
 
             return $this->render('security/forgotPassword.html.twig');
         }
-
 
         $user = $this->getDoctrine()
             ->getRepository(User::class)

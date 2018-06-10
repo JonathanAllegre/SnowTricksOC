@@ -25,6 +25,7 @@ class Mailer
     }
 
     /**
+     * @return bool
      * @param User $user
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
@@ -43,7 +44,11 @@ class Mailer
             ->setTo($user->getEmail())
             ->setBody($view, 'text/html');
 
-        $this->mailer->send($message);
+        if ($this->mailer->send($message)) {
+            return true;
+        }
+
+        return false;
     }
 
 }
