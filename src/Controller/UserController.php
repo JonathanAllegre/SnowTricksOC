@@ -4,9 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Service\User\AccountConfirmation;
-use App\Service\User\RegisterUser;
-use App\Service\User\UserManager;
+use App\Service\User\UserFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -44,13 +42,17 @@ class UserController extends Controller
     /**
      * REGISTER USER
      * @param Request $request
-     * @param RegisterUser $registerUser
+     * @param UserFactory $userFactory
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws \Exception
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      * @Route("/register", name="user_registration")
      */
-    public function register(Request $request, RegisterUser $registerUser)
+    public function register(Request $request, UserFactory $userFactory)
     {
+
         // BUILD THE FORM
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -59,7 +61,7 @@ class UserController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // REGISTER USER
-            $register = $registerUser->register($user);
+            $register = $userFactory->createNewRegisterUser()->register($user);
         }
 
         if (isset($register) && true === $register) {
@@ -76,12 +78,12 @@ class UserController extends Controller
      * CONFIRM USER ACCOUNT
      * @param string $username
      * @param string $token
-     * @param AccountConfirmation $confirmation
+     * @param UserFactory $userFactory
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
      */
-    public function accountConfirmation(string $username, string $token, AccountConfirmation $confirmation)
+    public function accountConfirmation(string $username, string $token, UserFactory $userFactory)
     {
         // GET USER
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $username]);
@@ -101,7 +103,7 @@ class UserController extends Controller
         }
 
         // VALIDATION
-        $confirmation->confirm($user);
+        $userFactory->createNewAccuntConfirmation()->confirm($user);
 
         $this->addFlash('success', 'Votre compte est maintenant activé.');
 
