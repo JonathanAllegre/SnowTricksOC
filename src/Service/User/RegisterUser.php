@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: jonathan
- * Date: 10/06/2018
- * Time: 18:23
+ * Date: 12/06/2018
+ * Time: 19:54
  */
 
 namespace App\Service\User;
@@ -13,30 +13,42 @@ use App\Service\Mailer\Mailer;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserManager
+/**
+ * SAVE AN USER
+ * Class RegisterUser
+ * @package App\Service\User
+ */
+class RegisterUser
 {
-    private $passwordEncoder;
     private $doctrine;
+    private $passwordEncoder;
     private $mailer;
 
+    /**
+     * RegisterUser constructor.
+     * @param RegistryInterface $doctrine
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param Mailer $mailer
+     */
     public function __construct(
-        UserPasswordEncoderInterface $passwordEncoder,
         RegistryInterface $doctrine,
+        UserPasswordEncoderInterface $passwordEncoder,
         Mailer $mailer
     ) {
-        $this->passwordEncoder = $passwordEncoder;
+
         $this->doctrine = $doctrine;
+        $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
     }
 
     /**
-     * @return bool
      * @param User $user
+     * @return bool
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function registerUser(User $user)
+    public function register(User $user):bool
     {
         // ENCODE PASSWORD
         $password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
@@ -53,19 +65,5 @@ class UserManager
         }
 
         return false;
-    }
-
-    /**
-     * @param User $user
-     * @throws \Exception
-     */
-    public function accountConfirmation(User $user)
-    {
-        // WE VALIDATE & RENGENERATE TOKEN
-        $user->setActive(1);
-        $user->setToken($user->generateToken());
-
-        //EM
-        $this->doctrine->getManager()->flush();
     }
 }

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\User\AccountConfirmation;
+use App\Service\User\RegisterUser;
 use App\Service\User\UserManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,6 +25,7 @@ class UserController extends Controller
     }
 
     /**
+     * LOGIN USER
      * @Route("/login", name="login")
      * @param AuthenticationUtils $authenticationUtils
      * @return \Symfony\Component\HttpFoundation\Response
@@ -39,16 +42,14 @@ class UserController extends Controller
     }
 
     /**
+     * REGISTER USER
      * @param Request $request
-     * @param UserManager $userManager
+     * @param RegisterUser $registerUser
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws \Exception
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      * @Route("/register", name="user_registration")
      */
-    public function register(Request $request, UserManager $userManager)
+    public function register(Request $request, RegisterUser $registerUser)
     {
         // BUILD THE FORM
         $user = new User();
@@ -58,7 +59,7 @@ class UserController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // REGISTER USER
-            $register = $userManager->registerUser($user);
+            $register = $registerUser->register($user);
         }
 
         if (isset($register) && true === $register) {
@@ -72,14 +73,15 @@ class UserController extends Controller
 
 
     /**
+     * CONFIRM USER ACCOUNT
      * @param string $username
      * @param string $token
-     * @param UserManager $userManager
+     * @param AccountConfirmation $confirmation
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
      */
-    public function accountConfirmation(string $username, string $token, UserManager $userManager)
+    public function accountConfirmation(string $username, string $token, AccountConfirmation $confirmation)
     {
         // GET USER
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $username]);
@@ -99,7 +101,7 @@ class UserController extends Controller
         }
 
         // VALIDATION
-        $userManager->accountConfirmation($user);
+        $confirmation->confirm($user);
 
         $this->addFlash('success', 'Votre compte est maintenant activé.');
 
@@ -119,12 +121,17 @@ class UserController extends Controller
             return $this->render('user/forgotPassword.html.twig');
         }
 
-        // CHECK CSRF
-        if (!$this->isCsrfTokenValid('forgotPass', $request->request->get('_csrf_token'))) {
-            $this->addFlash('warning', 'Une erreur est survenue');
+        $user = $request->request->get('_username');
 
+        // CHECK CSRF
+        if (!$this->isCsrfTokenValid('forgotPass', $request->request->get('_csrf_token')) || empty($user)) {
+            $this->addFlash('warning', 'Une erreur est survenue');
             return $this->render('user/forgotPassword.html.twig');
         }
+
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $user]);
+        var_dump($user);
+
 
         /*$user = $this->getDoctrine()
             ->getRepository(User::class)
