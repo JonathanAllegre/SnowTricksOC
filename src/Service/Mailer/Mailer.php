@@ -8,7 +8,6 @@
 
 namespace App\Service\Mailer;
 
-
 use App\Entity\User;
 
 class Mailer
@@ -25,13 +24,14 @@ class Mailer
     }
 
     /**
+     * SEND A CONFIRMATION MAIL TO USER WITH AN ACTIVATE ACCOUNT TOKEN
      * @return bool
      * @param User $user
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function sendRegisterConfirmation(User $user)
+    public function sendRegisterConfirmation(User $user):bool
     {
 
         $view = $this->twig->render('mailer/register.html.twig', [
@@ -51,4 +51,30 @@ class Mailer
         return false;
     }
 
+    /**
+     * SEND A RESET PASS TOKEN TO USER
+     * @param User $user
+     * @return bool
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function sendResetPass(User $user):bool
+    {
+        $view = $this->twig->render('mailer/forgot.html.twig', [
+            'name' => $user->getUsername(),
+            'token' => $user->getToken(),
+        ]);
+
+        $message = (new \Swift_Message('Snowtricks - Mot de Passe'))
+            ->setFrom($this->from)
+            ->setTo($user->getEmail())
+            ->setBody($view, 'text/html');
+
+        if ($this->mailer->send($message)) {
+            return true;
+        }
+
+        return false;
+    }
 }

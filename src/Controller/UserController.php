@@ -113,33 +113,41 @@ class UserController extends Controller
 
     /**
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param UserFactory $userFactory
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      * @Route("forgot/password", name="forgotPassword")
      */
-    public function forgotPassword(Request $request)
+    public function forgotPassword(Request $request, UserFactory $userFactory)
     {
         // CHECK METHOD
         if ('POST' !== $request->getMethod()) {
             return $this->render('user/forgotPassword.html.twig');
         }
 
-        $user = $request->request->get('_username');
-
         // CHECK CSRF
-        if (!$this->isCsrfTokenValid('forgotPass', $request->request->get('_csrf_token')) || empty($user)) {
+        if (!$this->isCsrfTokenValid('forgotPass', $request->request->get('_csrf_token'))) {
             $this->addFlash('warning', 'Une erreur est survenue');
+
             return $this->render('user/forgotPassword.html.twig');
         }
 
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $user]);
-        var_dump($user);
+        $forgotPass = $userFactory->createNewForgotPass()->forgot($request->request->get('_username'));
+        if ($forgotPass['statut']) {
+            $this->addFlash('success', "Un e-mail vient d'être envoyé");
 
+            return $this->redirectToRoute('home');
+        }
 
-        /*$user = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->findOneBy(['username' => $request->request->get('username')]);
+        $this->addFlash('warning', $forgotPass['error']);
 
-        $this->addFlash('success', 'ok');*/
         return $this->render('user/forgotPassword.html.twig');
+    }
+
+    public function resetPassWord()
+    {
+
     }
 }

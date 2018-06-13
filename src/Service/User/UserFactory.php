@@ -9,23 +9,26 @@
 namespace App\Service\User;
 
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 class UserFactory
 {
     private $accuntConfirmation;
     private $registerUser;
+    private $forgotPass;
 
     /**
      * UserFactory constructor.
-     * @param $accuntConfirmation
-     * @param $registerUser
+     * @param AccountConfirmation $accuntConfirmation
+     * @param RegisterUser $registerUser
+     * @param ForgotPass $forgotPass
      */
-    public function __construct(AccountConfirmation $accuntConfirmation, RegisterUser $registerUser)
-    {
+    public function __construct(
+        AccountConfirmation $accuntConfirmation,
+        RegisterUser $registerUser,
+        ForgotPass $forgotPass
+    ) {
         $this->accuntConfirmation = $accuntConfirmation;
-        $this->registerUser = $registerUser;
+        $this->registerUser       = $registerUser;
+        $this->forgotPass         = $forgotPass;
     }
 
 
@@ -37,5 +40,10 @@ class UserFactory
     public function createNewRegisterUser()
     {
         return $this->registerUser;
+    }
+
+    public function createNewForgotPass()
+    {
+        return $this->forgotPass;
     }
 }
