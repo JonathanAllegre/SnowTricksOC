@@ -147,22 +147,31 @@ class UserController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param string $token
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      * @Route("reset/password/{token}", name="resetPassword")
      */
-    public function resetPassWord(Request $request, string $token)
+    public function resetPassWord(Request $request, string $token, UserFactory $userFactory)
     {
 
         $user = new User();
         $form = $this->createForm(UserResetPassType::class, $user);
 
-        // HANDLE THE SUBMIT
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            echo 'cool';
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return $this->render('user/resetPass.html.twig', array('form' => $form->createView()));
         }
+
+        $resetPass = $userFactory->creatNewResetPass()->reset($user, $token);
+        if (false === $resetPass['statut']) {
+            $this->addFlash('warning', $resetPass['error']);
+
+            return $this->render('user/resetPass.html.twig', array('form' => $form->createView()));
+        }
+
+        $this->addFlash('success', 'Votre mot de passe à bien été réinitialiser.');
 
         return $this->render('user/resetPass.html.twig', array('form' => $form->createView()));
     }

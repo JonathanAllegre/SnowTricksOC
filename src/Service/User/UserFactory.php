@@ -14,21 +14,25 @@ class UserFactory
     private $accuntConfirmation;
     private $registerUser;
     private $forgotPass;
+    private $resetPass;
 
     /**
      * UserFactory constructor.
      * @param AccountConfirmation $accuntConfirmation
      * @param RegisterUser $registerUser
      * @param ForgotPass $forgotPass
+     * @param ResetPassword $resetPassword
      */
     public function __construct(
         AccountConfirmation $accuntConfirmation,
         RegisterUser $registerUser,
-        ForgotPass $forgotPass
+        ForgotPass $forgotPass,
+        ResetPassword $resetPassword
     ) {
         $this->accuntConfirmation = $accuntConfirmation;
         $this->registerUser       = $registerUser;
         $this->forgotPass         = $forgotPass;
+        $this->resetPass          = $resetPassword;
     }
 
 
@@ -45,5 +49,10 @@ class UserFactory
     public function createNewForgotPass()
     {
         return $this->forgotPass;
+    }
+
+    public function creatNewResetPass()
+    {
+        return $this->resetPass;
     }
 }

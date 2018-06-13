@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}SnowTricksOC - Réinitialiser le mot de passe{% endblock %}
+{% block title %}SnowTricksOC - Réinitialiser le Mot de Passe{% endblock %}
 {% form_theme form _self %}
 {# form_errors.html.twig #}
 {% block form_errors %}
@@ -21,9 +21,9 @@
     <div class="container">
         <div class="col-12 text-center">
             <div class="offset-xl-3 col-xl-6 offset-sm-0 col-sm-12">
-                <h1 class="h3 mb-3 font-weight-normal">Réinitialiser le mot de passe:</h1>
+                <h1 class="h3 mb-3 font-weight-normal">Réinitialiser le Mot de Passe:</h1>
                 <hr>
-                {{ form_start(form, {'attr':{'class':'form-signin'}}) }}
+                {{ form_start(form, {'attr':{'class':'form-signin', 'novalidate':'novalidate'}}) }}
                 <div class="form-group">
                     {{ form_label(form.email) }}
                     {{ form_widget(form.email, {'attr' : {'class': 'form-control'}}) }}
