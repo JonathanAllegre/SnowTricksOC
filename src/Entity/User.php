@@ -28,6 +28,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
+     * @Assert\NotBlank(groups="reset")
      * @Assert\Email()
      */
     private $email;
@@ -39,6 +40,7 @@ class User implements UserInterface
     private $username;
 
     /**
+     * @Assert\NotBlank(groups="reset")
      * @Assert\NotBlank(message="Ce message")
      * @Assert\Length(max=4096)
      */

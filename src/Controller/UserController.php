@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserResetPassType;
 use App\Form\UserType;
 use App\Service\User\UserFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,7 +73,6 @@ class UserController extends Controller
 
         return $this->render('user/register.html.twig', array('form' => $form->createView()));
     }
-
 
     /**
      * CONFIRM USER ACCOUNT
@@ -146,8 +146,24 @@ class UserController extends Controller
         return $this->render('user/forgotPassword.html.twig');
     }
 
-    public function resetPassWord()
+    /**
+     * @param string $token
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     * @Route("reset/password/{token}", name="resetPassword")
+     */
+    public function resetPassWord(Request $request, string $token)
     {
 
+        $user = new User();
+        $form = $this->createForm(UserResetPassType::class, $user);
+
+        // HANDLE THE SUBMIT
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            echo 'cool';
+        }
+
+        return $this->render('user/resetPass.html.twig', array('form' => $form->createView()));
     }
 }

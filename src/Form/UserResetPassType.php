@@ -11,16 +11,13 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-class UserType extends AbstractType
+class UserResetPassType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('email', EmailType::class, array(
                 'label' => "E-Mail",
-            ))
-            ->add('username', TextType::class, array(
-                'label' => "Nom d'utilisateur"
             ))
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
@@ -34,6 +31,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'validation_groups' => array('reset'),
         ]);
     }
 }
