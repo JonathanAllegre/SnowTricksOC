@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserResetPassType;
 use App\Form\UserType;
 use App\Service\User\UserFactory;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,10 +25,8 @@ class UserController extends Controller
     }
 
     /**
-     * LOGIN USER
      * @Route("/login", name="login")
-     * @param AuthenticationUtils $authenticationUtils
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template()
      */
     public function login(AuthenticationUtils $authenticationUtils)
     {
@@ -37,19 +36,12 @@ class UserController extends Controller
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('user/login.html.twig', array('last_username' => $lastUsername, 'error' => $error,));
+        return ['last_username' => $lastUsername, 'error' => $error];
     }
 
     /**
-     * REGISTER USER
-     * @param Request $request
-     * @param UserFactory $userFactory
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      * @Route("/register", name="user_registration")
+     * @Template()
      */
     public function register(Request $request, UserFactory $userFactory)
     {
@@ -71,16 +63,10 @@ class UserController extends Controller
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('user/register.html.twig', array('form' => $form->createView()));
+        return ['form' => $form->createView()];
     }
 
     /**
-     * CONFIRM USER ACCOUNT
-     * @param string $username
-     * @param string $token
-     * @param UserFactory $userFactory
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Exception
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
      */
     public function accountConfirmation(string $username, string $token, UserFactory $userFactory)
@@ -112,26 +98,21 @@ class UserController extends Controller
 
 
     /**
-     * @param Request $request
-     * @param UserFactory $userFactory
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      * @Route("forgot/password", name="forgotPassword")
+     * @Template()
      */
     public function forgotPassword(Request $request, UserFactory $userFactory)
     {
         // CHECK METHOD
         if ('POST' !== $request->getMethod()) {
-            return $this->render('user/forgotPassword.html.twig');
+            return [];
         }
 
         // CHECK CSRF
         if (!$this->isCsrfTokenValid('forgotPass', $request->request->get('_csrf_token'))) {
             $this->addFlash('warning', 'Une erreur est survenue');
 
-            return $this->render('user/forgotPassword.html.twig');
+            return [];
         }
 
         $forgotPass = $userFactory->createNewForgotPass()->forgot($request->request->get('_username'));
@@ -143,15 +124,12 @@ class UserController extends Controller
 
         $this->addFlash('warning', $forgotPass['error']);
 
-        return $this->render('user/forgotPassword.html.twig');
+        return [];
     }
 
     /**
-     * @param Request $request
-     * @param string $token
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
      * @Route("reset/password/{token}", name="resetPassword")
+     * @Template()
      */
     public function resetPassWord(Request $request, string $token, UserFactory $userFactory)
     {
@@ -161,18 +139,18 @@ class UserController extends Controller
 
         $form->handleRequest($request);
         if (!$form->isSubmitted() || !$form->isValid()) {
-            return $this->render('user/resetPass.html.twig', array('form' => $form->createView()));
+            return ['form' => $form->createView()];
         }
 
         $resetPass = $userFactory->creatNewResetPass()->reset($user, $token);
         if (false === $resetPass['statut']) {
             $this->addFlash('warning', $resetPass['error']);
 
-            return $this->render('user/resetPass.html.twig', array('form' => $form->createView()));
+            return ['form' => $form->createView()];
         }
 
         $this->addFlash('success', 'Votre mot de passe à bien été réinitialiser.');
 
-        return $this->render('user/resetPass.html.twig', array('form' => $form->createView()));
+        return ['form' => $form->createView()];
     }
 }
