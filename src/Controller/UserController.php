@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserResetPassType;
 use App\Form\UserType;
 use App\Service\User\UserServices;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -131,8 +132,10 @@ class UserController extends Controller
      * @Route("reset/password/{token}", name="resetPassword")
      * @Template()
      */
-    public function resetPassWord(Request $request, string $token, UserServices $userServices)
+    public function resetPassWord(Request $request, User $user, UserServices $userServices)
     {
+        var_dump($user);
+        exit();
 
         $user = new User();
         $form = $this->createForm(UserResetPassType::class, $user);
