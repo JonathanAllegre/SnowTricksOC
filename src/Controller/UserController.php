@@ -44,7 +44,7 @@ class UserController extends Controller
      * @Route("/register", name="user_registration")
      * @Template()
      */
-    public function register(Request $request, UserServices $userServices)
+    public function register(Request $request, UserServices $userServices, SessionInterface $session)
     {
 
         // BUILD THE FORM
@@ -53,17 +53,19 @@ class UserController extends Controller
 
         // HANDLE THE SUBMIT
         $form->handleRequest($request);
+        $register = false;
         if ($form->isSubmitted() && $form->isValid()) {
             // REGISTER USER
             $register = $userServices->registerUser($user);
         }
 
-        if (isset($register) && true === $register) {
+        if (true === $register) {
             $this->addFlash('success', 'Votre compte à bien été crée.');
 
             return $this->redirectToRoute('home');
         }
 
+        $this->addFlash('warning', $register);
         return ['form' => $form->createView()];
     }
 
@@ -102,7 +104,7 @@ class UserController extends Controller
      * @Route("forgot/password", name="forgotPassword")
      * @Template()
      */
-    public function forgotPassword(Request $request, UserServices $userServices, SessionInterface $session)
+    public function forgotPassword(Request $request, UserServices $userServices)
     {
         // CHECK METHOD
         if ('POST' !== $request->getMethod()) {
@@ -116,13 +118,14 @@ class UserController extends Controller
             return [];
         }
 
-        if ($userServices->forgotPassword($request->request->get('_username'))) {
+        $forgotPass = $userServices->forgotPassword($request->request->get('_username'));
+        if (true === $forgotPass) {
             $this->addFlash('success', "Un e-mail vient d'être envoyé");
 
             return $this->redirectToRoute('home');
         }
 
-        $this->addFlash('warning', $session->get('error'));
+        $this->addFlash('warning', $forgotPass);
 
         return [];
     }

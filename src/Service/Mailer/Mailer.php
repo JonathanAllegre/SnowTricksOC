@@ -33,22 +33,15 @@ class Mailer
      */
     public function sendRegisterConfirmation(User $user):bool
     {
-
         $view = $this->twig->render('mailer/register.html.twig', [
             'name' => $user->getUsername(),
             'token' => $user->getToken(),
         ]);
 
-        $message = (new \Swift_Message('Snowtricks - Confirmation'))
-            ->setFrom($this->from)
-            ->setTo($user->getEmail())
-            ->setBody($view, 'text/html');
+        $subject = "SnowTricks: Confirmation de compte";
+        $to      = $user->getEmail();
 
-        if ($this->mailer->send($message)) {
-            return true;
-        }
-
-        return false;
+        return $this->send($view, $subject, $to);
     }
 
     /**
@@ -62,13 +55,22 @@ class Mailer
     public function sendResetPass(User $user):bool
     {
         $view = $this->twig->render('mailer/forgot.html.twig', [
-            'name' => $user->getUsername(),
+            'name'  => $user->getUsername(),
             'token' => $user->getToken(),
         ]);
 
-        $message = (new \Swift_Message('Snowtricks - Mot de Passe'))
+        $subject = "SnowTricks: Réinitialisation de mot de passe";
+        $to      = $user->getEmail();
+
+        return $this->send($view, $subject, $to);
+    }
+
+    private function send($view, $subject, $to)
+    {
+
+        $message = (new \Swift_Message($subject))
             ->setFrom($this->from)
-            ->setTo($user->getEmail())
+            ->setTo($to)
             ->setBody($view, 'text/html');
 
         if ($this->mailer->send($message)) {

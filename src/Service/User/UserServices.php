@@ -61,7 +61,7 @@ class UserServices
     /**
      * FORGOT PASSWORD SEND MAIL
      * @param $userName
-     * @return bool
+     * @return mixed
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -72,15 +72,12 @@ class UserServices
         $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $userName]);
         // VERIF IF USER EXIST
         if (!$user) {
-            $this->session->set('error', self::NO_USER_FOUND);
-
-            return false;
+            return self::NO_USER_FOUND;
         }
 
+        // WE SEND MAIL REINIT PASS
         if (!$this->mailer->sendResetPass($user)) {
-            $this->session->set('error', self::ERROR_MAILER);
-
-            return false;
+            return self::ERROR_MAILER;
         }
 
         return true;
@@ -89,12 +86,12 @@ class UserServices
     /**
      * REGISTER NEW USER
      * @param User $user
-     * @return bool
+     * @return mixed
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function registerUser(User $user):bool
+    public function registerUser(User $user)
     {
         // ENCODE PASSWORD
         $password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
@@ -106,11 +103,11 @@ class UserServices
         $entityManager->flush();
 
         // MAILER
-        if ($this->mailer->sendRegisterConfirmation($user)) {
-            return true;
+        if (!$this->mailer->sendRegisterConfirmation($user)) {
+            return self::ERROR_MAILER;
         }
 
-        return false;
+        return true;
     }
 
     /**
