@@ -11,6 +11,7 @@ namespace App\Service\User;
 use App\Entity\User;
 use App\Service\Mailer\Mailer;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -23,6 +24,7 @@ class UserServices
     private $doctrine;
     private $mailer;
     private $passwordEncoder;
+    private $session;
 
     const NO_USER_FOUND  = "Aucun utilisateur trouvé";
     const ERROR_MAILER   = "Une erreur est survenue lors de l'envoie du mail";
@@ -31,12 +33,14 @@ class UserServices
     public function __construct(
         RegistryInterface $doctrine,
         Mailer $mailer,
-        UserPasswordEncoderInterface $encoder
+        UserPasswordEncoderInterface $encoder,
+        SessionInterface $session
     ) {
 
         $this->doctrine        = $doctrine;
         $this->mailer          = $mailer;
         $this->passwordEncoder = $encoder;
+        $this->session         = $session;
     }
 
     /**
@@ -57,25 +61,29 @@ class UserServices
     /**
      * FORGOT PASSWORD SEND MAIL
      * @param $userName
-     * @return array
+     * @return bool
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function forgotPassword($userName):array
+    public function forgotPassword($userName)
     {
 
         $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $userName]);
         // VERIF IF USER EXIST
         if (!$user) {
-            return array('statut' => false, 'error' => self::NO_USER_FOUND);
+            $this->session->set('error', self::NO_USER_FOUND);
+
+            return false;
         }
 
         if (!$this->mailer->sendResetPass($user)) {
-            return array('statut' => false, 'error' => self::ERROR_MAILER);
+            $this->session->set('error', self::ERROR_MAILER);
+
+            return false;
         }
 
-        return array('statut' => true);
+        return true;
     }
 
     /**
@@ -113,7 +121,7 @@ class UserServices
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Exception
      */
-    public function resetPassword(User $user, $userForm):bool
+    public function resetPassword(User $user, $userForm):void
     {
 
         // PASSWORD ENCODER
@@ -125,9 +133,5 @@ class UserServices
 
         // SAVE THE NEW PASSWORD
         $this->doctrine->getEntityManager()->flush();
-
-        return true;
-
-
     }
 }

@@ -8,6 +8,7 @@ use App\Form\UserType;
 use App\Service\User\UserServices;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -101,7 +102,7 @@ class UserController extends Controller
      * @Route("forgot/password", name="forgotPassword")
      * @Template()
      */
-    public function forgotPassword(Request $request, UserServices $userServices)
+    public function forgotPassword(Request $request, UserServices $userServices, SessionInterface $session)
     {
         // CHECK METHOD
         if ('POST' !== $request->getMethod()) {
@@ -115,14 +116,13 @@ class UserController extends Controller
             return [];
         }
 
-        $forgotPass = $userServices->forgotPassword($request->request->get('_username'));
-        if ($forgotPass['statut']) {
+        if ($userServices->forgotPassword($request->request->get('_username'))) {
             $this->addFlash('success', "Un e-mail vient d'être envoyé");
 
             return $this->redirectToRoute('home');
         }
 
-        $this->addFlash('warning', $forgotPass['error']);
+        $this->addFlash('warning', $session->get('error'));
 
         return [];
     }
@@ -140,19 +140,11 @@ class UserController extends Controller
             return ['form' => $form->createView()];
         }
 
-        // PASS USER RESET PASS FORM DATA
+        // RESET PASS FORM DATA
         $userResetPass = $request->request->get('user_reset_pass');
-        if (!$userServices->resetPassword($user, $userResetPass)) {
-            $this->addFlash('warning', 'Une erreur est survenue');
-
-            return ['form' => $form->createView()];
-        }
+        $userServices->resetPassword($user, $userResetPass);
 
         $this->addFlash('success', 'Votre mot de passe à bien été réinitialiser.');
         return $this->redirectToRoute('home');
-        return ['form' => $form->createView()];
     }
-
-
-
 }
