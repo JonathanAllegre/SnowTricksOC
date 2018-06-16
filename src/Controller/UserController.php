@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserResetPassType;
 use App\Form\UserType;
-use App\Service\User\UserFactory;
+use App\Service\User\UserServices;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,7 +43,7 @@ class UserController extends Controller
      * @Route("/register", name="user_registration")
      * @Template()
      */
-    public function register(Request $request, UserFactory $userFactory)
+    public function register(Request $request, UserServices $userServices)
     {
 
         // BUILD THE FORM
@@ -54,7 +54,7 @@ class UserController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // REGISTER USER
-            $register = $userFactory->createNewRegisterUser()->register($user);
+            $register = $userServices->registerUser($user);
         }
 
         if (isset($register) && true === $register) {
@@ -69,7 +69,7 @@ class UserController extends Controller
     /**
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
      */
-    public function accountConfirmation(string $username, string $token, UserFactory $userFactory)
+    public function accountConfirmation(string $username, string $token, UserServices $userServices)
     {
         // GET USER
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $username]);
@@ -89,7 +89,7 @@ class UserController extends Controller
         }
 
         // VALIDATION
-        $userFactory->createNewAccuntConfirmation()->confirm($user);
+        $userServices->accuntConfirmation($user);
 
         $this->addFlash('success', 'Votre compte est maintenant activé.');
 
@@ -101,7 +101,7 @@ class UserController extends Controller
      * @Route("forgot/password", name="forgotPassword")
      * @Template()
      */
-    public function forgotPassword(Request $request, UserFactory $userFactory)
+    public function forgotPassword(Request $request, UserServices $userServices)
     {
         // CHECK METHOD
         if ('POST' !== $request->getMethod()) {
@@ -115,7 +115,7 @@ class UserController extends Controller
             return [];
         }
 
-        $forgotPass = $userFactory->createNewForgotPass()->forgot($request->request->get('_username'));
+        $forgotPass = $userServices->forgotPassword($request->request->get('_username'));
         if ($forgotPass['statut']) {
             $this->addFlash('success', "Un e-mail vient d'être envoyé");
 
@@ -131,7 +131,7 @@ class UserController extends Controller
      * @Route("reset/password/{token}", name="resetPassword")
      * @Template()
      */
-    public function resetPassWord(Request $request, string $token, UserFactory $userFactory)
+    public function resetPassWord(Request $request, string $token, UserServices $userServices)
     {
 
         $user = new User();
@@ -142,7 +142,7 @@ class UserController extends Controller
             return ['form' => $form->createView()];
         }
 
-        $resetPass = $userFactory->creatNewResetPass()->reset($user, $token);
+        $resetPass = $userServices->resetPassword($user, $token);
         if (false === $resetPass['statut']) {
             $this->addFlash('warning', $resetPass['error']);
 
