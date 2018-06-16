@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Form\UserResetPassType;
 use App\Form\UserType;
 use App\Service\User\UserServices;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -134,26 +133,26 @@ class UserController extends Controller
      */
     public function resetPassWord(Request $request, User $user, UserServices $userServices)
     {
-        var_dump($user);
-        exit();
-
-        $user = new User();
-        $form = $this->createForm(UserResetPassType::class, $user);
+        $form = $this->createForm(UserResetPassType::class);
 
         $form->handleRequest($request);
         if (!$form->isSubmitted() || !$form->isValid()) {
             return ['form' => $form->createView()];
         }
 
-        $resetPass = $userServices->resetPassword($user, $token);
-        if (false === $resetPass['statut']) {
-            $this->addFlash('warning', $resetPass['error']);
+        // PASS USER RESET PASS FORM DATA
+        $userResetPass = $request->request->get('user_reset_pass');
+        if (!$userServices->resetPassword($user, $userResetPass)) {
+            $this->addFlash('warning', 'Une erreur est survenue');
 
             return ['form' => $form->createView()];
         }
 
         $this->addFlash('success', 'Votre mot de passe à bien été réinitialiser.');
-
+        return $this->redirectToRoute('home');
         return ['form' => $form->createView()];
     }
+
+
+
 }

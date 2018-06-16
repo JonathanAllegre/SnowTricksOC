@@ -109,34 +109,25 @@ class UserServices
      * RESET THE PASSWORD USER
      * @param User $formUser
      * @param $token
-     * @return array
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Exception
      */
-    public function resetPassword(User $formUser, $token):array
+    public function resetPassword(User $user, $userForm):bool
     {
-        $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $formUser->getEmail()]);
-
-        // CHECK IF USER EXIST
-        if (!$user) {
-            return array('statut' => false, 'error' => self::NO_USER_FOUND);
-        }
-
-        // CHECK IF TOKENS MATCH
-        if ($token !== $user->getToken()) {
-            return array('statut' => false, 'error' => self::STANDARD_ERROR);
-        }
 
         // PASSWORD ENCODER
-        $password = $this->passwordEncoder->encodePassword($formUser, $formUser->getPlainPassword());
+        $password = $this->passwordEncoder->encodePassword($user, $userForm['plainPassword']['second']);
         $user->setPassword($password);
 
         // REGENERATE TOKEN
         $user->setToken($user->generateToken());
 
+        // SAVE THE NEW PASSWORD
         $this->doctrine->getEntityManager()->flush();
 
-        return array('statut' => true);
+        return true;
+
+
     }
 }
