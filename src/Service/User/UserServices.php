@@ -76,8 +76,9 @@ class UserServices
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function forgotPassword($userName)
+    public function forgotPassword($form)
     {
+        $userName = $form['username'];
 
         $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $userName]);
         // VERIF IF USER EXIST

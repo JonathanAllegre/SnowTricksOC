@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserForgotPassType;
 use App\Form\UserResetPassType;
 use App\Form\UserType;
 use App\Service\User\UserServices;
@@ -100,19 +101,15 @@ class UserController extends Controller
      */
     public function forgotPassword(Request $request, UserServices $userServices)
     {
-        // CHECK METHOD
-        if ('POST' !== $request->getMethod()) {
-            return [];
+        $form = $this->createForm(UserForgotPassType::class);
+
+        $form->handleRequest($request);
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return ['form' => $form->createView()];
         }
 
-        // CHECK CSRF
-        if (!$this->isCsrfTokenValid('forgotPass', $request->request->get('_csrf_token'))) {
-            $this->addFlash('warning', 'Une erreur est survenue');
-
-            return [];
-        }
-
-        $forgotPass = $userServices->forgotPassword($request->request->get('_username'));
+        // FORGOT PASS SERVICES
+        $forgotPass = $userServices->forgotPassword($request->request->get('user_forgot_pass'));
         if (true === $forgotPass) {
             $this->addFlash('success', "Un e-mail vient d'être envoyé");
 
@@ -121,7 +118,7 @@ class UserController extends Controller
 
         $this->addFlash('warning', $forgotPass);
 
-        return [];
+        return ['form' => $form->createView()];
     }
 
     /**
