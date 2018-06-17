@@ -53,18 +53,24 @@ class UserController extends Controller
 
         // HANDLE THE SUBMIT
         $form->handleRequest($request);
-        $register = false;
         if ($form->isSubmitted() && $form->isValid()) {
             // REGISTER USER
             $register = $userServices->registerUser($user);
         }
 
+        // IF FORM IS NOT SEND
+        if (!isset($register)) {
+            return ['form' => $form->createView()];
+        }
+
+        // IF REGISTER IS TRUE
         if (true === $register) {
             $this->addFlash('success', 'Votre compte à bien été crée.');
 
             return $this->redirectToRoute('home');
         }
 
+        // IF REGISTER IS FALSE
         $this->addFlash('warning', $register);
         return ['form' => $form->createView()];
     }
