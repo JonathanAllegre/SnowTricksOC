@@ -46,32 +46,27 @@ class UserController extends Controller
      */
     public function register(Request $request, UserServices $userServices)
     {
-
         // BUILD THE FORM
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
         // HANDLE THE SUBMIT
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // REGISTER USER
-            $register = $userServices->registerUser($user);
-        }
-
-        // IF FORM IS NOT SEND
-        if (!isset($register)) {
+        if (!$form->isSubmitted() || !$form->isValid()) {
             return ['form' => $form->createView()];
         }
 
+        // REGISTER SERVICES
+        $register = $userServices->registerUser($user);
         // IF REGISTER IS TRUE
         if (true === $register) {
             $this->addFlash('success', 'Votre compte à bien été crée.');
 
             return $this->redirectToRoute('home');
         }
-
         // IF REGISTER IS FALSE
         $this->addFlash('warning', $register);
+
         return ['form' => $form->createView()];
     }
 
@@ -80,7 +75,6 @@ class UserController extends Controller
      */
     public function accountConfirmation(User $user, UserServices $userServices)
     {
-
         // VALIDATION
         $accuntConfirmation = $userServices->accuntConfirmation($user);
         if (true === $accuntConfirmation) {
