@@ -8,7 +8,6 @@ use App\Form\UserType;
 use App\Service\User\UserServices;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -44,7 +43,7 @@ class UserController extends Controller
      * @Route("/register", name="user_registration")
      * @Template()
      */
-    public function register(Request $request, UserServices $userServices, SessionInterface $session)
+    public function register(Request $request, UserServices $userServices)
     {
 
         // BUILD THE FORM
