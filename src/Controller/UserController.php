@@ -78,29 +78,18 @@ class UserController extends Controller
     /**
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
      */
-    public function accountConfirmation(string $username, string $token, UserServices $userServices)
+    public function accountConfirmation(User $user, UserServices $userServices)
     {
-        // GET USER
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => $username]);
-
-        // IF TOKEN NOT MATCH
-        if (null === $user || $user->getToken() !== $token) {
-            $this->addFlash('warning', 'Une erreur est survenue durant la validation..');
-
-            return $this->redirectToRoute('home');
-        }
-
-        // IF USER ALREADY ACTIVE
-        if ($user->getActive() === 1) {
-            $this->addFlash('warning', 'Votre compte est déjà actif.');
-
-            return $this->redirectToRoute('home');
-        }
 
         // VALIDATION
-        $userServices->accuntConfirmation($user);
+        $accuntConfirmation = $userServices->accuntConfirmation($user);
+        if (true === $accuntConfirmation) {
+            $this->addFlash('success', 'Votre compte est maintenant activé.');
 
-        $this->addFlash('success', 'Votre compte est maintenant activé.');
+            return $this->redirectToRoute('home');
+        }
+
+        $this->addFlash('warning', $accuntConfirmation);
 
         return $this->redirectToRoute('home');
     }

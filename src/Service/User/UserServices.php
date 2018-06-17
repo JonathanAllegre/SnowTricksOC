@@ -26,9 +26,10 @@ class UserServices
     private $passwordEncoder;
     private $session;
 
-    const NO_USER_FOUND  = "Aucun utilisateur trouvé";
-    const ERROR_MAILER   = "Une erreur est survenue lors de l'envoie du mail";
-    const STANDARD_ERROR = "Une erreur s'est produite.";
+    const NO_USER_FOUND   = "Aucun utilisateur trouvé";
+    const ERROR_MAILER    = "Une erreur est survenue lors de l'envoie du mail";
+    const STANDARD_ERROR  = "Une erreur s'est produite.";
+    const ALLREADY_ACTIVE = "Votre compte est déjà actif.";
 
     public function __construct(
         RegistryInterface $doctrine,
@@ -47,15 +48,24 @@ class UserServices
      * CONFIRM THE USER ACCUNT
      * @param User $user
      * @throws \Exception
+     * @return mixed
      */
-    public function accuntConfirmation(User $user):void
+    public function accuntConfirmation(User $user)
     {
+
+        // IF USER ALREADY ACTIVE
+        if ($user->getActive() === 1) {
+            return self::ALLREADY_ACTIVE;
+        }
+
         // WE VALIDATE & RENGENERATE TOKEN
         $user->setActive(1);
         $user->setToken($user->generateToken());
 
         //EM
         $this->doctrine->getManager()->flush();
+
+        return true;
     }
 
     /**
