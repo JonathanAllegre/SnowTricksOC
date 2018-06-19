@@ -19,7 +19,7 @@ class Mailer
     public function __construct(\Swift_Mailer $mailer, \Twig_Environment $twig)
     {
         $this->mailer = $mailer;
-        $this->from   = 'snowtricks@snowtricks.com';
+        $this->from   = 'jonathan.allegre258@orange.fr';
         $this->twig   = $twig;
     }
 
