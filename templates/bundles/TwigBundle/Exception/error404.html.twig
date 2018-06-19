@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+    <div class="container">
+       <div class="spacertop50"></div>
+       <div class="row">
+          <div class="col-6">
+             <h1>Page non trouvée...</h1>
+             <hr>
+             <div class="text-center">
+                <li class="list-inline-item socialIcon"><a href="{{ path("home") }}"><i class="fas fa-home fa-lg"></i> Accueil</a></li>
+                <li class="list-inline-item socialIcon"><a href="{{ path("home") }}"><i class="fas fa-newspaper fa-lg"></i> Articles</a></li>
+                <li class="list-inline-item socialIcon"><a href="{{ path("home") }}#contact"><i class="far fa-envelope fa-lg"></i> Contact</a></li>
+             </div>
+          </div>
+          <div class="col-6">
+             <img src="{{ asset('img/banner404.png') }}" class="rounded-circle" alt="">
+          </div>
+       </div>
+    </div>
+{% endblock %}
