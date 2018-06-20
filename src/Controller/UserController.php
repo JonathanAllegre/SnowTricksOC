@@ -31,6 +31,12 @@ class UserController extends Controller
      */
     public function login(AuthenticationUtils $authenticationUtils)
     {
+
+        // IF THE USER IS ALREADY CONNECT WE REDIRECT TO HOME
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('home');
+        }
+
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
@@ -46,6 +52,7 @@ class UserController extends Controller
      */
     public function register(Request $request, UserServices $userServices)
     {
+
         // BUILD THE FORM
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
