@@ -24,6 +24,10 @@ class AppFixtures extends Fixture
         $this->encoder = $encoder;
     }
 
+    /**
+     * @param ObjectManager $manager
+     * @throws \Exception
+     */
     public function load(ObjectManager $manager)
     {
         $user = $this->newUser('jonathan', 'simple', 'jonathan.allegre258@orange.fr');
@@ -39,6 +43,13 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
+    /**
+     * @param $name
+     * @param $pass
+     * @param $mail
+     * @return User
+     * @throws \Exception
+     */
     public function newUser($name, $pass, $mail)
     {
         $user = new User();

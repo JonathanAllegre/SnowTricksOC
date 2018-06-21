@@ -18,7 +18,7 @@ security:
                 login_path: login
                 check_path: login
                 csrf_token_generator: security.csrf.token_manager
-            user_checker: App\Service\Security\UserChecker
+            user_checker: App\Service\UserChecker
             provider: db_provider
             logout:
                 path: /logout

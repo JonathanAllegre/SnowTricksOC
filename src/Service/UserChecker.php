@@ -6,7 +6,7 @@
  * Time: 11:11
  */
 
-namespace App\Service\Security;
+namespace App\Service;
 
 use App\Entity\User;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
