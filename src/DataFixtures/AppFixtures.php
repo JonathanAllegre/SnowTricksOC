@@ -33,17 +33,11 @@ class AppFixtures extends Fixture
         $user->setActive(1);
         $manager->persist($user);
 
-        $manager->flush();
-
-        $id = $user->getId();
-
         $trick = new Trick();
-
         $trick->setName('mute');
         $trick->setDescription('blabla');
         $trick->setCreated(new \DateTime());
         $trick->setUser($user);
-
         $manager->persist($trick);
 
         $manager->flush();
