@@ -26,11 +26,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $user = new User();
-        $user->setUsername('Jonathan');
-        $user->setPassword($this->encoder->encodePassword($user, 'simple'));
-        $user->setEmail('jonathan.allegre258@orange.fr');
-        $user->setActive(1);
+        $user = $this->newUser('jonathan', 'simple', 'jonathan.allegre258@orange.fr');
         $manager->persist($user);
 
         $trick = new Trick();
@@ -41,6 +37,17 @@ class AppFixtures extends Fixture
         $manager->persist($trick);
 
         $manager->flush();
+    }
+
+    public function newUser($name, $pass, $mail)
+    {
+        $user = new User();
+        $user->setUsername($name);
+        $user->setPassword($this->encoder->encodePassword($user, $pass));
+        $user->setEmail($mail);
+        $user->setActive(1);
+
+        return $user;
     }
 
 }

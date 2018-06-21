@@ -17,6 +17,12 @@ class Picture
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $trick;
+
+    /**
      * @ORM\Column(type="text")
      */
     private $name;
@@ -51,6 +57,18 @@ class Picture
     public function setCreated(\DateTimeInterface $created): self
     {
         $this->created = $created;
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): self
+    {
+        $this->trick = $trick;
 
         return $this;
     }
