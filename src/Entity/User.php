@@ -3,9 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\Exception\AccountStatusException;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,7 +25,6 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
-     * @Assert\NotBlank(groups="reset")
      * @Assert\Email()
      */
     private $email;
@@ -40,8 +36,7 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @Assert\NotBlank(groups="reset")
-     * @Assert\NotBlank(message="Ce message")
+     * @Assert\NotBlank()
      * @Assert\Length(max=4096)
      */
     private $plainPassword;
@@ -68,6 +63,11 @@ class User implements UserInterface
      * @ORM\Column(type="smallint")
      */
     private $active;
+
+    /**
+     * @ORM\Column(type="string", name="user_picture")
+     */
+    private $userPicture;
 
     /**
      * User constructor.
@@ -183,5 +183,27 @@ class User implements UserInterface
         return md5(random_bytes(40));
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUserPicture()
+    {
+        return $this->userPicture;
+    }
 
+    /**
+     * @param mixed $userPicture
+     */
+    public function setUserPicture($userPicture): void
+    {
+        $this->userPicture = $userPicture;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }
