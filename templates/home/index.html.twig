@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SnowTricksOC - Acceuil{% endblock %}
+{% block css  %}<link rel="stylesheet" href="{{ asset('custom/home/style.css') }}">{% endblock %}
+{% block content %}
+    <!-- IMG TOP -->
+    <div class="col-12" style="margin:0; padding:0;">
+        <div id="linkTricks">
+            <a href="#tricks" class="linkTricksLinks"><i class="fas fa-arrow-alt-circle-down fa-3x"></i></a>
+        </div>
+        <img src="{{ asset('img/back.jpg') }}" alt="" style="width:100%;" id="bgImg">
+    </div>
+    <!-- CONTAINER TRICKS -->
+    <div class="container containerAcc" id="tricks">
+        <div class="row">
+            <div class="col-12">
+                <h1>Trick List</h1>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    {% for i in 0..15 %}
+                        <div class="col-md-3 thumb" >
+                            <div class="card">
+                                <img class="card-img-top" src="{{ asset('img/ex/min.jpeg') }}" alt="Card image cap">
+                                <div class="card-body">
+                                    <p class="card-text">Stalefish</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}<script src="{{ asset('custom/home/scriptHome.js') }}"></script>{% endblock %}
+

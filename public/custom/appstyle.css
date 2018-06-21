@@ -1,0 +1,91 @@
+/* ALL CSS */
+.spacertop50{
+    padding-top:50px;
+}
+.spacerbottom50{
+    padding-bottom: 100px;
+}
+.spacebottom25{
+    padding-bottom:25px;
+}
+.spacertop25{
+    padding-top:25px;
+}
+
+.invalid{
+    color:red;
+    text-align: left;
+}
+.form-control{
+    border: solid 1px #567398;
+}
+
+a{
+    color: #567398;
+}
+a:hover{
+    color: #567398;
+}
+
+.listMobilFooter a{
+    margin-right:50px;
+}
+
+.nav-link{
+    cursor:pointer;
+}
+.navbBlack{
+    background-color: black;
+}
+.containerAcc{
+    margin-top:100px;
+    margin-bottom:50px;
+}
+
+/* FOOTER */
+#navBottomMobil{
+    text-align:center;
+    min-height:40px;
+}
+#navBottomDesktop{
+    text-align:center;
+    min-height:40px;
+}
+.linkCopirighFooter{
+    margin-top:10px;
+    color:white;
+}
+.ulPictoFooter{
+    padding-top:8px;
+}
+.listMobilFooter a{
+    margin-right:60px;
+}
+#navBottomMobil>.row{
+    margin-top:5px;
+}
+
+.pictoFooter{
+    color:white;
+}
+
+@media (min-width: 767.98px) {
+    #navBottomMobil{
+        display:none;
+    }
+}
+
+/* FLASH MESSAGES */
+
+.flash-success{
+    background-color: #567398;
+    color:white;
+    height:30px;
+    padding-top:3px;
+}
+.flash-warning{
+    background-color: #98474d;
+    color:white;
+    height:30px;
+    padding-top:3px;
+}

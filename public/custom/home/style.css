@@ -1,0 +1,29 @@
+
+/* HOME CSS */
+#navBottomDesktop{
+	display:none;
+}
+#navBottomMobil{
+	display: none;
+}
+
+#bgImg{
+	border-bottom: solid 3px black;
+}
+
+.thumb{
+	padding-left:20px;
+	padding-bottom:20px;
+}
+#linkTricks{
+	position: absolute;
+	z-index: 2;
+	color:white;
+}
+.linkTricksLinks{
+	color:white;
+}
+
+
+
+
