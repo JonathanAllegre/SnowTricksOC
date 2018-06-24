@@ -8,6 +8,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Comment;
 use App\Entity\Family;
 use App\Entity\Picture;
 use App\Entity\Trick;
@@ -40,18 +41,21 @@ class AppFixtures extends Fixture
         $flipFamily   = $this->newFamily('Flip');
 
 
-        $user = $this->newUser('jonathan', 'simple', 'jonathan.allegre258@orange.fr');
+        $user1 = $this->newUser('jonathan', 'simple', 'jonathan.allegre258@orange.fr');
 
-        $trick1  = $this->newTrick('Mute', 'C le mute', $user, $grabFamily);
-        $this->newPicture('test.jpeg', $trick1);
+        $trick1         = $this->newTrick('Mute', 'C le mute', $user1, $grabFamily);
+        $listingPicture = $this->newPicture('test.jpeg', $trick1);
         $this->newPicture('test2.jpeg', $trick1);
         $this->newVideo('youtube/khkhkh', $trick1);
         $this->newVideo('youtube/khkhk', $trick1);
         $this->newVideo('youtube/khkh', $trick1);
         $this->newVideo('youtube/khkkjhlkj', $trick1);
+        $this->newComment($trick1, $user1, 'C cool le mute');
+        $trick1->setListingPicture($listingPicture);
 
 
-        $trick2 = $this->newTrick('Stalefish', 'C le Stalefish', $user, $grabFamily);
+
+        $trick2 = $this->newTrick('Stalefish', 'C le Stalefish', $user1, $grabFamily);
 
         $manager->flush();
     }
@@ -138,6 +142,19 @@ class AppFixtures extends Fixture
         $this->manager->persist($family);
 
         return $family;
+    }
+
+    public function newComment(Trick $trick, User $user, $content):Comment
+    {
+        $comment = new Comment();
+        $comment->setTrick($trick);
+        $comment->setCreated(new \DateTime());
+        $comment->setUser($user);
+        $comment->setContent($content);
+
+        $this->manager->persist($comment);
+
+        return $comment;
     }
 
 

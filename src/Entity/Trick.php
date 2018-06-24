@@ -30,6 +30,12 @@ class Trick
     private $family;
 
     /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Picture")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $listingPicture;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $name;
@@ -111,6 +117,22 @@ class Trick
         $this->family = $family;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getListingPicture()
+    {
+        return $this->listingPicture;
+    }
+
+    /**
+     * @param mixed $listingPicture
+     */
+    public function setListingPicture($listingPicture): void
+    {
+        $this->listingPicture = $listingPicture;
     }
 
 
