@@ -26,9 +26,11 @@ class TrickController extends Controller
      */
     public function test()
     {
-        //
-        // FIND PICTURE FOR TRICK
-        $trick = $this->getDoctrine()->getRepository(Trick::class)->find(8);
+
+
+
+
+        exit();
 
         $pictures = $this->getDoctrine()
             ->getRepository(Picture::class)

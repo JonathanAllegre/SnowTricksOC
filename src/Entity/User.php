@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -23,11 +21,6 @@ class User implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user")
-     */
-    private $tricks;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -85,7 +78,6 @@ class User implements UserInterface
         $this->roles  = array('ROLE_USER');
         $this->token  = $this->generateToken();
         $this->active = 0;
-        $this->tricks = new ArrayCollection();
     }
 
 
@@ -215,11 +207,4 @@ class User implements UserInterface
         return $this->id;
     }
 
-    /**
-     * @return Collection|Trick[]
-     */
-    public function getTricks(): Collection
-    {
-        return $this->tricks;
-    }
 }

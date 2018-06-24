@@ -8,6 +8,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -33,12 +34,18 @@ class AppFixtures extends Fixture
         $user = $this->newUser('jonathan', 'simple', 'jonathan.allegre258@orange.fr');
         $manager->persist($user);
 
-        $trick = new Trick();
-        $trick->setName('mute');
-        $trick->setDescription('blabla');
-        $trick->setCreated(new \DateTime());
-        $trick->setUser($user);
+
+        $trick  = $this->newTrick('Mute', 'C le mute', $user);
+        $picture = $this->newPicture('test.jpeg', $trick);
+        $manager->persist($picture);
+        $picture = $this->newPicture('test2.jpeg', $trick);
+        $manager->persist($picture);
         $manager->persist($trick);
+
+
+        $trick = $this->newTrick('Stalefish', 'C le Stalefish', $user);
+        $manager->persist($trick);
+
 
         $manager->flush();
     }
@@ -50,7 +57,7 @@ class AppFixtures extends Fixture
      * @return User
      * @throws \Exception
      */
-    public function newUser($name, $pass, $mail)
+    public function newUser($name, $pass, $mail):User
     {
         $user = new User();
         $user->setUsername($name);
@@ -61,4 +68,31 @@ class AppFixtures extends Fixture
         return $user;
     }
 
+    /**
+     * @param $name
+     * @param $description
+     * @param User $user
+     * @return Trick
+     */
+    public function newTrick($name, $description, User $user):Trick
+    {
+        $trick = new Trick();
+        $trick->setName($name);
+        $trick->setDescription($description);
+        $trick->setCreated(new \DateTime());
+        $trick->setUser($user);
+
+        return $trick;
+    }
+
+    public function newPicture($name, $trick):Picture
+    {
+        $picture = new Picture();
+        $picture->setName($name);
+        $picture->setCreated(new \DateTime());
+        $picture->setTrick($trick);
+
+        return $picture;
+
+    }
 }
