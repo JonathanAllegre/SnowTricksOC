@@ -6,11 +6,11 @@
  * Time: 13:10
  */
 
-namespace App\Service\Mailer;
+namespace App\Service;
 
 use App\Entity\User;
 
-class Mailer
+class MailerService
 {
     private $mailer;
     private $from;

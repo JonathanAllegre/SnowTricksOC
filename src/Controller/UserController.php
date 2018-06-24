@@ -6,7 +6,7 @@ use App\Entity\User;
 use App\Form\UserForgotPassType;
 use App\Form\UserResetPassType;
 use App\Form\UserType;
-use App\Service\User\UserServices;
+use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -50,7 +50,7 @@ class UserController extends Controller
      * @Route("/register", name="user_registration")
      * @Template()
      */
-    public function register(Request $request, UserServices $userServices)
+    public function register(Request $request, UserService $userServices)
     {
 
         // BUILD THE FORM
@@ -80,7 +80,7 @@ class UserController extends Controller
     /**
      * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
      */
-    public function accountConfirmation(User $user, UserServices $userServices)
+    public function accountConfirmation(User $user, UserService $userServices)
     {
         // VALIDATION
         $accuntConfirmation = $userServices->accuntConfirmation($user);
@@ -100,7 +100,7 @@ class UserController extends Controller
      * @Route("forgot/password", name="forgotPassword")
      * @Template()
      */
-    public function forgotPassword(Request $request, UserServices $userServices)
+    public function forgotPassword(Request $request, UserService $userServices)
     {
         $form = $this->createForm(UserForgotPassType::class);
 
@@ -126,7 +126,7 @@ class UserController extends Controller
      * @Route("reset/password/{token}", name="resetPassword")
      * @Template()
      */
-    public function resetPassWord(Request $request, User $user, UserServices $userServices)
+    public function resetPassWord(Request $request, User $user, UserService $userServices)
     {
         $form = $this->createForm(UserResetPassType::class);
 

@@ -6,10 +6,9 @@
  * Time: 11:02
  */
 
-namespace App\Service\User;
+namespace App\Service;
 
 use App\Entity\User;
-use App\Service\Mailer\Mailer;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -19,7 +18,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * Class UserServices
  * @package App\Service\User
  */
-class UserServices
+class UserService
 {
     private $doctrine;
     private $mailer;
@@ -33,7 +32,7 @@ class UserServices
 
     public function __construct(
         RegistryInterface $doctrine,
-        Mailer $mailer,
+        MailerService $mailer,
         UserPasswordEncoderInterface $encoder,
         SessionInterface $session
     ) {
