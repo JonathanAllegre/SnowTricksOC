@@ -17,6 +17,12 @@ class Video
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     */
+    private $trick;
+
+    /**
      * @ORM\Column(type="text")
      */
     private $url;
@@ -54,4 +60,22 @@ class Video
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTrick()
+    {
+        return $this->trick;
+    }
+
+    /**
+     * @param mixed $trick
+     */
+    public function setTrick($trick): void
+    {
+        $this->trick = $trick;
+    }
+
+
 }
