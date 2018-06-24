@@ -8,6 +8,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Family;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\User;
@@ -34,9 +35,14 @@ class AppFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
+        $grabFamily   = $this->newFamily('Grab');
+        $rotateFamily = $this->newFamily('Rotation');
+        $flipFamily   = $this->newFamily('Flip');
+
+
         $user = $this->newUser('jonathan', 'simple', 'jonathan.allegre258@orange.fr');
 
-        $trick1  = $this->newTrick('Mute', 'C le mute', $user);
+        $trick1  = $this->newTrick('Mute', 'C le mute', $user, $grabFamily);
         $this->newPicture('test.jpeg', $trick1);
         $this->newPicture('test2.jpeg', $trick1);
         $this->newVideo('youtube/khkhkh', $trick1);
@@ -45,7 +51,7 @@ class AppFixtures extends Fixture
         $this->newVideo('youtube/khkkjhlkj', $trick1);
 
 
-        $trick2 = $this->newTrick('Stalefish', 'C le Stalefish', $user);
+        $trick2 = $this->newTrick('Stalefish', 'C le Stalefish', $user, $grabFamily);
 
         $manager->flush();
     }
@@ -76,13 +82,14 @@ class AppFixtures extends Fixture
      * @param User $user
      * @return Trick
      */
-    public function newTrick($name, $description, User $user):Trick
+    public function newTrick($name, $description, User $user, Family $family):Trick
     {
         $trick = new Trick();
         $trick->setName($name);
         $trick->setDescription($description);
         $trick->setCreated(new \DateTime());
         $trick->setUser($user);
+        $trick->setFamily($family);
 
         $this->manager->persist($trick);
 
@@ -121,6 +128,16 @@ class AppFixtures extends Fixture
         $this->manager->persist($video);
 
         return $video;
+    }
+
+    public function newFamily($name):Family
+    {
+        $family = new Family();
+        $family->setTitle($name);
+
+        $this->manager->persist($family);
+
+        return $family;
     }
 
 

@@ -9,11 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Trick
 {
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
-    private $user;
 
     /**
      * @ORM\Id()
@@ -21,6 +16,18 @@ class Trick
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Family")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $family;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -89,4 +96,22 @@ class Trick
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFamily(): ?Family
+    {
+        return $this->family;
+    }
+
+
+    public function setFamily(?Family $family):self
+    {
+        $this->family = $family;
+
+        return $this;
+    }
+
+
 }
