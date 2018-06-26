@@ -36,6 +36,13 @@ class AppFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
+
+        $video            = file(__DIR__.'/video.txt');
+        $picture          = file(__DIR__.'/picture.txt');
+        $trickDescription = file(__DIR__.'/trickDescription.txt');
+
+
+
         $grabFamily   = $this->newFamily('Grab');
         $rotateFamily = $this->newFamily('Rotation');
         $flipFamily   = $this->newFamily('Flip');
@@ -43,27 +50,32 @@ class AppFixtures extends Fixture
 
         $user1 = $this->newUser('jonathan', 'simple', 'jonathan.allegre258@orange.fr');
 
-        $trick1         = $this->newTrick('Mute', 'saisie de la carre frontside de la planche entre les deux pieds avec la main avant ;', $user1, $grabFamily);
-        $listingPicture = $this->newPicture('https://upload.wikimedia.org/wikipedia/commons/d/df/Aviano_snowboarder.JPG', $trick1);
-        $this->newPicture('https://www.summitdaily.com/wp-content/uploads/2016/12/USGrandPrixPhotos-sdn-121816-12-1240x859.jpg', $trick1);
-        $this->newVideo('<iframe width="560" height="315" src="https://www.youtube.com/embed/hih9jIzOoRg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>', $trick1);
-        $this->newVideo('<iframe width="560" height="315" src="https://www.youtube.com/embed/CA5bURVJ5zk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>', $trick1);
+        $trick1         = $this->newTrick('Mute', $trickDescription[0], $user1, $grabFamily);
+        $listingPicture = $this->newPicture($picture[0], $trick1);
+        $this->newPicture($picture[1], $trick1);
+        $this->newVideo($video[0], $trick1);
+        $this->newVideo($video[1], $trick1);
         $this->newComment($trick1, $user1, 'Trop cool le mute et facile en plus');
         $trick1->setListingPicture($listingPicture);
 
-
-        $trick2         = $this->newTrick('Stalefish', 'saisie de la carre backside de la planche entre les deux pieds avec la main arrière ;', $user1, $grabFamily);
-        $listingPicture = $this->newPicture('https://c1.staticflickr.com/4/3623/3349766374_4d5a21fa06_b.jpg', $trick2);
-        $this->newPicture('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR77FBcNmHo6akKUJL8dfQBvrKkiPiVcIyhDx2mS2TqA8kRrayJ', $trick2);
-        $this->newVideo('<iframe width="560" height="315" src="https://www.youtube.com/embed/6z6KBAbM0MY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>', $trick2);
+        $trick2         = $this->newTrick('Stalefish', $trickDescription[1], $user1, $grabFamily);
+        $listingPicture = $this->newPicture($picture[2], $trick2);
+        $this->newPicture($picture[3], $trick2);
+        $this->newVideo($video[2], $trick2);
         $this->newComment($trick2, $user1, 'Un bon stalefish, et au lit !');
         $trick2->setListingPicture($listingPicture);
 
-
-        $trick3         = $this->newTrick('180', 'désigne un demi-tour, soit 180 degrés d\'angle ;', $user1, $rotateFamily);
-        $listingPicture = $this->newPicture('https://c1.staticflickr.com/3/2075/2319855559_2887938f5b_b.jpg', $trick3);
-        $this->newPicture('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR77FBcNmHo6akKUJL8dfQBvrKkiPiVcIyhDx2mS2TqA8kRrayJ', $trick3);
+        $trick3         = $this->newTrick('180', $trickDescription[2], $user1, $rotateFamily);
+        $listingPicture = $this->newPicture($picture[4], $trick3);
+        $this->newPicture($picture[5], $trick3);
         $trick2->setListingPicture($listingPicture);
+
+        $trick4         = $this->newTrick('Backflip', $trickDescription[3], $user1, $flipFamily);
+        $this->newVideo($video[3], $trick4);
+        $listingPicture = $this->newPicture($picture[6], $trick4);
+        $trick4->setListingPicture($listingPicture);
+        $this->newPicture($picture[7], $trick4);
+
 
         $manager->flush();
     }
@@ -164,8 +176,4 @@ class AppFixtures extends Fixture
 
         return $comment;
     }
-
-
-
-
 }
