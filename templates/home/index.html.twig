@@ -21,12 +21,24 @@
         <div class="row">
             <div class="col-12">
                 <div class="row">
-                    {% for i in 0..15 %}
+                    {% for trick in tricks %}
                         <div class="col-md-3 thumb" >
                             <div class="card">
-                                <img class="card-img-top" src="{{ asset('img/ex/min.jpeg') }}" alt="Card image cap">
+                                {% if trick.getListingPicture() %}
+                                    <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
+                                {% else %}
+                                    <img class="card-img-top" src="http://blog.kesi-art.com/wp-content/uploads/elementor/thumbs/VISUEL-NON-DISPONIBLE-nchgtciah9pdkun8mutbeagowv4fc9zk23qz6hmx8m.png" alt="Card image cap">
+                                {% endif %}
                                 <div class="card-body">
-                                    <p class="card-text">Stalefish</p>
+                                    <p class="card-text">
+                                        <a href="hj/kl">{{ trick.name }}</a>
+                                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                        <span class="float-right">
+                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-trash-alt"></i>
+                                        </span>
+                                        {% endif %}
+                                    </p>
                                 </div>
                             </div>
                         </div>

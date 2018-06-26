@@ -122,17 +122,20 @@ class Trick
     /**
      * @return mixed
      */
-    public function getListingPicture()
+    public function getListingPicture(): ?Picture
     {
         return $this->listingPicture;
     }
 
     /**
-     * @param mixed $listingPicture
+     * @param $listingPicture
+     * @return Trick
      */
-    public function setListingPicture($listingPicture): void
+    public function setListingPicture($listingPicture): self
     {
         $this->listingPicture = $listingPicture;
+
+        return $this;
     }
 
 

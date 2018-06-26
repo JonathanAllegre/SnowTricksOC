@@ -41,12 +41,9 @@ class AppFixtures extends Fixture
         $picture          = file(__DIR__.'/picture.txt');
         $trickDescription = file(__DIR__.'/trickDescription.txt');
 
-
-
         $grabFamily   = $this->newFamily('Grab');
         $rotateFamily = $this->newFamily('Rotation');
         $flipFamily   = $this->newFamily('Flip');
-
 
         $user1 = $this->newUser('jonathan', 'simple', 'jonathan.allegre258@orange.fr');
 
@@ -68,7 +65,7 @@ class AppFixtures extends Fixture
         $trick3         = $this->newTrick('180', $trickDescription[2], $user1, $rotateFamily);
         $listingPicture = $this->newPicture($picture[4], $trick3);
         $this->newPicture($picture[5], $trick3);
-        $trick2->setListingPicture($listingPicture);
+        $trick3->setListingPicture($listingPicture);
 
         $trick4         = $this->newTrick('Backflip', $trickDescription[3], $user1, $flipFamily);
         $this->newVideo($video[3], $trick4);

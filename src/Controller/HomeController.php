@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Trick;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -9,19 +11,20 @@ class HomeController extends Controller
 {
     /**
      * @Route("/", name="home")
+     * @Template();
      */
     public function index()
     {
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
-        ]);
+        $tricks = $this->getDoctrine()
+            ->getRepository(Trick::class)
+            ->getTricksWithListingPicture();
+
+        /*$tricks = $this->getDoctrine()
+            ->getRepository(Trick::class)
+            ->findAll();*/
+
+
+        return  ['tricks' => $tricks];
     }
 
-    /**
-     * @Route("/admin", name="Admin")
-     */
-    public function admin()
-    {
-        return $this->render('bienvenue');
-    }
 }
