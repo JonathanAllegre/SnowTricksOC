@@ -19,11 +19,6 @@ class HomeController extends Controller
             ->getRepository(Trick::class)
             ->getTricksWithListingPicture();
 
-        /*$tricks = $this->getDoctrine()
-            ->getRepository(Trick::class)
-            ->findAll();*/
-
-
         return  ['tricks' => $tricks];
     }
 
