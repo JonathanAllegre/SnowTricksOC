@@ -49,13 +49,8 @@ $(window).scroll(function() {
 });
 
 // MODAL SUPPRESSION
-
 $(".deletIcon").click(function(){
-
     $('#deleteButton').attr('href', 'trick/delete/' + $(this).attr("trickId"));
     $('#exampleModalLabel').html('Suppression du trick "'+ $(this).attr("trickName")+'"');
-
-
 });
-
 
