@@ -32,7 +32,7 @@
                                     {% endif %}
                                     <div class="card-body">
                                         <p class="card-text">
-                                            <a href="hj/kl"><bold>{{ trick.name|upper }}</bold></a>
+                                            <a href="{{ path('trick_detail', {'id': trick.id}) }}"><bold>{{ trick.name|upper }}</bold></a>
                                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                             <span class="float-right">
                                                 <a href="{{ path('trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>

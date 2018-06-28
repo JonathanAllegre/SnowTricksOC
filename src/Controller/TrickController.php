@@ -21,7 +21,7 @@ class TrickController extends Controller
     /**
      * @Route("/trick/delete/{id}", name="trick_delete")
      */
-    public function test(Trick $trick)
+    public function delete(Trick $trick)
     {
         // CHECK IF USER IS CONNECT
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -34,6 +34,18 @@ class TrickController extends Controller
         $this->addFlash('success', 'Le trick "'. $trick->getName().'" à bien été supprimé');
 
         return $this->redirectToRoute('home', ['_fragment' => 'tricks']);
+    }
+
+    /**
+     * @param Trick $trick
+     * @return array
+     * @Template()
+     * @Route("/trick/detail/{id}", name="trick_detail")
+     */
+    public function detail(Trick $trick)
+    {
+        var_dump($trick);
+        return [];
     }
 
     /**
