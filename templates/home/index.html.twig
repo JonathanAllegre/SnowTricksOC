@@ -25,18 +25,14 @@
                         {% for trick in tricks %}
                             <div class="col-md-3 thumb" >
                                 <div class="card">
-                                    {% if trick.getListingPicture() %}
-                                        <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
-                                    {% else %}
-                                        <img class="card-img-top" src="http://blog.kesi-art.com/wp-content/uploads/elementor/thumbs/VISUEL-NON-DISPONIBLE-nchgtciah9pdkun8mutbeagowv4fc9zk23qz6hmx8m.png" alt="Card image cap">
-                                    {% endif %}
+                                    <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
                                     <div class="card-body">
                                         <p class="card-text">
                                             <a href="{{ path('trick_detail', {'id': trick.id}) }}"><bold>{{ trick.name|upper }}</bold></a>
                                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                             <span class="float-right">
                                                 <a href="{{ path('trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
-                                                <a href="" class="deletIcon" trickId="{{ trick.Id  }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
+                                                <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
                                             </span>
                                             {% endif %}
                                         </p>

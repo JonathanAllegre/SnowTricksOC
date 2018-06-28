@@ -19,7 +19,7 @@ class TrickController extends Controller
     }
 
     /**
-     * @Route("/trick/delete/{id}", name="trick_delete")
+     * @Route("/trick/delete/{id}")
      */
     public function delete(Trick $trick)
     {
@@ -33,7 +33,7 @@ class TrickController extends Controller
         // AD FLASH
         $this->addFlash('success', 'Le trick "'. $trick->getName().'" à bien été supprimé');
 
-        return $this->redirectToRoute('home', ['_fragment' => 'tricks']);
+        return $this->redirectToRoute('home');
     }
 
     /**

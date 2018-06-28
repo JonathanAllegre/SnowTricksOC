@@ -122,9 +122,9 @@ class Trick
     /**
      * @return mixed
      */
-    public function getListingPicture(): ?Picture
+    public function getListingPicture(): Picture
     {
-        return $this->listingPicture;
+        return $this->listingPicture ?? new Picture();
     }
 
     /**
