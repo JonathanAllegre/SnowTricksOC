@@ -32,6 +32,19 @@ class TrickController extends Controller
 
         // AD FLASH
         $this->addFlash('success', 'Le trick "'. $trick->getName().'" à bien été supprimé');
+
         return $this->redirectToRoute('home', ['_fragment' => 'tricks']);
+    }
+
+    /**
+     * @param Trick $trick
+     * @return array
+     * @Template()
+     * @Route("/trick/update/{id}", name="trick_update")
+     */
+    public function update(Trick $trick)
+    {
+        var_dump($trick);
+        return [];
     }
 }
