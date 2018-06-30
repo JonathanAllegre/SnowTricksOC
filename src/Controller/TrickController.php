@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -21,17 +22,21 @@ class TrickController extends Controller
     /**
      * @Route("/trick/delete/{id}")
      */
-    public function delete(Trick $trick)
+    public function delete(Trick $trick, Request $request)
     {
         // CHECK IF USER IS CONNECT
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // REMOVE TRICK
-        $this->getDoctrine()->getManager()->remove($trick);
-        $this->getDoctrine()->getManager()->flush();
+        if ($this->isCsrfTokenValid('delete-trick', $request->request->get('token'))) {
+            // REMOVE TRICK
+            $this->getDoctrine()->getManager()->remove($trick);
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'Le trick "'. $trick->getName().'" à bien été supprimé');
 
-        // AD FLASH
-        $this->addFlash('success', 'Le trick "'. $trick->getName().'" à bien été supprimé');
+            return $this->redirectToRoute('home');
+        }
+
+        $this->addFlash('warning', "Une erreur s'est produite");
 
         return $this->redirectToRoute('home');
     }

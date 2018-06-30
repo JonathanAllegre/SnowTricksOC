@@ -80,8 +80,11 @@
                     Cette action est irréversible. Souhaitez-vous continuer ?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <a id="deleteButton" href="trick/delete/id"><button type="button" class="btn btn-danger">Supprimer</button></a>
+                    <form action="" method="POST" id="formDelete">
+                        <input type="hidden" name="token" value="{{ csrf_token('delete-trick') }}" />
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Supprimer</button></a>
+                    </form>
                 </div>
             </div>
         </div>

@@ -50,7 +50,7 @@ $(window).scroll(function() {
 
 // MODAL SUPPRESSION
 $(".deletIcon").click(function(){
-    $('#deleteButton').attr('href', $(this).attr("trickPath"));
+    $('#formDelete').attr('action', $(this).attr("trickPath"));
     $('#exampleModalLabel').html('Suppression du trick "'+ $(this).attr("trickName")+'"');
 });
 
