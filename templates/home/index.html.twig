@@ -11,9 +11,9 @@
         <img src="{{ asset('img/back.jpg') }}" alt="" style="width:100%;" id="bgImg">
     </div>
     <!-- CONTAINER TRICKS -->
-    <div class="container containerAcc" id="tricks">
+    <div class="container-fluid containerAcc" id="tricks">
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-10 offset-md-1">
                 <h1>Trick List</h1>
                 <hr>
             </div>
@@ -21,10 +21,10 @@
         <div class="row">
             <div class="col-12">
                 {% if tricks %}
-                    {% for trick in tricks %}
-                        {% if  loop.index0 is divisible by(5) and loop.index0 == 0  %}
-                            <div class="row">
-                                <div class="col-md">
+                    <div class="row">
+                        {% for trick in tricks %}
+                            {% if loop.index0 is divisible by(5)%}
+                                <div class="col-md-2 offset-md-1 thumb">
                                     <div class="card">
                                         <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
                                         <div class="card-body">
@@ -32,18 +32,16 @@
                                                 <a href="{{ path('trick_detail', {'id': trick.id}) }}"><bold>{{ trick.name|upper }}</bold></a>
                                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                                     <span class="float-right">
-                                                <a href="{{ path('trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
-                                                <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
-                                            </span>
+                                                    <a href="{{ path('trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
+                                                    <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
+                                                </span>
                                                 {% endif %}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
-                        {% elseif loop.index0 is divisible by(5) %}
-                            </div>
-                            <div class="row">
-                                <div class="col-md thumb">
+                            {% else %}
+                                <div class="col-md-2 thumb">
                                     <div class="card">
                                         <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
                                         <div class="card-body">
@@ -51,54 +49,20 @@
                                                 <a href="{{ path('trick_detail', {'id': trick.id}) }}"><bold>{{ trick.name|upper }}</bold></a>
                                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                                     <span class="float-right">
-                                                <a href="{{ path('trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
-                                                <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
-                                            </span>
+                                                    <a href="{{ path('trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
+                                                    <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
+                                                </span>
                                                 {% endif %}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
-                        {% elseif loop.last %}
-                            <div class="col-md thumb">
-                                <div class="card">
-                                    <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
-                                    <div class="card-body">
-                                        <p class="card-text">
-                                            <a href="{{ path('trick_detail', {'id': trick.id}) }}"><bold>{{ trick.name|upper }}</bold></a>
-                                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                                <span class="float-right">
-                                                <a href="{{ path('trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
-                                                <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
-                                            </span>
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                        {% else %}
-                            <div class="col-md thumb">
-                                <div class="card">
-                                    <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
-                                    <div class="card-body">
-                                        <p class="card-text">
-                                            <a href="{{ path('trick_detail', {'id': trick.id}) }}"><bold>{{ trick.name|upper }}</bold></a>
-                                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                                <span class="float-right">
-                                                <a href="{{ path('trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
-                                                <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
-                                            </span>
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                                {% endif %}
+                        {% endfor %}
                 {% else %}
                     <div class="col-12">Aucun tricks n'est en ligne...</div>
                     {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
