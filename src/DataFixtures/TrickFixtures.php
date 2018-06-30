@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Family;
 use App\Entity\Trick;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -12,6 +14,10 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
     private $manager;
 
+    const TRICK_MUTE      = 'Mute';
+    const TRICK_STALEFISH = 'Stalefish';
+    const TRICK_180       = '180';
+    const TRICK_BACKFLIP  = 'Backflip';
 
     public function __construct(ObjectManager $manager)
     {
@@ -23,34 +29,38 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trickDescription = file(__DIR__.'/trickDescription.txt');
 
 
-        $trick1 = $this->newTrick(
+        $trickMute = $this->newTrick(
             'Mute',
             trim($trickDescription[0]),
             $this->getReference(UserFixtures::USER_ONE_REFERENCE),
             $this->getReference(FamilyFixtures::GRAB_FAMILY)
         );
 
-        $trick2 = $this->newTrick(
+        $trickStalefish = $this->newTrick(
             'Stalefish',
             trim($trickDescription[1]),
             $this->getReference(UserFixtures::USER_ONE_REFERENCE),
             $this->getReference(FamilyFixtures::GRAB_FAMILY)
         );
 
-        $trick3 = $this->newTrick(
+        $trick180 = $this->newTrick(
             '180',
             trim($trickDescription[2]),
             $this->getReference(UserFixtures::USER_ONE_REFERENCE),
             $this->getReference(FamilyFixtures::ROTATION_FAMILY)
         );
 
-        $trick4 = $this->newTrick(
+        $trickBackflip = $this->newTrick(
             'Backflip',
             trim($trickDescription[3]),
             $this->getReference(UserFixtures::USER_ONE_REFERENCE),
             $this->getReference(FamilyFixtures::FLIP_FAMILY)
         );
 
+        $this->addReference(self::TRICK_MUTE, $trickMute);
+        $this->addReference(self::TRICK_STALEFISH, $trickStalefish);
+        $this->addReference(self::TRICK_180, $trick180);
+        $this->addReference(self::TRICK_BACKFLIP, $trickBackflip);
 
         $manager->flush();
     }
@@ -76,7 +86,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
      * @param $family
      * @return Trick
      */
-    public function newTrick($name, $description, $user, $family):Trick
+    public function newTrick($name, $description, User $user, Family $family):Trick
     {
         $trick = new Trick();
         $trick->setName($name);
