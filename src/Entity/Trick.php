@@ -30,13 +30,13 @@ class Trick
     private $family;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Picture")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Picture")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $listingPicture;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
 
