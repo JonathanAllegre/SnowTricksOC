@@ -15,8 +15,8 @@ security:
         main:
             anonymous: true
             form_login:
-                login_path: login
-                check_path: login
+                login_path: app_user_login
+                check_path: app_user_login
                 csrf_token_generator: security.csrf.token_manager
             user_checker: App\Service\UserCheckerService
             provider: db_provider

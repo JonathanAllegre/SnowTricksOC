@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class UserController extends Controller
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/user")
      */
     public function index()
     {
@@ -26,7 +26,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/login", name="login")
+     * @Route("/login")
      * @Template()
      */
     public function login(AuthenticationUtils $authenticationUtils)
@@ -34,7 +34,7 @@ class UserController extends Controller
 
         // IF THE USER IS ALREADY CONNECT WE REDIRECT TO HOME
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home_index');
         }
 
         // get the login error if there is one
@@ -47,7 +47,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/register", name="user_registration")
+     * @Route("/register")
      * @Template()
      */
     public function register(Request $request, UserService $userServices)
@@ -69,7 +69,7 @@ class UserController extends Controller
         if (true === $register) {
             $this->addFlash('success', 'Votre compte à bien été crée.');
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home_index');
         }
         // IF REGISTER IS FALSE
         $this->addFlash('warning', $register);
@@ -78,7 +78,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
+     * @Route("/register/confirmation/{username}/{token}")
      */
     public function accountConfirmation(User $user, UserService $userServices)
     {
@@ -87,17 +87,17 @@ class UserController extends Controller
         if (true === $accuntConfirmation) {
             $this->addFlash('success', 'Votre compte est maintenant activé.');
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home_index');
         }
 
         $this->addFlash('warning', $accuntConfirmation);
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('app_home_index');
     }
 
 
     /**
-     * @Route("forgot/password", name="forgotPassword")
+     * @Route("forgot/password")
      * @Template()
      */
     public function forgotPassword(Request $request, UserService $userServices)
@@ -114,7 +114,7 @@ class UserController extends Controller
         if (true === $forgotPass) {
             $this->addFlash('success', "Un e-mail vient d'être envoyé");
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home_index');
         }
 
         $this->addFlash('warning', $forgotPass);
@@ -123,7 +123,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("reset/password/{token}", name="resetPassword")
+     * @Route("reset/password/{token}")
      * @Template()
      */
     public function resetPassWord(Request $request, User $user, UserService $userServices)
@@ -140,6 +140,6 @@ class UserController extends Controller
         $userServices->resetPassword($user, $userResetPass);
 
         $this->addFlash('success', 'Votre mot de passe à bien été réinitialiser.');
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('app_home_index');
     }
 }

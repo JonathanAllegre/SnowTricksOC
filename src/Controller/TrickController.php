@@ -33,19 +33,19 @@ class TrickController extends Controller
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le trick "'. $trick->getName().'" à bien été supprimé');
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home_index');
         }
 
         $this->addFlash('warning', "Une erreur s'est produite");
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('app_home_index');
     }
 
     /**
      * @param Trick $trick
      * @return array
      * @Template()
-     * @Route("/trick/detail/{id}", name="trick_detail")
+     * @Route("/trick/detail/{id}")
      */
     public function detail(Trick $trick)
     {
@@ -57,7 +57,7 @@ class TrickController extends Controller
      * @param Trick $trick
      * @return array
      * @Template()
-     * @Route("/trick/update/{id}", name="trick_update")
+     * @Route("/trick/update/{id}")
      */
     public function update(Trick $trick)
     {
