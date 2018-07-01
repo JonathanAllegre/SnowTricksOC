@@ -53,26 +53,31 @@ class UserController extends Controller
     public function register(Request $request, UserService $userServices)
     {
 
+        // IF THE USER IS ALREADY CONNECT WE REDIRECT TO HOME
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('app_home_index');
+        }
+
         // BUILD THE FORM
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
         // HANDLE THE SUBMIT
         $form->handleRequest($request);
-        if (!$form->isSubmitted() || !$form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            // REGISTER SERVICES
+            $register = $userServices->registerUser($user);
+            // IF REGISTER IS TRUE
+            if (true === $register) {
+                $this->addFlash('success', 'Votre compte à bien été crée.');
+
+                return $this->redirectToRoute('app_home_index');
+            }
+            // IF REGISTER IS FALSE
+            $this->addFlash('warning', $register);
+
             return ['form' => $form->createView()];
         }
-
-        // REGISTER SERVICES
-        $register = $userServices->registerUser($user);
-        // IF REGISTER IS TRUE
-        if (true === $register) {
-            $this->addFlash('success', 'Votre compte à bien été crée.');
-
-            return $this->redirectToRoute('app_home_index');
-        }
-        // IF REGISTER IS FALSE
-        $this->addFlash('warning', $register);
 
         return ['form' => $form->createView()];
     }
@@ -105,19 +110,18 @@ class UserController extends Controller
         $form = $this->createForm(UserForgotPassType::class);
 
         $form->handleRequest($request);
-        if (!$form->isSubmitted() || !$form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            // FORGOT PASS SERVICES
+            $forgotPass = $userServices->forgotPassword($request->request->get('user_forgot_pass'));
+            if (true === $forgotPass) {
+                $this->addFlash('success', "Un e-mail vient d'être envoyé");
+
+                return $this->redirectToRoute('app_home_index');
+            }
+            $this->addFlash('warning', $forgotPass);
+
             return ['form' => $form->createView()];
         }
-
-        // FORGOT PASS SERVICES
-        $forgotPass = $userServices->forgotPassword($request->request->get('user_forgot_pass'));
-        if (true === $forgotPass) {
-            $this->addFlash('success', "Un e-mail vient d'être envoyé");
-
-            return $this->redirectToRoute('app_home_index');
-        }
-
-        $this->addFlash('warning', $forgotPass);
 
         return ['form' => $form->createView()];
     }
@@ -131,15 +135,15 @@ class UserController extends Controller
         $form = $this->createForm(UserResetPassType::class);
 
         $form->handleRequest($request);
-        if (!$form->isSubmitted() || !$form->isValid()) {
-            return ['form' => $form->createView()];
+        if ($form->isSubmitted() && $form->isValid()) {
+            // RESET PASS FORM DATA
+            $userResetPass = $request->request->get('user_reset_pass');
+            $userServices->resetPassword($user, $userResetPass);
+
+            $this->addFlash('success', 'Votre mot de passe à bien été réinitialiser.');
+            return $this->redirectToRoute('app_home_index');
         }
 
-        // RESET PASS FORM DATA
-        $userResetPass = $request->request->get('user_reset_pass');
-        $userServices->resetPassword($user, $userResetPass);
-
-        $this->addFlash('success', 'Votre mot de passe à bien été réinitialiser.');
-        return $this->redirectToRoute('app_home_index');
+        return ['form' => $form->createView()];
     }
 }

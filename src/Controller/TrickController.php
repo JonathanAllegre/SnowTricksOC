@@ -27,6 +27,7 @@ class TrickController extends Controller
         // CHECK IF USER IS CONNECT
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        // CHECK CSRF
         if ($this->isCsrfTokenValid('delete-trick', $request->request->get('token'))) {
             // REMOVE TRICK
             $this->getDoctrine()->getManager()->remove($trick);
