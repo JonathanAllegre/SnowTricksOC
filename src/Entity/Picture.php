@@ -17,6 +17,12 @@ class Picture
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     */
+    private $trick;
+
+    /**
      * @ORM\Column(type="text")
      */
     private $name;
@@ -25,6 +31,12 @@ class Picture
      * @ORM\Column(type="datetime")
      */
     private $created;
+
+    public function __construct()
+    {
+        $this->name = "http://blog.kesi-art.com/wp-content/uploads/elementor/thumbs/VISUEL-NON-DISPONIBLE-nchgtciah9pdkun8mutbeagowv4fc9zk23qz6hmx8m.png";
+        $this->created = new \DateTime();
+    }
 
     public function getId()
     {
@@ -43,7 +55,7 @@ class Picture
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+    public function getCreated(): \DateTimeInterface
     {
         return $this->created;
     }
@@ -51,6 +63,18 @@ class Picture
     public function setCreated(\DateTimeInterface $created): self
     {
         $this->created = $created;
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): self
+    {
+        $this->trick = $trick;
 
         return $this;
     }

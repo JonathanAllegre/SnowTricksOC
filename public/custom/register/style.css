@@ -2,13 +2,10 @@
     display:none;
 }
 @media (max-width:767.98px) {
-
     #navTop{
         display:none;
     }
-
     .mobil_alreadyAccount{
         display:block;
     }
-
 }

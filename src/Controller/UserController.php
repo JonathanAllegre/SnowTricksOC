@@ -6,7 +6,7 @@ use App\Entity\User;
 use App\Form\UserForgotPassType;
 use App\Form\UserResetPassType;
 use App\Form\UserType;
-use App\Service\User\UserServices;
+use App\Service\UserService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class UserController extends Controller
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/user")
      */
     public function index()
     {
@@ -26,7 +26,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/login", name="login")
+     * @Route("/login")
      * @Template()
      */
     public function login(AuthenticationUtils $authenticationUtils)
@@ -34,7 +34,7 @@ class UserController extends Controller
 
         // IF THE USER IS ALREADY CONNECT WE REDIRECT TO HOME
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home_index');
         }
 
         // get the login error if there is one
@@ -47,11 +47,16 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/register", name="user_registration")
+     * @Route("/register")
      * @Template()
      */
-    public function register(Request $request, UserServices $userServices)
+    public function register(Request $request, UserService $userServices)
     {
+
+        // IF THE USER IS ALREADY CONNECT WE REDIRECT TO HOME
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('app_home_index');
+        }
 
         // BUILD THE FORM
         $user = new User();
@@ -59,87 +64,86 @@ class UserController extends Controller
 
         // HANDLE THE SUBMIT
         $form->handleRequest($request);
-        if (!$form->isSubmitted() || !$form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            // REGISTER SERVICES
+            $register = $userServices->registerUser($user);
+            // IF REGISTER IS TRUE
+            if (true === $register) {
+                $this->addFlash('success', 'Votre compte à bien été crée.');
+
+                return $this->redirectToRoute('app_home_index');
+            }
+            // IF REGISTER IS FALSE
+            $this->addFlash('warning', $register);
+
             return ['form' => $form->createView()];
         }
-
-        // REGISTER SERVICES
-        $register = $userServices->registerUser($user);
-        // IF REGISTER IS TRUE
-        if (true === $register) {
-            $this->addFlash('success', 'Votre compte à bien été crée.');
-
-            return $this->redirectToRoute('home');
-        }
-        // IF REGISTER IS FALSE
-        $this->addFlash('warning', $register);
 
         return ['form' => $form->createView()];
     }
 
     /**
-     * @Route("/register/confirmation/{username}/{token}", name="accountConfirmation")
+     * @Route("/register/confirmation/{username}/{token}")
      */
-    public function accountConfirmation(User $user, UserServices $userServices)
+    public function accountConfirmation(User $user, UserService $userServices)
     {
         // VALIDATION
         $accuntConfirmation = $userServices->accuntConfirmation($user);
         if (true === $accuntConfirmation) {
             $this->addFlash('success', 'Votre compte est maintenant activé.');
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home_index');
         }
 
         $this->addFlash('warning', $accuntConfirmation);
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('app_home_index');
     }
 
 
     /**
-     * @Route("forgot/password", name="forgotPassword")
+     * @Route("forgot/password")
      * @Template()
      */
-    public function forgotPassword(Request $request, UserServices $userServices)
+    public function forgotPassword(Request $request, UserService $userServices)
     {
         $form = $this->createForm(UserForgotPassType::class);
 
         $form->handleRequest($request);
-        if (!$form->isSubmitted() || !$form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            // FORGOT PASS SERVICES
+            $forgotPass = $userServices->forgotPassword($request->request->get('user_forgot_pass'));
+            if (true === $forgotPass) {
+                $this->addFlash('success', "Un e-mail vient d'être envoyé");
+
+                return $this->redirectToRoute('app_home_index');
+            }
+            $this->addFlash('warning', $forgotPass);
+
             return ['form' => $form->createView()];
         }
-
-        // FORGOT PASS SERVICES
-        $forgotPass = $userServices->forgotPassword($request->request->get('user_forgot_pass'));
-        if (true === $forgotPass) {
-            $this->addFlash('success', "Un e-mail vient d'être envoyé");
-
-            return $this->redirectToRoute('home');
-        }
-
-        $this->addFlash('warning', $forgotPass);
 
         return ['form' => $form->createView()];
     }
 
     /**
-     * @Route("reset/password/{token}", name="resetPassword")
+     * @Route("reset/password/{token}")
      * @Template()
      */
-    public function resetPassWord(Request $request, User $user, UserServices $userServices)
+    public function resetPassWord(Request $request, User $user, UserService $userServices)
     {
         $form = $this->createForm(UserResetPassType::class);
 
         $form->handleRequest($request);
-        if (!$form->isSubmitted() || !$form->isValid()) {
-            return ['form' => $form->createView()];
+        if ($form->isSubmitted() && $form->isValid()) {
+            // RESET PASS FORM DATA
+            $userResetPass = $request->request->get('user_reset_pass');
+            $userServices->resetPassword($user, $userResetPass);
+
+            $this->addFlash('success', 'Votre mot de passe à bien été réinitialiser.');
+            return $this->redirectToRoute('app_home_index');
         }
 
-        // RESET PASS FORM DATA
-        $userResetPass = $request->request->get('user_reset_pass');
-        $userServices->resetPassword($user, $userResetPass);
-
-        $this->addFlash('success', 'Votre mot de passe à bien été réinitialiser.');
-        return $this->redirectToRoute('home');
+        return ['form' => $form->createView()];
     }
 }

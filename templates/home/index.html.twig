@@ -11,26 +11,80 @@
         <img src="{{ asset('img/back.jpg') }}" alt="" style="width:100%;" id="bgImg">
     </div>
     <!-- CONTAINER TRICKS -->
-    <div class="container containerAcc" id="tricks">
+    <div class="container-fluid containerAcc" id="tricks">
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-10 offset-md-1">
                 <h1>Trick List</h1>
                 <hr>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="row">
-                    {% for i in 0..15 %}
-                        <div class="col-md-3 thumb" >
-                            <div class="card">
-                                <img class="card-img-top" src="{{ asset('img/ex/min.jpeg') }}" alt="Card image cap">
-                                <div class="card-body">
-                                    <p class="card-text">Stalefish</p>
+                {% if tricks %}
+                    <div class="row">
+                        {% for trick in tricks %}
+                            {% if loop.index0 is divisible by(5)%}
+                                <div class="col-md-2 offset-md-1 thumb">
+                                    <div class="card">
+                                        <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                <a href="{{ path('app_trick_detail', {'id': trick.id}) }}"><bold>{{ trick.name|upper }}</bold></a>
+                                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                                    <span class="float-right">
+                                                    <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
+                                                    <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
+                                                </span>
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    {% endfor %}
+                            {% else %}
+                                <div class="col-md-2 thumb">
+                                    <div class="card">
+                                        <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                <a href="{{ path('app_trick_detail', {'id': trick.id}) }}"><bold>{{ trick.name|upper }}</bold></a>
+                                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                                    <span class="float-right">
+                                                    <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
+                                                    <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
+                                                </span>
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                        {% endfor %}
+                {% else %}
+                    <div class="col-md-10 offset-md-1">Aucun tricks n'est en ligne...</div>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Cette action est irréversible. Souhaitez-vous continuer ?
+                </div>
+                <div class="modal-footer">
+                    <form action="" method="POST" id="formDelete">
+                        <input type="hidden" name="token" value="{{ csrf_token('delete-trick') }}" />
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Supprimer</button></a>
+                    </form>
                 </div>
             </div>
         </div>

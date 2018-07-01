@@ -21,10 +21,10 @@
 }
 
 a{
-    color: #567398;
+    color: #000000;
 }
 a:hover{
-    color: #567398;
+    color: #988571;
 }
 
 .listMobilFooter a{
@@ -74,6 +74,12 @@ a:hover{
         display:none;
     }
 }
+@media (max-width: 767.98px) {
+    #navTop{
+        display:none;
+    }
+
+}
 
 /* FLASH MESSAGES */
 
@@ -89,3 +95,4 @@ a:hover{
     height:30px;
     padding-top:3px;
 }
+

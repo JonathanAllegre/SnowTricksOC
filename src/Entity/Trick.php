@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Trick
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -17,7 +18,25 @@ class Trick
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Family")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $family;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Picture")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $listingPicture;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
 
@@ -71,4 +90,53 @@ class Trick
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFamily(): ?Family
+    {
+        return $this->family;
+    }
+
+
+    public function setFamily(?Family $family):self
+    {
+        $this->family = $family;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getListingPicture(): Picture
+    {
+        return $this->listingPicture ?? new Picture();
+    }
+
+    /**
+     * @param $listingPicture
+     * @return Trick
+     */
+    public function setListingPicture($listingPicture): self
+    {
+        $this->listingPicture = $listingPicture;
+
+        return $this;
+    }
+
+
 }
