@@ -44,14 +44,14 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         );
 
         $trick180 = $this->newTrick(
-            '180 à la Mode Baxk sur',
+            '180',
             trim($trickDescription[2]),
             $this->getReference(UserFixtures::USER_ONE_REFERENCE),
             $this->getReference(FamilyFixtures::ROTATION_FAMILY)
         );
 
         $trickBackflip = $this->newTrick(
-            'Backflip Double Corké à là',
+            'Backflip',
             trim($trickDescription[3]),
             $this->getReference(UserFixtures::USER_ONE_REFERENCE),
             $this->getReference(FamilyFixtures::FLIP_FAMILY)
