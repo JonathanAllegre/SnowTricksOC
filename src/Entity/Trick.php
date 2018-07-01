@@ -50,6 +50,11 @@ class Trick
      */
     private $created;
 
+    /**
+     * @ORM\column(type="string", nullable=false)
+     */
+    private $slug;
+
     public function getId()
     {
         return $this->id;
@@ -63,6 +68,7 @@ class Trick
     public function setName(string $name): self
     {
         $this->name = $name;
+        $this->slug = $this->slugify($name);
 
         return $this;
     }
@@ -136,6 +142,40 @@ class Trick
         $this->listingPicture = $listingPicture;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function slugify($text)
+    {
+        if (empty($text)) {
+            return 'n-a';
+        }
+
+        // replace non letter or digits by -
+        $text = preg_replace('#[^\\pL\d]+#u', '-', $text);
+
+        // trim
+        $text = trim($text, '-');
+
+        // transliterate
+        if (function_exists('iconv')) {
+            $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        }
+
+        // lowercase
+        $text = strtolower($text);
+
+        // remove unwanted characters
+        $text = preg_replace('#[^-\w]+#', '', $text);
+
+        return $text;
     }
 
 
