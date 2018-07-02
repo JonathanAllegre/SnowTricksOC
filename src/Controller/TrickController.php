@@ -46,7 +46,7 @@ class TrickController extends Controller
      * @param Trick $trick
      * @return array
      * @Template()
-     * @Route("/trick/detail/{name}")
+     * @Route("/trick/detail/{slug}")
      */
     public function detail(Trick $trick)
     {

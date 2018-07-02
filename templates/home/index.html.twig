@@ -29,10 +29,10 @@
                                         <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
                                         <div class="card-body">
                                             <p class="card-text">
-                                                <a href="{{ path('app_trick_detail', {'id': trick.id}) }}"><bold>{{ trick.name|upper }}</bold></a>
+                                                <a href="{{ path('app_trick_detail', {'slug': trick.slug}) }}"><bold>{{ trick.name|upper }}</bold></a>
                                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                                     <span class="float-right">
-                                                    <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
+                                                    <a href="{{ path('app_trick_update', {'slug': trick.slug}) }}"><i class="fas fa-edit"></i></a>
                                                     <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
                                                 </span>
                                                 {% endif %}
@@ -46,7 +46,7 @@
                                         <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
                                         <div class="card-body">
                                             <p class="card-text">
-                                                <a href="{{ path('app_trick_detail', {'id': trick.id}) }}"><bold>{{ trick.name|upper }}</bold></a>
+                                                <a href="{{ path('app_trick_detail', {'slug': trick.slug}) }}"><bold>{{ trick.name|upper }}</bold></a>
                                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                                     <span class="float-right">
                                                     <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
