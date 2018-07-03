@@ -1,4 +1,17 @@
 {% extends 'base.html.twig' %}
 {% block title %}SnowTricksOC - Acceuil{% endblock %}
+{% block css  %}<link rel="stylesheet" href="{{ asset('custom/trick/style.css') }}">{% endblock %}
 {% block content %}
+   <div class="container containerHeaderTrick">
+       <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({{ trick.listingPicture.name }});">
+       <div class="container titleContainer">
+           <div class="titleTrick">
+               <h1 class="display-4">{{ trick.name }}</h1>
+           </div>
+       </div>
+   </div>
+       <div class="container">
+
+       </div>
+   </div>
 {% endblock %}

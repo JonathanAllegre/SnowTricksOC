@@ -26,15 +26,16 @@
                             {% if loop.index0 is divisible by(5)%}
                                 <div class="col-md-2 offset-md-1 thumb">
                                     <div class="card">
-                                        <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
+                                        <a href="{{ path('app_trick_detail', {'id': trick.id, 'slug': trick.slug}) }}"><img class="card-img-top" src="{{ trick.getListingPicture.getName }}"></a>
                                         <div class="card-body">
-                                            <p class="card-text">
-                                                <a href="{{ path('app_trick_detail', {'slug': trick.slug}) }}"><bold>{{ trick.name|upper }}</bold></a>
+                                            <p class="card-text ">
+                                                <a href="{{ path('app_trick_detail', {'id': trick.id, 'slug': trick.slug}) }}" ><bold>{{ trick.name|upper }}</bold></a>
                                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                                    <span class="float-right">
-                                                    <a href="{{ path('app_trick_update', {'slug': trick.slug}) }}"><i class="fas fa-edit"></i></a>
-                                                    <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
-                                                </span>
+                                                    <hr/>
+                                            <div class="text-center">
+                                                <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
+                                                <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
+                                            </div>
                                                 {% endif %}
                                             </p>
                                         </div>
@@ -43,15 +44,16 @@
                             {% else %}
                                 <div class="col-md-2 thumb">
                                     <div class="card">
-                                        <img class="card-img-top" src="{{ trick.getListingPicture.getName }}" alt="Card image cap">
+                                        <a href="{{ path('app_trick_detail', {'id': trick.id, 'slug': trick.slug}) }}"><img class="card-img-top" src="{{ trick.getListingPicture.getName }}"></a>
                                         <div class="card-body">
                                             <p class="card-text">
-                                                <a href="{{ path('app_trick_detail', {'slug': trick.slug}) }}"><bold>{{ trick.name|upper }}</bold></a>
+                                                <a href="{{ path('app_trick_detail', {'id': trick.id, 'slug': trick.slug}) }}"><bold>{{ trick.name|upper }}</bold></a>
                                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                                    <span class="float-right">
-                                                    <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
-                                                    <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
-                                                </span>
+                                                    <hr/>
+                                                    <div class="text-center">
+                                                        <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
+                                                        <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt"></i></a>
+                                                    </div>
                                                 {% endif %}
                                             </p>
                                         </div>
