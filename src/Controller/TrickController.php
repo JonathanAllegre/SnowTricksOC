@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Picture;
 use App\Entity\Trick;
+use App\Entity\Video;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,8 +53,10 @@ class TrickController extends Controller
     public function detail(Trick $trick)
     {
 
+        $pics = $this->getDoctrine()->getRepository(Picture::class)->findBy(['trick'=> $trick]);
+        $vids = $this->getDoctrine()->getRepository(Video::class)->findBy(['trick'=> $trick]);
 
-        return ['trick' => $trick];
+        return ['trick' => $trick, 'pics' => $pics, 'vids' => $vids];
     }
 
     /**
