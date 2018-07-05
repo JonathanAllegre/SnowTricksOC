@@ -31,19 +31,32 @@
 	text-overflow: ellipsis;
 
 }
+
 .card {
 	background-color:whitesmoke;
 	width: 200px;
-	-webkit-transition: width 500ms,background-color 500ms;
-	transition: width 500ms,background-color 500ms;
+	opacity:0.8;
+	-webkit-transition: opacity 500ms,background-color 500ms;
+	transition: opacity 2s,background-color 500ms;
 }
+
 .card:hover {
 	background-color:white;
 	z-index:999;
-	width:300px;
+	opacity:1;
 
 }
 
+@media (max-width: 575.98px) {
+	.card {
+		width:100%;
+	}
+}
+@media (min-width: 576px) {
+	.card {
+		width:100%;
+	}
+}
 
 
 

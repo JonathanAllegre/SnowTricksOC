@@ -56,6 +56,7 @@ class UserFixtures extends Fixture
         $user->setPassword($this->encoder->encodePassword($user, $pass));
         $user->setEmail($mail);
         $user->setActive(1);
+        $user->setUserPicture('default.svg');
 
         $this->manager->persist($user);
 

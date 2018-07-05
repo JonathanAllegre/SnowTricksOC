@@ -12,12 +12,27 @@
     height:350px;
 }
 
+.containerUpdateIcons{
+   margin-top:-64px;
+    margin-left:15px;
+}
+
+.updateIconsCol{
+    padding-top:20px;
+}
+.updateIconsCol a {
+    color:white;
+}
+.updateIconsCol a:hover {
+    color:#567398;
+}
+
 .titleContainer{
     background-color:black;
     opacity:0.7;
     height:125px;
     width:100%;
-    margin-top:130px;
+    margin-top:138px;
 }
 
 .titleTrick{
@@ -35,8 +50,7 @@
 }
 .card {
     display: inline-block;
-    max-width: 200px;
-    max-height:175px;
+
 }
 .media{
     width:200px;
@@ -47,6 +61,35 @@
     padding-top:50px;
 }
 
-.cht{
+.trickAttribute{
     padding-top:35px;
+}
+
+.trickAttribute .btn {
+    cursor: default !important;
+}
+
+.trickAttribute .btn:hover{
+     background-color: white;
+     color:#6c757d;
+ }
+
+.formComment{
+    padding-top: 30px;
+}
+
+.spaceBot15 {
+    padding-bottom: 15px;
+}
+
+.userPict {
+    max-width:50px;
+}
+
+.rowComment {
+    padding-top: 30px;
+}
+
+.rowComment .card {
+    min-width:100%;
 }

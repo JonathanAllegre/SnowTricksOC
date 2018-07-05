@@ -7,6 +7,12 @@
             <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({{ trick.listingPicture.name }});">
                 <div class="container titleContainer">
                     <div class="titleTrick">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <div class="float-right updateIconsCol">
+                            <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit fa-2x"></i></a>
+                            <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt fa-2x"></i></a>
+                        </div>
+                        {% endif %}
                         <h1 class="display-4">{{ trick.name }}</h1>
                     </div>
                 </div>
@@ -26,18 +32,73 @@
             </div>
         </div>
         <div class="container containerTrickDescription">
-            <col-12>
-                {{ trick.description | nl2br }}
-            </col-12>
+            <div class="col-12">
+                {{ trick.description|raw|nl2br}}
+            </div>
         </div>
-        <div class="container cht text-center">
-            <col-12>
-                <button type="button" class="btn btn-outline-secondary">Famille: {{ trick.family.title }}</button>
-                <button type="button" class="btn btn-outline-secondary">Crée le: {{ trick.created |date('d-m-Y') }}</button>
+        <div class="container trickAttribute text-center">
+            <div class="col-lg-12">
+                <button class="btn btn-outline-secondary">Famille: {{ trick.family.title }}</button>
+                <button class="btn btn-outline-secondary">Crée le: {{ trick.created |date('d-m-Y') }}</button>
                 {% if trick.updated  %}
-                    <button type="button" class="btn btn-outline-secondary">Crée le: {{ trick.updated |date('d-m-Y') }}</button>
+                    <button class="btn btn-outline-secondary">Modifié le: {{ trick.updated |date('d-m-Y') }}</button>
                 {% endif %}
-            </col-12>
+                <hr>
+            </div>
+        </div>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <div class="container formComment">
+                <div class="row spaceBot15">
+                    <div class="offset-md-2 col-md-4">
+                        <div class="form-group">
+                            <textarea class="form-control" rows="1" id="comment"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-secondary btn-block">Laisser un commentaire !</button>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+        {% endif %}
+        <div class="container">
+            {% for comment in comments %}
+            <div class="row rowComment">
+                <div class="offset-md-2 col-md-1 text-md-center">
+                    <img src="{{ asset('img/user/'~comment.user.userPicture) }}" class="rounded-circle userPict">
+                </div>
+                <div class="col-md-8">
+                    <div class="card border-dark">
+                        <div class="card-header">Par {{ comment.user.username }}, le <span class="font-italic">{{ comment.created|date('d-m-Y') }}</span> </div>
+                        <div class="card-body text-dark">
+                            <p class="card-text">{{ comment.content }} </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Cette action est irréversible. Souhaitez-vous continuer ?
+                </div>
+                <div class="modal-footer">
+                    <form action="" method="POST" id="formDelete">
+                        <input type="hidden" name="token" value="{{ csrf_token('delete-trick') }}" />
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Supprimer</button></a>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -45,6 +106,11 @@
     <script>
         $(document).ready(function(){
             $(".card > iframe").attr({height:125,width:200});
+        });
+        // MODAL SUPPRESSION
+        $(".deletIcon").click(function(){
+            $('#formDelete').attr('action', $(this).attr("trickPath"));
+            $('#exampleModalLabel').html('Suppression du trick "'+ $(this).attr("trickName")+'"');
         });
     </script>
 {% endblock %}

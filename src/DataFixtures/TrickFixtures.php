@@ -27,11 +27,13 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $trickDescription = file(__DIR__.'/trickDescription.txt');
+        $lorem            = file_get_contents(__DIR__.'/lorem.txt');
 
 
         $trickMute = $this->newTrick(
             'Mute',
             trim($trickDescription[0]),
+            $lorem,
             $this->getReference(UserFixtures::USER_ONE_REFERENCE),
             $this->getReference(FamilyFixtures::GRAB_FAMILY)
         );
@@ -39,13 +41,16 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trickStalefish = $this->newTrick(
             'Stalefish',
             trim($trickDescription[1]),
+            $lorem,
             $this->getReference(UserFixtures::USER_ONE_REFERENCE),
-            $this->getReference(FamilyFixtures::GRAB_FAMILY)
+            $this->getReference(FamilyFixtures::GRAB_FAMILY),
+            true
         );
 
         $trick180 = $this->newTrick(
             '180',
             trim($trickDescription[2]),
+            $lorem,
             $this->getReference(UserFixtures::USER_ONE_REFERENCE),
             $this->getReference(FamilyFixtures::ROTATION_FAMILY)
         );
@@ -53,6 +58,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trickBackflip = $this->newTrick(
             'Backflip',
             trim($trickDescription[3]),
+            $lorem,
             $this->getReference(UserFixtures::USER_ONE_REFERENCE),
             $this->getReference(FamilyFixtures::FLIP_FAMILY)
         );
@@ -86,14 +92,19 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
      * @param $family
      * @return Trick
      */
-    public function newTrick($name, $description, User $user, Family $family):Trick
+    public function newTrick($name, $description, $lorem, User $user, Family $family, $updatedDate = false):Trick
     {
+        $description = "<b>".$description."</b>\n\n".$lorem;
+
         $trick = new Trick();
         $trick->setName($name);
         $trick->setDescription($description);
         $trick->setCreated(new \DateTime());
         $trick->setUser($user);
         $trick->setFamily($family);
+        if (true === $updatedDate) {
+            $trick->setUpdated(new \DateTime);
+        }
 
         $this->manager->persist($trick);
 
