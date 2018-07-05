@@ -1,3 +1,6 @@
+.content{
+    padding-bottom: 120px;
+}
 .containerHeaderTrick{
     padding-top:30px;
 }
@@ -40,3 +43,10 @@
     height:125px;
 }
 
+.containerTrickDescription{
+    padding-top:50px;
+}
+
+.cht{
+    padding-top:35px;
+}

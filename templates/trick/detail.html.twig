@@ -2,37 +2,49 @@
 {% block title %}SnowTricksOC - Acceuil{% endblock %}
 {% block css  %}<link rel="stylesheet" href="{{ asset('custom/trick/style.css') }}">{% endblock %}
 {% block content %}
-   <div class="container containerHeaderTrick">
-       <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({{ trick.listingPicture.name }});">
-       <div class="container titleContainer">
-           <div class="titleTrick">
-               <h1 class="display-4">{{ trick.name }}</h1>
-           </div>
-       </div>
-   </div>
-       <div class="container">
-           <div class="scrolling-wrapper">
-               {% for pic in pics %}
-                   <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
-                   <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
-                   <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
-                   <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
-               {% endfor %}
-               {% for vid in vids %}
-                   <div class="card">{{ vid.url | raw }}</div>
-               {% endfor %}
-
-
-           </div>
+    <div class="content">
+        <div class="container containerHeaderTrick">
+            <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({{ trick.listingPicture.name }});">
+                <div class="container titleContainer">
+                    <div class="titleTrick">
+                        <h1 class="display-4">{{ trick.name }}</h1>
+                    </div>
+                </div>
+            </div>
         </div>
-   </div>
-
+        <div class="container containerMedia">
+            <div class="scrolling-wrapper">
+                {% for pic in pics %}
+                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
+                {% endfor %}
+                {% for vid in vids %}
+                    <div class="card">{{ vid.url | raw }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="container containerTrickDescription">
+            <col-12>
+                {{ trick.description | nl2br }}
+            </col-12>
+        </div>
+        <div class="container cht text-center">
+            <col-12>
+                <button type="button" class="btn btn-outline-secondary">Famille: {{ trick.family.title }}</button>
+                <button type="button" class="btn btn-outline-secondary">Crée le: {{ trick.created |date('d-m-Y') }}</button>
+                {% if trick.updated  %}
+                    <button type="button" class="btn btn-outline-secondary">Crée le: {{ trick.updated |date('d-m-Y') }}</button>
+                {% endif %}
+            </col-12>
+        </div>
+    </div>
 {% endblock %}
 {% block script %}
     <script>
         $(document).ready(function(){
-            $('.card > iframe').attr('height', '125');
-            $('.card > iframe').attr('width', '200');
+            $(".card > iframe").attr({height:125,width:200});
         });
     </script>
 {% endblock %}

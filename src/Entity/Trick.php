@@ -51,7 +51,12 @@ class Trick
     private $created;
 
     /**
-     * @ORM\column(type="string", nullable=false)
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updated;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
      */
     private $slug;
 
@@ -177,6 +182,24 @@ class Trick
 
         return $text;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param mixed $updated
+     */
+    public function setUpdated($updated): void
+    {
+        $this->updated = $updated;
+    }
+
+
 
 
 }
