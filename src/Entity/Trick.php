@@ -198,8 +198,4 @@ class Trick
     {
         $this->updated = $updated;
     }
-
-
-
-
 }

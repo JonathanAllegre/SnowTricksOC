@@ -11,7 +11,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class PictureFixtures extends Fixture implements DependentFixtureInterface
 {
-
     private $manager;
     private $trickRepo;
 
@@ -23,7 +22,6 @@ class PictureFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-
         $pictureFile = file(__DIR__.'/picture.txt');
 
         $this->newPicture(

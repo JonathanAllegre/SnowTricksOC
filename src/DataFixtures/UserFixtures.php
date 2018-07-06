@@ -32,8 +32,6 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-
-
         $userOne = $this->newUser('jonathan', 'simple', 'jonathan.allegre258@orange.fr');
         $manager -> persist($userOne);
         $manager -> flush();

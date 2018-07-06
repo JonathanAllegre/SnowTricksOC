@@ -36,7 +36,6 @@ class UserService
         UserPasswordEncoderInterface $encoder,
         SessionInterface $session
     ) {
-
         $this->doctrine        = $doctrine;
         $this->mailer          = $mailer;
         $this->passwordEncoder = $encoder;

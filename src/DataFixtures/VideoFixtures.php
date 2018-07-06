@@ -19,7 +19,6 @@ class VideoFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-
         $videoFile = file(__DIR__.'/video.txt');
 
         $this->newVideo(

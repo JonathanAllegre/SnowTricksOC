@@ -28,5 +28,4 @@ class TrickRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
 }

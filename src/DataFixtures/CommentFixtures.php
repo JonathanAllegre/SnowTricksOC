@@ -11,7 +11,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class CommentFixtures extends Fixture implements DependentFixtureInterface
 {
-
     private $manager;
 
     public function __construct(ObjectManager $manager)

@@ -11,7 +11,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class TrickFixtures extends Fixture implements DependentFixtureInterface
 {
-
     private $manager;
 
     const TRICK_MUTE      = 'Mute';

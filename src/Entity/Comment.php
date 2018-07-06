@@ -98,6 +98,4 @@ class Comment
     {
         $this->trick = $trick;
     }
-
-
 }

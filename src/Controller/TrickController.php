@@ -53,7 +53,6 @@ class TrickController extends Controller
      */
     public function detail(Trick $trick)
     {
-
         $pics     = $this->getDoctrine()->getRepository(Picture::class)->findBy(['trick'=> $trick]);
         $vids     = $this->getDoctrine()->getRepository(Video::class)->findBy(['trick'=> $trick]);
         $comments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['trick' => $trick]);

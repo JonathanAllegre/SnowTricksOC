@@ -206,5 +206,4 @@ class User implements UserInterface
     {
         return $this->id;
     }
-
 }
