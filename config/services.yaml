@@ -30,3 +30,7 @@ services:
              class: App\Service\Use\UserFactory
              calls:
                  - [setRegisterUser, ['@mailer']]
+
+    App\EventListener\TrickSuscriber:
+            tags:
+                - { name: doctrine.event_subscriber, connection: default }

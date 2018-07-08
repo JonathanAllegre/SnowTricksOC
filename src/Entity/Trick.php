@@ -73,7 +73,6 @@ class Trick
     public function setName(string $name): self
     {
         $this->name = $name;
-        $this->slug = $this->slugify($name);
 
         return $this;
     }
@@ -157,32 +156,6 @@ class Trick
         return $this->slug;
     }
 
-    public function slugify($text)
-    {
-        if (empty($text)) {
-            return 'n-a';
-        }
-
-        // replace non letter or digits by -
-        $text = preg_replace('#[^\\pL\d]+#u', '-', $text);
-
-        // trim
-        $text = trim($text, '-');
-
-        // transliterate
-        if (function_exists('iconv')) {
-            $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-        }
-
-        // lowercase
-        $text = strtolower($text);
-
-        // remove unwanted characters
-        $text = preg_replace('#[^-\w]+#', '', $text);
-
-        return $text;
-    }
-
     /**
      * @return mixed
      */
@@ -197,5 +170,13 @@ class Trick
     public function setUpdated($updated): void
     {
         $this->updated = $updated;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug): void
+    {
+        $this->slug = $slug;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Family;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
@@ -68,7 +69,27 @@ class TrickController extends Controller
      */
     public function update(Trick $trick)
     {
-        var_dump($trick);
+        $trick->setDescription('lkjlkjlkj');
+        $this->getDoctrine()->getManager()->flush();
         return [];
+    }
+
+    /**
+     * @Route("/trick/add")
+     * @Template
+     */
+    public function add()
+    {
+        $family = $this->getDoctrine()->getRepository(Family::class)->findOneBy(['title' => 'grab']);
+
+        $trick = new Trick();
+        $trick->setName("testt coll :) éé $ **%");
+        $trick->setDescription('ma description');
+        $trick->setCreated(new \DateTime());
+        $trick->setUser($this->getUser());
+        $trick->setFamily($family);
+
+        $this->getDoctrine()->getManager()->persist($trick);
+        $this->getDoctrine()->getManager()->flush();
     }
 }
