@@ -25,8 +25,8 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $trickDescription = file(__DIR__.'/trickDescription.txt');
-        $lorem            = file_get_contents(__DIR__.'/lorem.txt');
+        $trickDescription = file(__DIR__.'/contentFiles/trickDescription.txt');
+        $lorem            = file_get_contents(__DIR__.'/contentFiles/lorem.txt');
 
 
         $trickMute = $this->newTrick(
