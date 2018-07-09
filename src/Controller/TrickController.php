@@ -33,9 +33,10 @@ class TrickController extends Controller
 
         // CHECK CSRF
         if ($this->isCsrfTokenValid('delete-trick', $request->request->get('token'))) {
+            $manager = $this->getDoctrine()->getManager();
             // REMOVE TRICK
-            $this->getDoctrine()->getManager()->remove($trick);
-            $this->getDoctrine()->getManager()->flush();
+            $manager->remove($trick);
+            $manager->flush();
             $this->addFlash('success', 'Le trick "'. $trick->getName().'" à bien été supprimé');
 
             return $this->redirectToRoute('app_home_index');
@@ -54,9 +55,10 @@ class TrickController extends Controller
      */
     public function detail(Trick $trick)
     {
-        $pics     = $this->getDoctrine()->getRepository(Picture::class)->findBy(['trick'=> $trick]);
-        $vids     = $this->getDoctrine()->getRepository(Video::class)->findBy(['trick'=> $trick]);
-        $comments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['trick' => $trick]);
+        $doctrine = $this->getDoctrine();
+        $pics     = $doctrine->getRepository(Picture::class)->findBy(['trick'=> $trick]);
+        $vids     = $doctrine->getRepository(Video::class)->findBy(['trick'=> $trick]);
+        $comments = $doctrine->getRepository(Comment::class)->findBy(['trick' => $trick]);
 
         return ['trick' => $trick, 'pics' => $pics, 'vids' => $vids, 'comments' => $comments];
     }
