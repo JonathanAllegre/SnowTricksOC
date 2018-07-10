@@ -1,6 +1,21 @@
 {% extends 'base.html.twig' %}
 {% block title %}SnowTricksOC - Acceuil{% endblock %}
 {% block css  %}<link rel="stylesheet" href="{{ asset('custom/trick/style.css') }}">{% endblock %}
+{% form_theme form _self %}
+{# form_errors.html.twig #}
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <ul>
+                {% for error in errors %}
+                    <small class="form-text invalid ">
+                        {{ error.message }}
+                    </small>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
 {% block content %}
     <div class="content">
         <div class="container containerHeaderTrick">
@@ -48,16 +63,19 @@
         </div>
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <div class="container formComment">
+                {{ form_start(form, {'attr':{'class':'form-signin'}}) }}
                 <div class="row spaceBot15">
                     <div class="offset-md-2 col-md-4">
                         <div class="form-group">
-                            <textarea class="form-control" rows="1" id="comment"></textarea>
+                            {{ form_widget(form.content, {'attr' : {'class': 'form-control', 'rows': '1' }}) }}
                         </div>
                     </div>
                     <div class="col-md-4">
                         <button class="btn btn-secondary btn-block">Laisser un commentaire !</button>
+
                     </div>
                 </div>
+                {{ form_end(form) }}
                 <hr/>
             </div>
         {% endif %}
@@ -71,7 +89,7 @@
                     <div class="card border-dark">
                         <div class="card-header">Par {{ comment.user.username }}, le <span class="font-italic">{{ comment.created|date('d-m-Y') }}</span> </div>
                         <div class="card-body text-dark">
-                            <p class="card-text">{{ comment.content }} </p>
+                            <p class="card-text">{{ comment.content|nl2br }} </p>
                         </div>
                     </div>
                 </div>

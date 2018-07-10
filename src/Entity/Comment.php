@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
@@ -19,12 +20,14 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @Assert\NotBlank()
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotBlank()
      */
     private $trick;
 

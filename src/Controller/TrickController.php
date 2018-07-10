@@ -7,6 +7,8 @@ use App\Entity\Family;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
+use App\Form\CommentAddType;
+use App\Service\CommentService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,19 +50,36 @@ class TrickController extends Controller
     }
 
     /**
-     * @param Trick $trick
-     * @return array
      * @Template()
      * @Route("/trick/detail/{id}/{slug}")
      */
-    public function detail(Trick $trick)
+    public function detail(Request $request, Trick $trick, CommentService $commentService)
     {
-        $doctrine = $this->getDoctrine();
-        $pics     = $doctrine->getRepository(Picture::class)->findBy(['trick'=> $trick]);
-        $vids     = $doctrine->getRepository(Video::class)->findBy(['trick'=> $trick]);
-        $comments = $doctrine->getRepository(Comment::class)->findBy(['trick' => $trick]);
+        // CREATE COMMENT FORM
+        $comment = new Comment();
+        $comment->setTrick($trick);
+        $this->isGranted('IS_AUTHENTICATED_FULLY') ? $comment->setUser($this->getUser()): $comment->setUser('');
 
-        return ['trick' => $trick, 'pics' => $pics, 'vids' => $vids, 'comments' => $comments];
+        $formComment = $this->createForm(CommentAddType::class, $comment);
+
+        // HANDLE REQUEST & SAVE COMMENT
+        $formComment->handleRequest($request);
+        if ($formComment->isSubmitted() && $formComment->isValid()) {
+            $commentService->addComment($comment);
+            $this->addFlash('success', 'Votre commentaire a bien été enregistré');
+
+            return $this->redirectToRoute('app_trick_detail', ['id' => $trick->getId(), 'slug' => $trick->getSlug()]);
+        }
+
+        $doctrine = $this->getDoctrine();
+
+        return [
+            'trick'     => $trick,
+            'pics'      => $doctrine->getRepository(Picture::class)->findBy(['trick'=> $trick]),
+            'vids'      => $doctrine->getRepository(Video::class)->findBy(['trick'=> $trick]),
+            'comments'  => $doctrine->getRepository(Comment::class)->findBy(['trick' => $trick]),
+            'form'      => $formComment->createView()
+        ];
     }
 
     /**
