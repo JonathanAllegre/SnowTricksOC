@@ -72,13 +72,15 @@ class TrickController extends Controller
         }
 
         $doctrine = $this->getDoctrine();
+        $comments = $doctrine->getRepository(Comment::class)->getCommentPaginate($trick);
 
         return [
-            'trick'     => $trick,
-            'pics'      => $doctrine->getRepository(Picture::class)->findBy(['trick'=> $trick]),
-            'vids'      => $doctrine->getRepository(Video::class)->findBy(['trick'=> $trick]),
-            'comments'  => $doctrine->getRepository(Comment::class)->findBy(['trick' => $trick]),
-            'form'      => $formComment->createView()
+            'trick'         => $trick,
+            'pics'          => $doctrine->getRepository(Picture::class)->findBy(['trick'=> $trick]),
+            'vids'          => $doctrine->getRepository(Video::class)->findBy(['trick'=> $trick]),
+            'comments'      => $comments['comments'],
+            'totalComments' => $comments['totalComments'],
+            'form'          => $formComment->createView()
         ];
     }
 

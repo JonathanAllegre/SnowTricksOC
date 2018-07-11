@@ -79,7 +79,7 @@
                 <hr/>
             </div>
         {% endif %}
-        <div class="container">
+        <div class="container" id="commentList">
             {% for comment in comments %}
             <div class="row rowComment">
                 <div class="offset-md-2 col-md-1 text-md-center">
@@ -96,6 +96,7 @@
             </div>
             {% endfor %}
         </div>
+        <button id="moreCom">kjlkjh</button>
     </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -130,5 +131,19 @@
             $('#formDelete').attr('action', $(this).attr("trickPath"));
             $('#exampleModalLabel').html('Suppression du trick "'+ $(this).attr("trickName")+'"');
         });
+
+
+        $("#moreCom").click(function(){
+            $.ajax({
+                url : '{{ path('app_comment_loadmorecomment', {'trick': trick.id, 'page': 1}) }}',
+                type : 'GET',
+                dataType : 'html',
+                success : function(code_html, statut){
+                    $(code_html).appendTo("#commentList");
+                },
+                error : function(resultat, statut, erreur) {
+                },
+
+        })});
     </script>
 {% endblock %}
