@@ -62,6 +62,7 @@ class TrickController extends Controller
 
         $formComment = $this->createForm(CommentAddType::class, $comment);
 
+
         // HANDLE REQUEST & SAVE COMMENT
         $formComment->handleRequest($request);
         if ($formComment->isSubmitted() && $formComment->isValid()) {
@@ -72,14 +73,13 @@ class TrickController extends Controller
         }
 
         $doctrine = $this->getDoctrine();
-        $comments = $doctrine->getRepository(Comment::class)->getCommentPaginate($trick);
 
         return [
             'trick'         => $trick,
             'pics'          => $doctrine->getRepository(Picture::class)->findBy(['trick'=> $trick]),
             'vids'          => $doctrine->getRepository(Video::class)->findBy(['trick'=> $trick]),
-            'comments'      => $comments['comments'],
-            'totalComments' => $comments['totalComments'],
+            'comments'      => $doctrine->getRepository(Comment::class)->getCommentPaginate($trick),
+            'totalComments' => count($doctrine->getRepository(Comment::class)->findBy(['trick'=> $trick])),
             'form'          => $formComment->createView()
         ];
     }

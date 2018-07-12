@@ -72,13 +72,13 @@
                     </div>
                     <div class="col-md-4">
                         <button class="btn btn-secondary btn-block">Laisser un commentaire !</button>
-
                     </div>
                 </div>
                 {{ form_end(form) }}
                 <hr/>
             </div>
         {% endif %}
+        {{ dump(totalComments) }}
         <div class="container" id="commentList">
             {% for comment in comments %}
             <div class="row rowComment">
@@ -132,7 +132,6 @@
             $('#exampleModalLabel').html('Suppression du trick "'+ $(this).attr("trickName")+'"');
         });
 
-
         $("#moreCom").click(function(){
             $.ajax({
                 url : '{{ path('app_comment_loadmorecomment', {'trick': trick.id, 'page': 1}) }}',
@@ -143,7 +142,6 @@
                 },
                 error : function(resultat, statut, erreur) {
                 },
-
         })});
     </script>
 {% endblock %}

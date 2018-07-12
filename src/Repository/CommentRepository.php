@@ -20,21 +20,12 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-
     /**
      * @param Trick $trick
      * @return mixed
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getCommentPaginate(Trick $trick)
     {
-        $nbTotal = $this->createQueryBuilder('c')
-            ->select('count(c.id)')
-            ->andWhere('c.trick = :trick')
-            ->setParameter('trick', $trick)
-            ->getQuery()
-            ->getSingleScalarResult();
-
         $qb = $this->createQueryBuilder('c')
             ->andWhere('c.trick = :trick')
             ->setParameter('trick', $trick)
@@ -43,35 +34,23 @@ class CommentRepository extends ServiceEntityRepository
             ->setMaxResults(2)
             ->getQuery();
 
+        return $qb->execute();
+    }
 
-        return ['totalComments' => $nbTotal, 'comments' => $qb->execute()];
-    }
-//    /**
-//     * @return Comment[] Returns an array of Comment objects
-//     */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param Trick $trick
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getNbTotalCommentsForTrick(Trick $trick)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+        $nbTotal = $this->createQueryBuilder('c')
+            ->select('count(c.id)')
+            ->andWhere('c.trick = :trick')
+            ->setParameter('trick', $trick)
             ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+            ->getSingleScalarResult();
 
-    /*
-    public function findOneBySomeField($value): ?Comment
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $nbTotal;
     }
-    */
 }
