@@ -36,21 +36,4 @@ class CommentRepository extends ServiceEntityRepository
 
         return $qb->execute();
     }
-
-    /**
-     * @param Trick $trick
-     * @return mixed
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function getNbTotalCommentsForTrick(Trick $trick)
-    {
-        $nbTotal = $this->createQueryBuilder('c')
-            ->select('count(c.id)')
-            ->andWhere('c.trick = :trick')
-            ->setParameter('trick', $trick)
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        return $nbTotal;
-    }
 }
