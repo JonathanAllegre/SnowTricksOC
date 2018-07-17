@@ -59,7 +59,6 @@ class TrickController extends Controller
         $comment = new Comment();
         $comment->setTrick($trick);
 
-        //
         $this->isGranted('IS_AUTHENTICATED_FULLY') ? $comment->setUser($this->getUser()): $comment->setUser('');
         $formComment = $this->createForm(CommentAddType::class, $comment);
 
@@ -73,8 +72,9 @@ class TrickController extends Controller
         }
 
         $doctrine = $this->getDoctrine();
+        $perPage  = 6;
         $comments = $doctrine->getRepository(Comment::class)
-            ->findBy(['trick' => $trick], ['id' => 'DESC'], 2, 0);
+            ->findBy(['trick' => $trick], ['id' => 'DESC'], $perPage, 0);
 
         return [
             'trick'         => $trick,
@@ -82,6 +82,7 @@ class TrickController extends Controller
             'vids'          => $doctrine->getRepository(Video::class)->findBy(['trick'=> $trick]),
             'comments'      => $comments,
             'totalComments' => count($doctrine->getRepository(Comment::class)->findBy(['trick'=> $trick])),
+            'perPage'       => $perPage,
             'form'          => $formComment->createView()
         ];
     }

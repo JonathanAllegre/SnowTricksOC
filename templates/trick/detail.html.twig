@@ -95,7 +95,13 @@
             </div>
             {% endfor %}
         </div>
-        <button id="moreCom">kjlkjh</button>
+        <div class="container">
+            <div class="row">
+                <div class="offset-md-9 col-md-2">
+                    <button class="btn btn-block btn-secondary btnMoreCom" id="moreCom"><i class="fas fa-plus"></i> Charger Plus</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -122,24 +128,38 @@
 {% endblock %}
 {% block script %}
     <script>
+
+        // BOX SIZE VIDEO
         $(document).ready(function(){
             $(".card > iframe").attr({height:125,width:200});
         });
-        // MODAL SUPPRESSION
+        // DELETE MODAL
         $(".deletIcon").click(function(){
             $('#formDelete').attr('action', $(this).attr("trickPath"));
             $('#exampleModalLabel').html('Suppression du trick "'+ $(this).attr("trickName")+'"');
         });
 
+        // AJAX CALL LOAD MORE COMMENT
+        var totalComment = {{ totalComments }};
+        var totalLoadCom = {{ perPage }};
+        if (totalLoadCom >= totalComment) {
+            $("#moreCom").attr('disabled', 'disabled');
+        }
+
         $("#moreCom").click(function(){
             $.ajax({
-                url : '{{ path('app_comment_loadmorecomment', {'trick': trick.id, 'page': 1}) }}',
+                url : "/comment/loadMore/{{ trick.id }}/" + totalLoadCom + "/{{ perPage }}",
                 type : 'GET',
                 dataType : 'html',
                 success : function(code_html, statut){
+                    totalLoadCom +={{ perPage }};
                     $(code_html).appendTo("#commentList");
+                    if (totalLoadCom >= totalComment) {
+                        $("#moreCom").attr('disabled', 'disabled');
+                    }
                 },
                 error : function(resultat, statut, erreur) {
+                    alert('Impossible de charger les commentaires...');
                 },
         })});
     </script>
