@@ -58,10 +58,10 @@ class TrickController extends Controller
         // CREATE COMMENT FORM
         $comment = new Comment();
         $comment->setTrick($trick);
+
+        //
         $this->isGranted('IS_AUTHENTICATED_FULLY') ? $comment->setUser($this->getUser()): $comment->setUser('');
-
         $formComment = $this->createForm(CommentAddType::class, $comment);
-
 
         // HANDLE REQUEST & SAVE COMMENT
         $formComment->handleRequest($request);
@@ -73,12 +73,14 @@ class TrickController extends Controller
         }
 
         $doctrine = $this->getDoctrine();
+        $comments = $doctrine->getRepository(Comment::class)
+            ->findBy(['trick' => $trick], ['id' => 'DESC'], 2, 0);
 
         return [
             'trick'         => $trick,
             'pics'          => $doctrine->getRepository(Picture::class)->findBy(['trick'=> $trick]),
             'vids'          => $doctrine->getRepository(Video::class)->findBy(['trick'=> $trick]),
-            'comments'      => $doctrine->getRepository(Comment::class)->getCommentPaginate($trick),
+            'comments'      => $comments,
             'totalComments' => count($doctrine->getRepository(Comment::class)->findBy(['trick'=> $trick])),
             'form'          => $formComment->createView()
         ];

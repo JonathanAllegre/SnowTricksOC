@@ -20,20 +20,4 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    /**
-     * @param Trick $trick
-     * @return mixed
-     */
-    public function getCommentPaginate(Trick $trick)
-    {
-        $qb = $this->createQueryBuilder('c')
-            ->andWhere('c.trick = :trick')
-            ->setParameter('trick', $trick)
-            ->orderBy('c.id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(2)
-            ->getQuery();
-
-        return $qb->execute();
-    }
 }
