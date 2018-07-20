@@ -106,6 +106,17 @@ class TrickController extends Controller
      */
     public function add()
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        return [];
+    }
+
+    /**
+     * @Route("/trick/test")
+     * @Template
+     */
+    public function test()
+    {
         $family = $this->getDoctrine()->getRepository(Family::class)->findOneBy(['title' => 'grab']);
 
         $trick = new Trick();

@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}SnowTricksOC - Acceuil{% endblock %}
+{% block title %}SnowTricksOC - {{ trick.name }}{% endblock %}
 {% block css  %}<link rel="stylesheet" href="{{ asset('custom/trick/style.css') }}">{% endblock %}
 {% form_theme form _self %}
 {# form_errors.html.twig #}
