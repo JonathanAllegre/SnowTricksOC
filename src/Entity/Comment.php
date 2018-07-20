@@ -10,6 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Comment
 {
+
+    const PER_PAGE = 5;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -71,19 +73,23 @@ class Comment
     }
 
     /**
-     * @return mixed
+     * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
      * @param mixed $user
+     *
+     * @return $this
      */
-    public function setUser($user): void
+    public function setUser($user): self
     {
         $this->user = $user;
+
+        return $this;
     }
 
     /**
@@ -96,9 +102,13 @@ class Comment
 
     /**
      * @param mixed $trick
+     *
+     * @return $this
      */
-    public function setTrick($trick): void
+    public function setTrick($trick)
     {
         $this->trick = $trick;
+
+        return $this;
     }
 }
