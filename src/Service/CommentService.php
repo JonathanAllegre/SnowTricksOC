@@ -31,7 +31,7 @@ class CommentService
     /**
      * @param Comment $comment
      */
-    public function addComment(Comment $comment)
+    public function add(Comment $comment)
     {
         $manager = $this->doctrine->getManager();
         $manager->persist($comment);

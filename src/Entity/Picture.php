@@ -32,11 +32,12 @@ class Picture
      */
     private $created;
 
+    /*
     public function __construct()
     {
         $this->name = "http://blog.kesi-art.com/wp-content/uploads/elementor/thumbs/VISUEL-NON-DISPONIBLE-nchgtciah9pdkun8mutbeagowv4fc9zk23qz6hmx8m.png";
         $this->created = new \DateTime();
-    }
+    }*/
 
     public function getId()
     {

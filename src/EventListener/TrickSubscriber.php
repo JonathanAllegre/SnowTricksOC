@@ -8,29 +8,16 @@
 
 namespace App\EventListener;
 
+use App\Entity\Picture;
 use Cocur\Slugify\Slugify;
-use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use App\Entity\Trick;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 
-class TrickSubscriber implements EventSubscriber
+class TrickSubscriber
 {
 
-    /**
-     * Returns an array of events this subscriber wants to listen to.
-     *
-     * @return array
-     */
-    public function getSubscribedEvents()
-    {
-        return [
-            'preUpdate',
-            'preFlush',
-        ];
-    }
-
-    public function preFlush(Trick $trick, PreFlushEventArgs $event)
+    public function preFlush(Trick $trick)
     {
         $this->slugify($trick);
     }
@@ -38,10 +25,21 @@ class TrickSubscriber implements EventSubscriber
     /**
      * @param LifecycleEventArgs $args
      */
-    public function preUpdate(Trick $trick, LifecycleEventArgs $args)
+    public function preUpdate(Trick $trick)
     {
         // SET UPDATED DATE
         $trick->setUpdated(new \DateTime());
+    }
+
+    public function postLoad(Trick $trick)
+    {
+
+        if ($trick->getListingPicture()->getName() === null) {
+            $picture = new Picture();
+            $picture->setName('http://www.bsmc.net.au/wp-content/uploads/No-image-available.jpg');
+            $trick->setListingPicture($picture);
+
+        }
     }
 
     /**

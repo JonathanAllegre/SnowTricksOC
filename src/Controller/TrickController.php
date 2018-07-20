@@ -55,26 +55,26 @@ class TrickController extends Controller
      */
     public function detail(Request $request, Trick $trick, CommentService $commentService)
     {
-        // CREATE COMMENT FORM
-        $comment = new Comment();
-        $comment->setTrick($trick);
-
-        $this->isGranted('IS_AUTHENTICATED_FULLY') ? $comment->setUser($this->getUser()): $comment->setUser('');
-        $formComment = $this->createForm(CommentAddType::class, $comment);
+        $formComment = $this->createForm(CommentAddType::class);
 
         // HANDLE REQUEST & SAVE COMMENT
+
         $formComment->handleRequest($request);
         if ($formComment->isSubmitted() && $formComment->isValid()) {
-            $commentService->addComment($comment);
+            $comment = (new Comment())
+                ->setUser($this->getUser())
+                ->setTrick($trick)
+                ->setContent($formComment->get('content')->getData())
+            ;
+            $commentService->add($comment);
             $this->addFlash('success', 'Votre commentaire a bien été enregistré');
 
             return $this->redirectToRoute('app_trick_detail', ['id' => $trick->getId(), 'slug' => $trick->getSlug()]);
         }
 
         $doctrine = $this->getDoctrine();
-        $perPage  = 6;
         $comments = $doctrine->getRepository(Comment::class)
-            ->findBy(['trick' => $trick], ['id' => 'DESC'], $perPage, 0);
+            ->findBy(['trick' => $trick], ['id' => 'DESC'], Comment::PER_PAGE, 0);
 
         return [
             'trick'         => $trick,
@@ -82,7 +82,7 @@ class TrickController extends Controller
             'vids'          => $doctrine->getRepository(Video::class)->findBy(['trick'=> $trick]),
             'comments'      => $comments,
             'totalComments' => count($doctrine->getRepository(Comment::class)->findBy(['trick'=> $trick])),
-            'perPage'       => $perPage,
+            'perPage'       => Comment::PER_PAGE,
             'form'          => $formComment->createView()
         ];
     }
@@ -95,7 +95,7 @@ class TrickController extends Controller
      */
     public function update(Trick $trick)
     {
-        $trick->setName('le trick de ouf éé');
+        $trick->setName('le trick de ouf éé aa');
         $this->getDoctrine()->getManager()->flush();
         return [];
     }

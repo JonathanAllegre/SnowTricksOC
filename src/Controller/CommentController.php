@@ -16,10 +16,14 @@ class CommentController extends Controller
      */
     public function loadMoreComment(Trick $trick, $page, $perPage)
     {
-        $doctrine = $this->getDoctrine();
-        $comments = $doctrine->getRepository(Comment::class)
-            ->findBy(['trick' => $trick], ['id' => 'DESC'], $perPage, $page);
-
-        return ['page' => $page, 'comments' => $comments];
+        return [
+            'page' => $page,
+            'comments' => $this->getDoctrine()->getRepository(Comment::class)->findBy(
+                ['trick' => $trick],
+                ['id' => 'DESC'],
+                $perPage,
+                $page
+            )
+        ];
     }
 }
