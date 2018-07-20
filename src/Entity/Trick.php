@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @ORM\EntityListeners({"App\EventListener\TrickSubscriber"})
  */
 class Trick
 {

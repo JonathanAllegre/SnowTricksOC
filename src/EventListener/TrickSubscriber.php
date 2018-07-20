@@ -12,8 +12,9 @@ use Cocur\Slugify\Slugify;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use App\Entity\Trick;
+use Doctrine\ORM\Event\PreFlushEventArgs;
 
-class TrickSuscriber implements EventSubscriber
+class TrickSubscriber implements EventSubscriber
 {
 
     /**
@@ -24,43 +25,23 @@ class TrickSuscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            'prePersist',
             'preUpdate',
+            'preFlush',
         ];
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function prePersist(LifecycleEventArgs $args)
+    public function preFlush(Trick $trick, PreFlushEventArgs $event)
     {
-        $entity = $args->getObject();
-
-        // only act on some "Trick" entity
-        if (!$entity instanceof Trick) {
-            return;
-        }
-
-        $this->slugify($entity);
+        $this->slugify($trick);
     }
 
     /**
      * @param LifecycleEventArgs $args
      */
-    public function preUpdate(LifecycleEventArgs $args)
+    public function preUpdate(Trick $trick, LifecycleEventArgs $args)
     {
-        $entity = $args->getObject();
-
-        // only act on some "Trick" entity
-        if (!$entity instanceof Trick) {
-            return;
-        }
-
-        // SLUGIFY
-        $this->slugify($entity);
-
         // SET UPDATED DATE
-        $entity->setUpdated(new \DateTime());
+        $trick->setUpdated(new \DateTime());
     }
 
     /**
