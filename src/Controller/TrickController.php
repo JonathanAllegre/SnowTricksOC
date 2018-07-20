@@ -95,7 +95,7 @@ class TrickController extends Controller
      */
     public function update(Trick $trick)
     {
-        $trick->setDescription('lkjlkjlkj');
+        $trick->setName('le trick de ouf éé');
         $this->getDoctrine()->getManager()->flush();
         return [];
     }
