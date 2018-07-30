@@ -8,15 +8,12 @@
 
 namespace App\EventListener;
 
-use App\Entity\Picture;
 use Cocur\Slugify\Slugify;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use App\Entity\Trick;
-use Doctrine\ORM\Event\PreFlushEventArgs;
 
 class TrickSubscriber
 {
-
     public function preFlush(Trick $trick)
     {
         $this->slugify($trick);
@@ -29,17 +26,6 @@ class TrickSubscriber
     {
         // SET UPDATED DATE
         $trick->setUpdated(new \DateTime());
-    }
-
-    public function postLoad(Trick $trick)
-    {
-
-        if ($trick->getListingPicture()->getName() === null) {
-            $picture = new Picture();
-            $picture->setName('http://www.bsmc.net.au/wp-content/uploads/No-image-available.jpg');
-            $trick->setListingPicture($picture);
-
-        }
     }
 
     /**
