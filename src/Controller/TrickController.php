@@ -57,7 +57,7 @@ class TrickController extends Controller
     {
         $formComment = $this->createForm(CommentAddType::class);
 
-        // HANDLE REQUEST & SAVE COMMENT
+        // HANDLE REQUEST & SAVE COMMENT *
 
         $formComment->handleRequest($request);
         if ($formComment->isSubmitted() && $formComment->isValid()) {
