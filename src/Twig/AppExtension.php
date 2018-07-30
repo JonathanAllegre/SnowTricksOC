@@ -15,7 +15,6 @@ use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
-
     private $doctrine;
 
     public function __construct(RegistryInterface $doctrine)
@@ -43,7 +42,7 @@ class AppExtension extends AbstractExtension
             ->findOneBy(['trick' => $trick], ['id' => 'ASC']);
 
         if (!$firstPicture) {
-            return "http://www.bsmc.net.au/wp-content/uploads/No-image-available.jpg";
+            return "http://blog.kesi-art.com/wp-content/uploads/elementor/thumbs/VISUEL-NON-DISPONIBLE-nchgtciah9pdkun8mutbeagowv4fc9zk23qz6hmx8m.png";
         }
         return $firstPicture->getName();
     }
