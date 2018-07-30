@@ -35,19 +35,16 @@ class AppExtension extends AbstractExtension
         return "lkjlkjlkj";
     }
 
-    public function getFirstPicture()
+    public function getFirstPicture(int $trick)
     {
         $firstPicture = $this
             ->doctrine
             ->getRepository(Picture::class)
-            ->findOneBy(['trick' => 394], ['id' => 'ASC']);
+            ->findOneBy(['trick' => $trick], ['id' => 'ASC']);
 
         if (!$firstPicture) {
             return "http://www.bsmc.net.au/wp-content/uploads/No-image-available.jpg";
         }
         return $firstPicture->getName();
     }
-
-
-
 }

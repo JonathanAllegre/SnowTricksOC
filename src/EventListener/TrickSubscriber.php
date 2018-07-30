@@ -31,16 +31,6 @@ class TrickSubscriber
         $trick->setUpdated(new \DateTime());
     }
 
-    public function postLoad(Trick $trick)
-    {
-
-        if ($trick->getListingPicture()->getName() === null) {
-            $picture = new Picture();
-            $picture->setName('http://www.bsmc.net.au/wp-content/uploads/No-image-available.jpg');
-            $trick->setListingPicture($picture);
-
-        }
-    }
 
     /**
      * @param Trick $trick

@@ -19,7 +19,7 @@
 {% block content %}
     <div class="content">
         <div class="container containerHeaderTrick">
-            <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({{ trick.listingPicture.name }});">
+            <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({% if trick.listingPicture.name %}{{ trick.listingPicture.name }}{% else %}{{ firstPicture(trick.id) }}{% endif %});">
                 <div class="container titleContainer">
                     <div class="titleTrick">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -49,7 +49,6 @@
         <div class="container containerTrickDescription">
             <div class="col-12">
                 {{ trick.description|raw|nl2br}}<br/>
-                {{ firstPicture() }}
             </div>
         </div>
         <div class="container trickAttribute text-center">
