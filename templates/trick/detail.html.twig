@@ -48,7 +48,8 @@
         </div>
         <div class="container containerTrickDescription">
             <div class="col-12">
-                {{ trick.description|raw|nl2br}}
+                {{ trick.description|raw|nl2br}}<br/>
+                {{ firstPicture() }}
             </div>
         </div>
         <div class="container trickAttribute text-center">
