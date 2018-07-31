@@ -58,7 +58,6 @@ class TrickController extends Controller
         $formComment = $this->createForm(CommentAddType::class);
 
         // HANDLE REQUEST & SAVE COMMENT *
-
         $formComment->handleRequest($request);
         if ($formComment->isSubmitted() && $formComment->isValid()) {
             $comment = (new Comment())
@@ -106,6 +105,7 @@ class TrickController extends Controller
      */
     public function add()
     {
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         return [];
@@ -120,7 +120,7 @@ class TrickController extends Controller
         $family = $this->getDoctrine()->getRepository(Family::class)->findOneBy(['title' => 'grab']);
 
         $trick = new Trick();
-        $trick->setName("testt coll :) éé $ **%");
+        $trick->setName("testt coll :) é et oui");
         $trick->setDescription('ma description');
         $trick->setCreated(new \DateTime());
         $trick->setUser($this->getUser());
