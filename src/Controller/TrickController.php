@@ -7,6 +7,7 @@ use App\Entity\Family;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
+use App\Form\AddTrickType;
 use App\Form\CommentAddType;
 use App\Service\CommentService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -103,12 +104,20 @@ class TrickController extends Controller
      * @Route("/trick/add")
      * @Template
      */
-    public function add()
+    public function add(Request $request)
     {
-
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        return [];
+        $trick = new Trick();
+        $formTrick = $this->createForm(AddTrickType::class, $trick);
+
+        // HANDLE REQUEST & SAVE TRICK *
+        $formTrick->handleRequest($request);
+        if ($formTrick->isSubmitted() && $formTrick->isValid()) {
+            return [];
+        }
+
+        return ['form' => $formTrick->createView()];
     }
 
     /**

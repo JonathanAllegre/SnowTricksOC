@@ -14,14 +14,12 @@ class AddTrickType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('created')
-            ->add('updated')
-            ->add('slug')
-            ->add('user')
             ->add('family')
-            ->add('listingPicture')
+            ->add('listingPicture') // DONT WORK SEE https://www.developpez.net/forums/d1309462/php/bibliotheques-frameworks/symfony/probleme-lier-plusieurs-images-article-onetomany/
         ;
     }
+
+    //TODO: Essayer de lier listing picture a l'entité picture: Faire un formulaire d'ajout d'image simple et l'inclure dans ce formulaire....
 
     public function configureOptions(OptionsResolver $resolver)
     {
