@@ -114,6 +114,17 @@ class TrickController extends Controller
         // HANDLE REQUEST & SAVE TRICK *
         $formTrick->handleRequest($request);
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
+            $trick
+                ->setName($formTrick->get('name')->getData())
+                ->setDescription($formTrick->get('name')->getData())
+                ->setUser($this->getUser());
+
+            $this->getDoctrine()->getManager()->persist($trick);
+            $this->getDoctrine()->getManager()->flush();
+
+            //TODO: Lier les pictures au formualire.
+
+            dd($trick);
             return [];
         }
 

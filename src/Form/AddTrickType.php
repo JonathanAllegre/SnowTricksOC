@@ -2,8 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\Family;
 use App\Entity\Trick;
+use App\Repository\FamilyRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,12 +18,14 @@ class AddTrickType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('family')
-            ->add('listingPicture') // DONT WORK SEE https://www.developpez.net/forums/d1309462/php/bibliotheques-frameworks/symfony/probleme-lier-plusieurs-images-article-onetomany/
+            ->add('family', EntityType::class, [
+                'class' => Family::class,
+                'choice_label' => 'title'
+            ])
+            ->add('save', SubmitType::class, array('label' => 'Create Task'))
+            //->add('listingPicture') // DONT WORK SEE https://www.developpez.net/forums/d1309462/php/bibliotheques-frameworks/symfony/probleme-lier-plusieurs-images-article-onetomany/
         ;
     }
-
-    //TODO: Essayer de lier listing picture a l'entité picture: Faire un formulaire d'ajout d'image simple et l'inclure dans ce formulaire....
 
     public function configureOptions(OptionsResolver $resolver)
     {
