@@ -10,6 +10,7 @@ use App\Entity\Video;
 use App\Form\AddTrickType;
 use App\Form\CommentAddType;
 use App\Service\CommentService;
+use App\Service\UploadPictureService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -104,25 +105,41 @@ class TrickController extends Controller
      * @Route("/trick/add")
      * @Template
      */
-    public function add(Request $request)
+    public function add(Request $request, UploadPictureService $uploadPictureService)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $trick = new Trick();
-        $formTrick = $this->createForm(AddTrickType::class, $trick);
+
+        $formTrick = $this->createForm(AddTrickType::class);
 
         // HANDLE REQUEST & SAVE TRICK *
         $formTrick->handleRequest($request);
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
-            $trick
+            $trick = (new Trick())
                 ->setName($formTrick->get('name')->getData())
                 ->setDescription($formTrick->get('name')->getData())
-                ->setUser($this->getUser());
+                ->setUser($this->getUser())
+                ->setFamily($formTrick->get('family')->getData());
 
             $this->getDoctrine()->getManager()->persist($trick);
             $this->getDoctrine()->getManager()->flush();
 
-            //TODO: Lier les pictures au formualire.
+            // if upload picture on upload
+            if ($formTrick->get('listingPicture')->getData()) {
+                $imgUploaded = $uploadPictureService->upload($formTrick->get('listingPicture')->getData());
+
+                $picture = (new Picture())
+                    ->setName($imgUploaded)
+                    ->setTrick($trick)
+                    ->setCreated(new \DateTime());
+
+                $this->getDoctrine()->getManager()->persist($picture);
+                $this->getDoctrine()->getManager()->flush();
+
+                dd($imgUploaded);
+            }
+
+            //TODO: Continuer le formaulaire; le formulaire fonctionne mais voir pour ajouter plusieurs images et rajouter le champ video.
 
             dd($trick);
             return [];
