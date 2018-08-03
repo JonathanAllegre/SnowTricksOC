@@ -29,10 +29,6 @@ class AppExtension extends AbstractExtension
         );
     }
 
-    public function firstPicture()
-    {
-        return "lkjlkjlkj";
-    }
 
     public function getFirstPicture(int $trick)
     {

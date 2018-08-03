@@ -10,6 +10,7 @@ use App\Entity\Video;
 use App\Form\AddTrickType;
 use App\Form\CommentAddType;
 use App\Service\CommentService;
+use App\Service\TrickService;
 use App\Service\UploadPictureService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -105,24 +106,18 @@ class TrickController extends Controller
      * @Route("/trick/add")
      * @Template
      */
-    public function add(Request $request, UploadPictureService $uploadPictureService)
+    public function add(Request $request, UploadPictureService $uploadPictureService, TrickService $trickService)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
 
         $formTrick = $this->createForm(AddTrickType::class);
 
         // HANDLE REQUEST & SAVE TRICK *
         $formTrick->handleRequest($request);
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
-            $trick = (new Trick())
-                ->setName($formTrick->get('name')->getData())
-                ->setDescription($formTrick->get('name')->getData())
-                ->setUser($this->getUser())
-                ->setFamily($formTrick->get('family')->getData());
+            $trick = $trickService->add($formTrick);
 
-            $this->getDoctrine()->getManager()->persist($trick);
-            $this->getDoctrine()->getManager()->flush();
+            dd($this->getUser());
 
             // if upload picture on upload
             if ($formTrick->get('image')->getData()) {

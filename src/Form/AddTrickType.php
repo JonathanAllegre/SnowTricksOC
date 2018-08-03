@@ -22,9 +22,8 @@ class AddTrickType extends AbstractType
                 'class' => Family::class,
                 'choice_label' => 'title'
             ])
-            ->add('image', FileType::class, ['data_class' => null, 'required' => false,])
-            ->add('video', TextType::class)
-            ->add('save', SubmitType::class, array('label' => 'Create TRick'))
-        ;
+            ->add('image', FileType::class, ['required' => false,])
+            ->add('video', TextType::class, ['attr' => ['name' => "video[1]"]])
+            ->add('save', SubmitType::class, array('label' => 'Create TRick'));// passer dans le template
     }
 }
