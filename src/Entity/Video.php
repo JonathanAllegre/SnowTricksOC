@@ -70,10 +70,13 @@ class Video
     }
 
     /**
-     * @param mixed $trick
+     * @param Trick $trick
+     * @return Video
      */
-    public function setTrick($trick): void
+    public function setTrick(Trick $trick): self
     {
         $this->trick = $trick;
+
+        return $this;
     }
 }

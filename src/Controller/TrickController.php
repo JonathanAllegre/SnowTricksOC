@@ -125,8 +125,8 @@ class TrickController extends Controller
             $this->getDoctrine()->getManager()->flush();
 
             // if upload picture on upload
-            if ($formTrick->get('listingPicture')->getData()) {
-                $imgUploaded = $uploadPictureService->upload($formTrick->get('listingPicture')->getData());
+            if ($formTrick->get('image')->getData()) {
+                $imgUploaded = $uploadPictureService->upload($formTrick->get('image')->getData());
 
                 $picture = (new Picture())
                     ->setName($imgUploaded)
@@ -136,14 +136,28 @@ class TrickController extends Controller
                 $this->getDoctrine()->getManager()->persist($picture);
                 $this->getDoctrine()->getManager()->flush();
 
-                dd($imgUploaded);
             }
 
-            //TODO: Continuer le formaulaire; le formulaire fonctionne mais voir pour ajouter plusieurs images et rajouter le champ video.
+            if ($formTrick->get('video')->getData()) {
+                $video = (new Video())
+                    ->setCreated(new \DateTime())
+                    ->setUrl($formTrick->get('video')->getData())
+                    ->setTrick($trick);
 
-            dd($trick);
+                $this->getDoctrine()->getManager()->persist($video);
+                $this->getDoctrine()->getManager()->flush();
+
+
+            }
+
             return [];
         }
+
+        //todo: refactor addtrick
+        //todo: Flash message si tout c bien passé,
+        //todo: Ajouter plusieurs images
+        //todo: Ajouter plusieurs videos
+
 
         return ['form' => $formTrick->createView()];
     }
