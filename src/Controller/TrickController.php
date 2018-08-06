@@ -151,7 +151,7 @@ class TrickController extends Controller
         //todo: refactor addtrick
         //todo: Flash message si tout c bien passé,
         //todo: Ajouter plusieurs images
-        //todo: Ajouter plusieurs videoss
+        //todo: Ajouter plusieurs videos
 
 
         return ['form' => $formTrick->createView()];
