@@ -1,0 +1,15 @@
+{% for comment in comments %}
+    <div class="row rowComment">
+        <div class="offset-md-2 col-md-1 text-md-center">
+            <img src="{{ asset('img/user/'~comment.user.userPicture) }}" class="rounded-circle userPict">
+        </div>
+        <div class="col-md-8">
+            <div class="card border-dark">
+                <div class="card-header">Par {{ comment.user.username }}, le <span class="font-italic">{{ comment.created|date('d-m-Y') }}</span> </div>
+                <div class="card-body text-dark">
+                    <p class="card-text">{{ comment.content|nl2br }} </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

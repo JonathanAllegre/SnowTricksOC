@@ -67,7 +67,6 @@ class MailerService
 
     private function send($view, $subject, $to)
     {
-
         $message = (new \Swift_Message($subject))
             ->setFrom($this->from)
             ->setTo($to)

@@ -73,10 +73,16 @@ a:hover{
     #navBottomMobil{
         display:none;
     }
+    #navBottomDesktop{
+        display:block;
+    }
 }
 @media (max-width: 767.98px) {
     #navTop{
         display:none;
+    }
+    #navBottomMobil{
+        display:block;
     }
 
 }

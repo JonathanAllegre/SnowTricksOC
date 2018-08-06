@@ -8,23 +8,22 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class FamilyFixtures extends Fixture
 {
-
     private $manager;
 
-    const GRAB_FAMILY     = 'Grab';
-    const FLIP_FAMILY     = 'Flip';
+    const GRAB_FAMILY = 'Grab';
+    const FLIP_FAMILY = 'Flip';
     const ROTATION_FAMILY = 'Rotation';
 
     public function __construct(ObjectManager $manager)
     {
         $this->manager = $manager;
     }
+
     public function load(ObjectManager $manager)
     {
-
-        $grabFamily   = $this->newFamily('Grab');
+        $grabFamily = $this->newFamily('Grab');
         $rotateFamily = $this->newFamily('Rotation');
-        $flipFamily   = $this->newFamily('Flip');
+        $flipFamily = $this->newFamily('Flip');
 
         $this->addReference(self::GRAB_FAMILY, $grabFamily);
         $this->addReference(self::ROTATION_FAMILY, $rotateFamily);
@@ -33,7 +32,7 @@ class FamilyFixtures extends Fixture
         $manager->flush();
     }
 
-    public function newFamily($name):Family
+    public function newFamily($name): Family
     {
         $family = new Family();
         $family->setTitle($name);
@@ -42,6 +41,4 @@ class FamilyFixtures extends Fixture
 
         return $family;
     }
-
-
 }

@@ -24,6 +24,43 @@
 	color:white;
 }
 
+.card-text{
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+}
+
+.card {
+	background-color:whitesmoke;
+	width: 200px;
+	opacity:0.8;
+	-webkit-transition: opacity 500ms,background-color 500ms;
+	transition: opacity 2s,background-color 500ms;
+}
+
+.card:hover {
+	background-color:white;
+	z-index:999;
+	opacity:1;
+
+}
+
+@media (max-width: 575.98px) {
+	.card {
+		width:100%;
+	}
+}
+@media (min-width: 576px) {
+	.card {
+		width:100%;
+	}
+}
+
+
+
+
 
 
 

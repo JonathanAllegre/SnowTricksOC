@@ -76,6 +76,4 @@ class Video
     {
         $this->trick = $trick;
     }
-
-
 }

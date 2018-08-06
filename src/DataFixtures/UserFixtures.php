@@ -32,8 +32,6 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-
-
         $userOne = $this->newUser('jonathan', 'simple', 'jonathan.allegre258@orange.fr');
         $manager -> persist($userOne);
         $manager -> flush();
@@ -56,6 +54,7 @@ class UserFixtures extends Fixture
         $user->setPassword($this->encoder->encodePassword($user, $pass));
         $user->setEmail($mail);
         $user->setActive(1);
+        $user->setUserPicture('default.svg');
 
         $this->manager->persist($user);
 

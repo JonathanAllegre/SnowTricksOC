@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  */
 class Comment
 {
+    const PER_PAGE = 5;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -19,12 +21,14 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @Assert\NotBlank()
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotBlank()
      */
     private $trick;
 
@@ -68,19 +72,23 @@ class Comment
     }
 
     /**
-     * @return mixed
+     * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
      * @param mixed $user
+     *
+     * @return $this
      */
-    public function setUser($user): void
+    public function setUser($user): self
     {
         $this->user = $user;
+
+        return $this;
     }
 
     /**
@@ -93,11 +101,13 @@ class Comment
 
     /**
      * @param mixed $trick
+     *
+     * @return $this
      */
-    public function setTrick($trick): void
+    public function setTrick($trick)
     {
         $this->trick = $trick;
+
+        return $this;
     }
-
-
 }

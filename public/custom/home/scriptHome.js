@@ -54,3 +54,8 @@ $(".deletIcon").click(function(){
     $('#exampleModalLabel').html('Suppression du trick "'+ $(this).attr("trickName")+'"');
 });
 
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+

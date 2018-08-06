@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+{% block title %}SnowTricksOC - Acceuil{% endblock %}
+{% block css  %}<link rel="stylesheet" href="{{ asset('custom/trick/style.css') }}">{% endblock %}
+{% form_theme form _self %}
+{# form_errors.html.twig #}
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <ul>
+                {% for error in errors %}
+                    <small class="form-text invalid ">
+                        {{ error.message }}
+                    </small>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+{% block content %}
+    <div class="content">
+        <div class="container containerHeaderTrick">
+            <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({% if trick.listingPicture.name %}{{ trick.listingPicture.name }}{% else %}{{ firstPicture(trick.id) }}{% endif %});">
+                <div class="container titleContainer">
+                    <div class="titleTrick">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <div class="float-right updateIconsCol">
+                            <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit fa-2x"></i></a>
+                            <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt fa-2x"></i></a>
+                        </div>
+                        {% endif %}
+                        <h1 class="display-4">{{ trick.name }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container containerMedia">
+            <div class="scrolling-wrapper">
+                {% for pic in pics %}
+                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
+                {% endfor %}
+                {% for vid in vids %}
+                    <div class="card">{{ vid.url | raw }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="container containerTrickDescription">
+            <div class="col-12">
+                {{ trick.description|raw|nl2br}}<br/>
+            </div>
+        </div>
+        <div class="container trickAttribute text-center">
+            <div class="col-lg-12">
+                <button class="btn btn-outline-secondary">Famille: {{ trick.family.title }}</button>
+                <button class="btn btn-outline-secondary">Crée le: {{ trick.created |date('d-m-Y') }}</button>
+                {% if trick.updated  %}
+                    <button class="btn btn-outline-secondary">Modifié le: {{ trick.updated |date('d-m-Y') }}</button>
+                {% endif %}
+                <hr>
+            </div>
+        </div>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <div class="container formComment">
+                {{ form_start(form, {'attr':{'class':'form-signin'}}) }}
+                <div class="row spaceBot15">
+                    <div class="offset-md-2 col-md-4">
+                        <div class="form-group">
+                            {{ form_widget(form.content, {'attr' : {'class': 'form-control', 'rows': '1' }}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-secondary btn-block">Laisser un commentaire !</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+                <hr/>
+            </div>
+        {% endif %}
+        <div class="container" id="commentList">
+            {% for comment in comments %}
+            <div class="row rowComment">
+                <div class="offset-md-2 col-md-1 text-md-center">
+                    <img src="{{ asset('img/user/'~comment.user.userPicture) }}" class="rounded-circle userPict">
+                </div>
+                <div class="col-md-8">
+                    <div class="card border-dark">
+                        <div class="card-header">Par {{ comment.user.username }}, le <span class="font-italic">{{ comment.created|date('d-m-Y') }}</span> </div>
+                        <div class="card-body text-dark">
+                            <p class="card-text">{{ comment.content|nl2br }} </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="offset-md-9 col-md-2">
+                    <button class="btn btn-block btn-secondary btnMoreCom" id="moreCom"><i class="fas fa-plus"></i> Charger Plus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Cette action est irréversible. Souhaitez-vous continuer ?
+                </div>
+                <div class="modal-footer">
+                    <form action="" method="POST" id="formDelete">
+                        <input type="hidden" name="token" value="{{ csrf_token('delete-trick') }}" />
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Supprimer</button></a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+
+        // BOX SIZE VIDEO
+        $(document).ready(function(){
+            $(".card > iframe").attr({height:125,width:200});
+        });
+        // DELETE MODAL
+        $(".deletIcon").click(function(){
+            $('#formDelete').attr('action', $(this).attr("trickPath"));
+            $('#exampleModalLabel').html('Suppression du trick "'+ $(this).attr("trickName")+'"');
+        });
+
+        // AJAX CALL LOAD MORE COMMENT
+        var totalComment = {{ totalComments }};
+        var totalLoadCom = {{ perPage }};
+        if (totalLoadCom >= totalComment) {
+            $("#moreCom").attr('disabled', 'disabled');
+        }
+
+        $("#moreCom").click(function(){
+            $.ajax({
+                url : "/comment/loadMore/{{ trick.id }}/" + totalLoadCom + "/{{ perPage }}",
+                type : 'GET',
+                dataType : 'html',
+                success : function(code_html, statut){
+                    totalLoadCom +={{ perPage }};
+                    $(code_html).appendTo("#commentList");
+                    if (totalLoadCom >= totalComment) {
+                        $("#moreCom").attr('disabled', 'disabled');
+                    }
+                },
+                error : function(resultat, statut, erreur) {
+                    alert('Impossible de charger les commentaires...');
+                },
+        })});
+    </script>
+{% endblock %}

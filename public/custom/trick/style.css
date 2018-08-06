@@ -1,0 +1,99 @@
+.content{
+    padding-bottom: 120px;
+}
+.containerHeaderTrick{
+    padding-top:30px;
+}
+
+.jumbotronHeaderTrick{
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size:cover;
+    height:350px;
+}
+
+.containerUpdateIcons{
+   margin-top:-64px;
+    margin-left:15px;
+}
+
+.updateIconsCol{
+    padding-top:20px;
+}
+.updateIconsCol a {
+    color:white;
+}
+.updateIconsCol a:hover {
+    color:#567398;
+}
+
+.titleContainer{
+    background-color:black;
+    opacity:0.7;
+    height:125px;
+    width:100%;
+    margin-top:138px;
+}
+
+.titleTrick{
+    z-index: 999;
+    opacity:1;
+    color:white;
+    padding-top:29px;
+    font-family: 'Impact';
+}
+
+.scrolling-wrapper {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+.card {
+    display: inline-block;
+
+}
+.media{
+    width:200px;
+    height:125px;
+}
+
+.containerTrickDescription{
+    padding-top:50px;
+}
+
+.trickAttribute{
+    padding-top:35px;
+}
+
+.trickAttribute .btn {
+    cursor: default !important;
+}
+
+.trickAttribute .btn:hover{
+     background-color: white;
+     color:#6c757d;
+ }
+
+.formComment{
+    padding-top: 30px;
+}
+
+.spaceBot15 {
+    padding-bottom: 15px;
+}
+
+.userPict {
+    max-width:50px;
+}
+
+.rowComment {
+    padding-top: 30px;
+}
+
+.rowComment .card {
+    min-width:100%;
+}
+
+.btnMoreCom{
+    margin-top:20px;
+}
