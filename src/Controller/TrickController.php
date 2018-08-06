@@ -117,8 +117,6 @@ class TrickController extends Controller
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
             $trick = $trickService->add($formTrick);
 
-            dd($this->getUser());
-
             // if upload picture on upload
             if ($formTrick->get('image')->getData()) {
                 $imgUploaded = $uploadPictureService->upload($formTrick->get('image')->getData());
@@ -133,19 +131,23 @@ class TrickController extends Controller
 
             }
 
-            if ($formTrick->get('video')->getData()) {
-                $video = (new Video())
-                    ->setCreated(new \DateTime())
-                    ->setUrl($formTrick->get('video')->getData())
-                    ->setTrick($trick);
+            if ($formTrick->get('videos')->getData()) {
+                $videos = $formTrick->get('videos')->getData();
 
-                $this->getDoctrine()->getManager()->persist($video);
-                $this->getDoctrine()->getManager()->flush();
+                foreach ($videos as $video) {
+                    dump($video);
+                    $video = (new Video())
+                        ->setCreated(new \DateTime())
+                        ->setUrl($video)
+                        ->setTrick($trick);
 
+                    $this->getDoctrine()->getManager()->persist($video);
+                    $this->getDoctrine()->getManager()->flush();
+                }
 
             }
 
-            return [];
+            return $this->redirectToRoute('app_trick_add');
         }
 
         //todo: refactor addtrick

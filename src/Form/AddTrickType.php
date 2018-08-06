@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Family;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -23,7 +24,11 @@ class AddTrickType extends AbstractType
                 'choice_label' => 'title'
             ])
             ->add('image', FileType::class, ['required' => false,])
-            ->add('video', TextType::class, ['attr' => ['name' => "video[1]"]])
-            ->add('save', SubmitType::class, array('label' => 'Create TRick'));// passer dans le template
+            ->add('videos', CollectionType::class, [
+                'entry_type' => TextType::class,
+                'allow_add' => true,
+                'prototype' => true
+            ]);
+
     }
 }
