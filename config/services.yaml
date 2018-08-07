@@ -2,7 +2,6 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'fr'
-    brochures_directory: '%kernel.project_dir%/public/img/tricks'
 
 services:
     # default configuration for services in *this* file
@@ -31,6 +30,6 @@ services:
             tags:
                 - { name: doctrine.event_subscriber, connection: default }
 
-    App\Service\UploadPictureService:
+    App\Service\PictureService:
             arguments:
-                $targetDirectory: '%brochures_directory%'
+                $targetDirectory: '%kernel.project_dir%/public/img/tricks'

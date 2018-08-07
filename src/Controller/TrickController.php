@@ -10,6 +10,7 @@ use App\Entity\Video;
 use App\Form\AddTrickType;
 use App\Form\CommentAddType;
 use App\Service\CommentService;
+use App\Service\PictureService;
 use App\Service\TrickService;
 use App\Service\UploadPictureService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -106,7 +107,7 @@ class TrickController extends Controller
      * @Route("/trick/add")
      * @Template
      */
-    public function add(Request $request, UploadPictureService $uploadPictureService, TrickService $trickService)
+    public function add(Request $request,PictureService $pictureService, TrickService $trickService)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -122,7 +123,7 @@ class TrickController extends Controller
                 $imgs = $formTrick->get('image')->getData();
                 foreach ($imgs as $img) {
                     dump($img);
-                    $imgUploaded = $uploadPictureService->upload($img);
+                    $imgUploaded = $pictureService->upload($img);
                     $picture = (new Picture())
                         ->setName($imgUploaded)
                         ->setTrick($trick)
