@@ -23,7 +23,7 @@ class AddTrickType extends AbstractType
                 'class' => Family::class,
                 'choice_label' => 'title'
             ])
-            ->add('image', FileType::class, ['required' => false,])
+            ->add('image', FileType::class, ['required' => false, 'multiple' => true])
             ->add('videos', CollectionType::class, [
                 'entry_type' => TextType::class,
                 'allow_add' => true,
