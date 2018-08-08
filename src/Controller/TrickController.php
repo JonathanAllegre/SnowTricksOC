@@ -107,7 +107,7 @@ class TrickController extends Controller
      * @Route("/trick/add")
      * @Template
      */
-    public function add(Request $request,PictureService $pictureService, TrickService $trickService)
+    public function add(Request $request, PictureService $pictureService, TrickService $trickService)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
