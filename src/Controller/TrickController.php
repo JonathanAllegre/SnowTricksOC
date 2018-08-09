@@ -118,23 +118,7 @@ class TrickController extends Controller
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
             $trick = $trickService->add($formTrick);
 
-            // if upload picture on upload
-            if ($formTrick->get('image')->getData()) {
-                $imgs = $formTrick->get('image')->getData();
-                foreach ($imgs as $img) {
-                    dump($img);
-                    $imgUploaded = $pictureService->upload($img);
-                    $picture = (new Picture())
-                        ->setName($imgUploaded)
-                        ->setTrick($trick)
-                        ->setCreated(new \DateTime());
-
-                    $this->getDoctrine()->getManager()->persist($picture);
-                    $this->getDoctrine()->getManager()->flush();
-                }
-
-
-            }
+            $pictureService->formHasPicture($formTrick, $trick);
 
             if ($formTrick->get('videos')->getData()) {
                 $videos = $formTrick->get('videos')->getData();
@@ -148,13 +132,14 @@ class TrickController extends Controller
                     $this->getDoctrine()->getManager()->persist($video);
                     $this->getDoctrine()->getManager()->flush();
                 }
-
             }
 
             return $this->redirectToRoute('app_trick_add');
         }
 
+
         //todo: refactor addtrick
+        //todo: Event Listener sur create img & create video
         //todo: Flash message si tout c bien passé,
 
 

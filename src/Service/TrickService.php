@@ -15,7 +15,6 @@ use Symfony\Component\Security\Core\Security;
 
 class TrickService
 {
-
     private $doctrine;
     private $security;
 
@@ -23,7 +22,6 @@ class TrickService
     {
         $this->doctrine = $doctrine;
         $this->security = $security;
-
     }
 
     public function add(Form $formTrick)

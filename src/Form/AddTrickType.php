@@ -38,6 +38,5 @@ class AddTrickType extends AbstractType
                 'allow_add' => true,
                 'prototype' => true
             ]);
-
     }
 }
