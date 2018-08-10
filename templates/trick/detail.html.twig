@@ -19,7 +19,7 @@
 {% block content %}
     <div class="content">
         <div class="container containerHeaderTrick">
-            <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({% if trick.listingPicture.name %}{{ trick.listingPicture.name }}{% else %}{{ firstPicture(trick.id) }}{% endif %});">
+            <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({{ firstPicture(trick) }});">
                 <div class="container titleContainer">
                     <div class="titleTrick">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -36,10 +36,10 @@
         <div class="container containerMedia">
             <div class="scrolling-wrapper">
                 {% for pic in pics %}
-                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
-                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
-                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
-                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
                 {% endfor %}
                 {% for vid in vids %}
                     <div class="card">{{ vid.url | raw }}</div>
@@ -143,7 +143,7 @@
         var totalComment = {{ totalComments }};
         var totalLoadCom = {{ perPage }};
         if (totalLoadCom >= totalComment) {
-            $("#moreCom").attr('disabled', 'disabled');
+            $("#moreCom").css('display', 'none');
         }
 
         $("#moreCom").click(function(){
@@ -155,7 +155,8 @@
                     totalLoadCom +={{ perPage }};
                     $(code_html).appendTo("#commentList");
                     if (totalLoadCom >= totalComment) {
-                        $("#moreCom").attr('disabled', 'disabled');
+                        //$("#moreCom").attr('disabled', 'disabled');
+                        $("#moreCom").css('display', 'none');
                     }
                 },
                 error : function(resultat, statut, erreur) {
