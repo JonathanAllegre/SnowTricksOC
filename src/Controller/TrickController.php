@@ -116,7 +116,13 @@ class TrickController extends Controller
         // HANDLE REQUEST & SAVE TRICK *
         $formTrick->handleRequest($request);
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
+            // ADD TRICK
             $trick = $trickSer->add($formTrick);
+            // IF FLUSH FAIL
+            if (null == $trick) {
+                $this->addFlash('warning', 'Le trick ne peut être enregistré. Il existe déjà.');
+                return $this->redirectToRoute('app_home_index');
+            }
 
             // CHECK IF 1 OR MANY PICTURES ARE UPLAODED: IF TRUE UPLOAD & PERSIST FILE
             $pictureSer->formHasPicture($formTrick, $trick);
@@ -124,9 +130,10 @@ class TrickController extends Controller
             //CHECK IF 1 OR MANY VIDEOS ARE UPLAODED: PERSIST URL
             $videoSer->formHasVideo($formTrick, $trick);
 
-            return $this->redirectToRoute('app_trick_add');
+            $this->addFlash('success', 'Le trick à bien été enregistré.');
+
+            return $this->redirectToRoute('app_home_index');
         }
-        
 
         return ['form' => $formTrick->createView()];
     }
