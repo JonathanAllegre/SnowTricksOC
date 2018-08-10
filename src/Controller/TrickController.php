@@ -126,10 +126,7 @@ class TrickController extends Controller
 
             return $this->redirectToRoute('app_trick_add');
         }
-
-        //todo: refactor addtrick
-        //todo: Event Listener sur create img & create video
-        //todo: Flash message si tout c bien passé,
+        
 
         return ['form' => $formTrick->createView()];
     }
