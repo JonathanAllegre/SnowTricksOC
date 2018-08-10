@@ -12,7 +12,7 @@ use App\Form\CommentAddType;
 use App\Service\CommentService;
 use App\Service\PictureService;
 use App\Service\TrickService;
-use App\Service\UploadPictureService;
+use App\Service\VideoService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -107,7 +107,7 @@ class TrickController extends Controller
      * @Route("/trick/add")
      * @Template
      */
-    public function add(Request $request, PictureService $pictureService, TrickService $trickService)
+    public function add(Request $request, PictureService $pictureSer, TrickService $trickSer, VideoService $videoSer)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -116,34 +116,20 @@ class TrickController extends Controller
         // HANDLE REQUEST & SAVE TRICK *
         $formTrick->handleRequest($request);
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
-            $trick = $trickService->add($formTrick);
+            $trick = $trickSer->add($formTrick);
 
-            $pictureService->formHasPicture($formTrick, $trick);
+            // CHECK IF 1 OR MANY PICTURES ARE UPLAODED: IF TRUE UPLOAD & PERSIST FILE
+            $pictureSer->formHasPicture($formTrick, $trick);
 
-            if ($formTrick->get('videos')->getData()) {
-                $videos = $formTrick->get('videos')->getData();
-                foreach ($videos as $video) {
-                    dump($video);
-                    $video = (new Video())
-                        ->setCreated(new \DateTime())
-                        ->setUrl($video)
-                        ->setTrick($trick);
-
-                    $this->getDoctrine()->getManager()->persist($video);
-                    $this->getDoctrine()->getManager()->flush();
-                }
-            }
+            //CHECK IF 1 OR MANY VIDEOS ARE UPLAODED: PERSIST URL
+            $videoSer->formHasVideo($formTrick, $trick);
 
             return $this->redirectToRoute('app_trick_add');
         }
 
-
         //todo: refactor addtrick
         //todo: Event Listener sur create img & create video
         //todo: Flash message si tout c bien passé,
-
-
-
 
         return ['form' => $formTrick->createView()];
     }
