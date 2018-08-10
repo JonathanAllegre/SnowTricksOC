@@ -11,7 +11,6 @@ namespace App\Service;
 use App\Entity\Trick;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Security\Core\Security;
 
@@ -20,6 +19,11 @@ class TrickService
     private $doctrine;
     private $security;
 
+    /**
+     * TrickService constructor.
+     * @param RegistryInterface $doctrine
+     * @param Security $security
+     */
     public function __construct(RegistryInterface $doctrine, Security $security)
     {
         $this->doctrine = $doctrine;
@@ -30,11 +34,13 @@ class TrickService
      * @param Form $formTrick
      * @return mixed
      */
-    public function add(Form $formTrick):?Trick
+    public function add(Form $formTrick): ?Trick
     {
+        $form = $formTrick->getData();
+
         $trick = (new Trick())
-            ->setName($formTrick->get('name')->getData())
-            ->setDescription($formTrick->get('name')->getData())
+            ->setName($form['name'])
+            ->setDescription($form['description'])
             ->setUser($this->security->getUser())
             ->setFamily($formTrick->get('family')->getData());
 

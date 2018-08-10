@@ -50,10 +50,8 @@ class AppExtension extends AbstractExtension
 
         // IF TRICK HAS NO LISTING PICTURE & NO PICTURE
         if (!$firstPicture) {
-            $url  = "http://blog.kesi-art.com/wp-content/uploads/elementor/thumbs/VISUEL-NON-DISPONIBLE";
-            $url .= "-nchgtciah9pdkun8mutbeagowv4fc9zk23qz6hmx8m.png";
-
-            return $url;
+            return 'http://blog.kesi-art.com/wp-content/uploads/elementor/thumbs/VISUEL-NON-DISPONIBLE
+            -nchgtciah9pdkun8mutbeagowv4fc9zk23qz6hmx8m.png';
         }
 
         // IF IF TRICK HAS A PICTURE IN DB WE RETURN THE FIRST PICTURE OF THE TRICK
@@ -66,9 +64,7 @@ class AppExtension extends AbstractExtension
             return $pictureName;
         }
 
-        $url  = $this->request->getCurrentRequest()->server->get('HHTP_HOST');
-        $url .= "/img/tricks/";
-        $url .= $pictureName;
+        $url = "/img/tricks/$pictureName";
 
         return $url;
     }
