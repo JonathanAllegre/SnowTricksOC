@@ -54,8 +54,7 @@ class PictureService
             $imgUploaded = $this->upload($picture);
             $picture = (new Picture())
                 ->setName($imgUploaded)
-                ->setTrick($trick)
-                ->setCreated(new \DateTime());
+                ->setTrick($trick);
 
             $this->doctrine->getManager()->persist($picture);
             $this->doctrine->getManager()->flush();

@@ -18,6 +18,7 @@ class TrickSubscriber
     {
         $trick->setCreated(new \DateTime());
     }
+
     public function preFlush(Trick $trick)
     {
         $this->slugify($trick);

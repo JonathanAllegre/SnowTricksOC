@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VideoRepository")
+ * @ORM\EntityListeners({"App\EventListener\VideoSubscriber"})
  */
 class Video
 {

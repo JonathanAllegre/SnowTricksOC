@@ -29,7 +29,6 @@ class VideoService
             foreach ($videos as $video) {
                 dump($video);
                 $video = (new Video())
-                    ->setCreated(new \DateTime())
                     ->setUrl($video)
                     ->setTrick($trick);
 
