@@ -8,7 +8,6 @@
 
 namespace App\Service;
 
-
 use App\Entity\Trick;
 use App\Entity\Video;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -16,7 +15,6 @@ use Symfony\Component\Form\Form;
 
 class VideoService
 {
-
     private $doctrine;
 
     public function __construct(RegistryInterface $doctrine)
