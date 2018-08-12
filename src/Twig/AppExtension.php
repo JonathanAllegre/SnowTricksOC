@@ -60,7 +60,8 @@ class AppExtension extends AbstractExtension
 
     public function renderPicture($pictureName)
     {
-        if (substr($pictureName, 0, '4') === 'http') {
+
+        if (filter_var($pictureName, FILTER_VALIDATE_URL)) {
             return $pictureName;
         }
 
