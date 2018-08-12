@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @ORM\EntityListeners({"App\EventListener\TrickSubscriber"})
+ * @UniqueEntity(fields="name", message="Trick déjà enregistré.")
  */
 class Trick
 {
@@ -44,6 +47,7 @@ class Trick
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="La description ne doit pas être vide.")
      */
     private $description;
 
@@ -84,7 +88,7 @@ class Trick
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 

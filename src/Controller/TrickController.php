@@ -118,10 +118,15 @@ class TrickController extends Controller
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
             // ADD TRICK
             $trick = $trickSer->add($formTrick);
-            // IF FLUSH FAIL
-            if (null == $trick) {
-                $this->addFlash('warning', 'Le trick ne peut être enregistré. Il existe déjà.');
-                return $this->redirectToRoute('app_home_index');
+
+            // CHECK IF $TRICK IS VALID
+            $isValid = $trickSer->isValid($trick);
+
+            // IF ERRORS
+            if (false === $isValid) {
+                $this->addFlash('warning', $trickSer->getStringErrorsMessage());
+                dump($trickSer->getErrors());
+                return ['form' => $formTrick->createView(), 'errors' => $trickSer->getErrors()];
             }
 
             // CHECK IF 1 OR MANY PICTURES ARE UPLAODED: IF TRUE UPLOAD & PERSIST FILE

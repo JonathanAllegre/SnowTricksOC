@@ -11,7 +11,7 @@ namespace App\Service;
 use App\Entity\Trick;
 use App\Entity\Video;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 
 class VideoService
 {
@@ -22,7 +22,7 @@ class VideoService
         $this->doctrine = $doctrine;
     }
 
-    public function formHasVideo(Form $formTrick, Trick $trick)
+    public function formHasVideo(FormInterface $formTrick, Trick $trick)
     {
         if ($formTrick->get('videos')->getData()) {
             $videos = $formTrick->get('videos')->getData();

@@ -9,32 +9,38 @@
 namespace App\Service;
 
 use App\Entity\Trick;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TrickService
 {
     private $doctrine;
     private $security;
+    private $validator;
+    private $errorStringMessage;
+    private $error;
 
     /**
      * TrickService constructor.
      * @param RegistryInterface $doctrine
      * @param Security $security
      */
-    public function __construct(RegistryInterface $doctrine, Security $security)
+    public function __construct(RegistryInterface $doctrine, Security $security, ValidatorInterface $validator)
     {
-        $this->doctrine = $doctrine;
-        $this->security = $security;
+        $this->doctrine  = $doctrine;
+        $this->security  = $security;
+        $this->validator = $validator;
     }
 
     /**
      * @param Form $formTrick
-     * @return mixed
+     * @return Trick
      */
-    public function add(Form $formTrick): ?Trick
+    public function add(FormInterface $formTrick):Trick
     {
         $form = $formTrick->getData();
 
@@ -42,15 +48,57 @@ class TrickService
             ->setName($form['name'])
             ->setDescription($form['description'])
             ->setUser($this->security->getUser())
-            ->setFamily($formTrick->get('family')->getData());
-
-        $this->doctrine->getManager()->persist($trick);
-        try {
-            $this->doctrine->getManager()->flush();
-        } catch (UniqueConstraintViolationException $e) {
-            return null;
-        }
+            ->setFamily($form['family']);
 
         return $trick;
     }
+
+    /**
+     * @param Trick $trick
+     * @return bool
+     */
+    public function isValid(Trick $trick):bool
+    {
+        $errors = $this->validator->validate($trick);
+
+        if ($errors->count() > 0) {
+            $this->setErrorMessage($errors);
+
+            return false;
+        }
+
+        //todo:Persist & flush
+        return true;
+    }
+
+    /**
+     * @param ConstraintViolationListInterface $errors
+     * @return void
+     */
+    private function setErrorMessage(ConstraintViolationListInterface $errors)
+    {
+
+        $stringError = "";
+        for ($i = 0; $i<$errors->count(); $i++) {
+            $stringError .= " ".$errors->get($i)->getMessage();
+        }
+
+        $this->errorStringMessage = $stringError;
+        $this->error = $errors;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStringErrorsMessage()
+    {
+        return $this->errorStringMessage;
+    }
+
+    public function getErrors()
+    {
+        return $this->error;
+    }
+
+
 }

@@ -11,7 +11,7 @@ namespace App\Service;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PictureService
@@ -39,7 +39,7 @@ class PictureService
         return $this->targetDirectory;
     }
 
-    public function formHasPicture(Form $form, Trick $trick)
+    public function formHasPicture(FormInterface $form, Trick $trick)
     {
         if ($form->get('image')->getData()) {
             $this->persist($form->get('image')->getData(), $trick);
