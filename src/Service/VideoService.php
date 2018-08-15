@@ -22,19 +22,17 @@ class VideoService
         $this->doctrine = $doctrine;
     }
 
-    public function formHasVideo(FormInterface $formTrick, Trick $trick)
+    public function saveVideo(array $videos, Trick $trick)
     {
-        if ($formTrick->get('videos')->getData()) {
-            $videos = $formTrick->get('videos')->getData();
-            foreach ($videos as $video) {
-                dump($video);
-                $video = (new Video())
-                    ->setUrl($video)
-                    ->setTrick($trick);
+        foreach ($videos as $video) {
+            dump($video);
+            $video = (new Video())
+                ->setUrl($video)
+                ->setTrick($trick);
 
-                $this->doctrine->getManager()->persist($video);
-                $this->doctrine->getManager()->flush();
-            }
+            $this->doctrine->getManager()->persist($video);
+
         }
+        $this->doctrine->getManager()->flush();
     }
 }

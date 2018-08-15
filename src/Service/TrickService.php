@@ -22,6 +22,8 @@ class TrickService
     private $security;
     private $validator;
     private $errorStringMessage;
+    private $videoService;
+    private $pictureService;
     /**
      * @var ConstraintViolationListInterface
      */
@@ -32,11 +34,18 @@ class TrickService
      * @param RegistryInterface $doctrine
      * @param Security $security
      */
-    public function __construct(RegistryInterface $doctrine, Security $security, ValidatorInterface $validator)
-    {
+    public function __construct(
+        RegistryInterface $doctrine,
+        Security $security,
+        ValidatorInterface $validator,
+        PictureService $pictureService,
+        VideoService $videoService
+    ) {
         $this->doctrine  = $doctrine;
         $this->security  = $security;
         $this->validator = $validator;
+        $this->pictureService = $pictureService;
+        $this->videoService = $videoService;
     }
 
     /**
@@ -74,6 +83,29 @@ class TrickService
         $manager->flush();
 
         return true;
+    }
+
+    /**
+     * @param FormInterface $form
+     * @param Trick $trick
+     * @return bool
+     */
+    public function trickHasPicture(FormInterface $form, Trick $trick)
+    {
+        if ($form->get('image')->getData()) {
+            $this->pictureService->savePicture($form->get('image')->getData(), $trick);
+        }
+
+        return false;
+    }
+
+    public function trickHasVideo(FormInterface $formTrick, Trick $trick)
+    {
+        if ($formTrick->get('image')->getData()) {
+            $this->videoService->saveVideo($formTrick->get('videos')->getData(), $trick);
+        }
+
+        return false;
     }
 
     /**

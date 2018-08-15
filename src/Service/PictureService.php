@@ -39,16 +39,12 @@ class PictureService
         return $this->targetDirectory;
     }
 
-    public function formHasPicture(FormInterface $form, Trick $trick)
-    {
-        if ($form->get('image')->getData()) {
-            $this->persist($form->get('image')->getData(), $trick);
-        }
 
-        return false;
-    }
-
-    private function persist($pictures, Trick $trick)
+    /**
+     * @param array $pictures
+     * @param Trick $trick
+     */
+    public function savePicture(array $pictures, Trick $trick)
     {
         foreach ($pictures as $picture) {
             $imgUploaded = $this->upload($picture);
@@ -57,7 +53,7 @@ class PictureService
                 ->setTrick($trick);
 
             $this->doctrine->getManager()->persist($picture);
-            $this->doctrine->getManager()->flush();
         }
+        $this->doctrine->getManager()->flush();
     }
 }

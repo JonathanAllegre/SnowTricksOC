@@ -10,9 +10,7 @@ use App\Entity\Video;
 use App\Form\AddTrickType;
 use App\Form\CommentAddType;
 use App\Service\CommentService;
-use App\Service\PictureService;
 use App\Service\TrickService;
-use App\Service\VideoService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -107,7 +105,7 @@ class TrickController extends Controller
      * @Route("/trick/add")
      * @Template
      */
-    public function add(Request $request, PictureService $pictureSer, TrickService $trickSer, VideoService $videoSer)
+    public function add(Request $request, TrickService $trickSer)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -129,10 +127,10 @@ class TrickController extends Controller
             }
 
             // CHECK IF 1 OR MANY PICTURES ARE UPLAODED: IF TRUE UPLOAD & PERSIST FILE
-            $pictureSer->formHasPicture($formTrick, $trick);
+            $trickSer->trickHasPicture($formTrick, $trick);
 
             //CHECK IF 1 OR MANY VIDEOS ARE UPLAODED: PERSIST URL
-            $videoSer->formHasVideo($formTrick, $trick);
+            $trickSer->trickHasVideo($formTrick, $trick);
 
             // WE SAVE ALL ENTITIES
             $this->getDoctrine()->getManager()->flush();
