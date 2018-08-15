@@ -60,7 +60,6 @@ class AppExtension extends AbstractExtension
 
     public function renderPicture($pictureName)
     {
-
         if (filter_var($pictureName, FILTER_VALIDATE_URL)) {
             return $pictureName;
         }

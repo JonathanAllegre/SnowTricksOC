@@ -1,22 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block title %}SnowTricksOC - Modification{% endblock %}
 {% block css  %}<link rel="stylesheet" href="{{ asset('custom/trick/style.css') }}">{% endblock %}
-{% form_theme form _self %}
-{# form_errors.html.twig #}
-{% block form_errors %}
-    {% spaceless %}
-        {% if errors|length > 0 %}
-            <ul>
-                {% for error in errors %}
-                    <small class="form-text invalid ">
-                        {{ error.message }}
-                    </small>
-
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endspaceless %}
-{% endblock form_errors %}
 {% block content %}
     <div class="container containerHeaderTrick">
         <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick">
@@ -31,8 +15,18 @@
         {{ form_start(form, {'attr':{'class':'form-signin','novalidate':'novalidate'}}) }}
         {{ form_label(form.name) }}
         {{ form_widget(form.name, {'attr' : {'class': 'form-control'}}) }}
+        {% if errors.name is defined %}
+            <small class="form-text invalid ">
+                {{ errors.name }}
+            </small>
+        {% endif %}
         {{ form_errors(form.name, {'attr' : {'class': 'form-text text-muted'}}) }}
         {{ form_row(form.description) }}
+        {% if errors.description is defined %}
+            <small class="form-text invalid ">
+                {{ errors.description }}
+            </small>
+        {% endif %}
         {{ form_row(form.family) }}
         {{ form_row(form.image) }}
         <ul id="video-fields-list"

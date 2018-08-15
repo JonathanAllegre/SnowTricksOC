@@ -124,9 +124,8 @@ class TrickController extends Controller
 
             // IF ERRORS
             if (false === $isValid) {
-                $this->addFlash('warning', $trickSer->getStringErrorsMessage());
-                dump($trickSer->getErrors());
-                return ['form' => $formTrick->createView(), 'errors' => $trickSer->getErrors()];
+                $this->addFlash('warning', 'Une erreur est survenue.');
+                return ['form' => $formTrick->createView(), 'errors' => $trickSer->getErrorsByField()];
             }
 
             // CHECK IF 1 OR MANY PICTURES ARE UPLAODED: IF TRUE UPLOAD & PERSIST FILE
@@ -134,6 +133,9 @@ class TrickController extends Controller
 
             //CHECK IF 1 OR MANY VIDEOS ARE UPLAODED: PERSIST URL
             $videoSer->formHasVideo($formTrick, $trick);
+
+            // WE SAVE ALL ENTITIES
+            $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Le trick à bien été enregistré.');
 

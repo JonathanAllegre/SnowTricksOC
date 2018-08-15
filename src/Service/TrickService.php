@@ -22,6 +22,9 @@ class TrickService
     private $security;
     private $validator;
     private $errorStringMessage;
+    /**
+     * @var ConstraintViolationListInterface
+     */
     private $error;
 
     /**
@@ -66,8 +69,10 @@ class TrickService
 
             return false;
         }
+        $manager = $this->doctrine->getManager();
+        $manager->persist($trick);
+        $manager->flush();
 
-        //todo:Persist & flush
         return true;
     }
 
@@ -77,7 +82,6 @@ class TrickService
      */
     private function setErrorMessage(ConstraintViolationListInterface $errors)
     {
-
         $stringError = "";
         for ($i = 0; $i<$errors->count(); $i++) {
             $stringError .= " ".$errors->get($i)->getMessage();
@@ -88,17 +92,26 @@ class TrickService
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getStringErrorsMessage()
+    public function getStringErrorsMessage():string
     {
         return $this->errorStringMessage;
     }
 
-    public function getErrors()
+    /**
+     * @return array
+     */
+    public function getErrorsByField():array
     {
-        return $this->error;
+        $errors = $this->error;
+        $error = [];
+        for ($i = 0; $i<$errors->count(); $i++) {
+            $property = $errors->get($i)->getPropertyPath();
+            $message = $errors->get($i)->getMessage();
+            $error[$property] = $message;
+        }
+
+        return $error;
     }
-
-
 }
