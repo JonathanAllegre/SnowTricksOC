@@ -5,14 +5,15 @@ namespace App\Form;
 use App\Entity\Family;
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\File;
 
@@ -27,18 +28,25 @@ class AddTrickType extends AbstractType
                 'class' => Family::class,
                 'choice_label' => 'title'
             ])
-            ->add('image', FileType::class, [
+
+
+            ->add('pictures', FileType::class, [
                 'required' => false,
-                'constraints' => [new All(['constraints' => [new File([
-                    'maxSize' => '50M',
-                    'mimeTypes' => ['image/jpeg', 'image/png']
-                ])]])],
                 'multiple' => true
             ])
+
+
             ->add('videos', CollectionType::class, [
-                'entry_type' => TextType::class,
+                'entry_type' => VideoType::class,
                 'allow_add' => true,
-                'prototype' => true
+                'by_reference' => false
             ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Trick::class,
+        ]);
     }
 }

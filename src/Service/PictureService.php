@@ -10,8 +10,8 @@ namespace App\Service;
 
 use App\Entity\Picture;
 use App\Entity\Trick;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PictureService
@@ -46,14 +46,14 @@ class PictureService
      */
     public function savePicture(array $pictures, Trick $trick)
     {
-        foreach ($pictures as $picture) {
-            $imgUploaded = $this->upload($picture);
-            $picture = (new Picture())
-                ->setName($imgUploaded)
-                ->setTrick($trick);
+        // WE MAKE AN ARRAY COLLECTION FOR ADD
+        $trick->setPictures(new ArrayCollection());
 
-            $this->doctrine->getManager()->persist($picture);
+        foreach ($pictures as $picture) {
+            $pic = (new Picture())
+                ->setName($this->upload($picture));
+
+            $trick->addAPicture($pic);
         }
-        $this->doctrine->getManager()->flush();
     }
 }

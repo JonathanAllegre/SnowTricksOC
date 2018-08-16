@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -14,6 +15,21 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Trick
 {
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", cascade={"persist"}, mappedBy="trick")
+     */
+    protected $videos;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture",cascade={"persist"}, mappedBy="trick")
+     * @Assert\All({
+     *      @Assert\File(
+     *     maxSize = "30000k",
+     *     mimeTypes={ "image/png", "image/jpeg" })
+     *})
+     */
+    protected $pictures;
 
     /**
      * @ORM\Id()
@@ -42,6 +58,7 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="Le nom  ne doit pas être vide.")
      */
     private $name;
 
@@ -66,6 +83,29 @@ class Trick
      */
     private $slug;
 
+    public function __construct()
+    {
+        $this->videos   = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
+    }
+
+    public function addVideo(Video $video)
+    {
+        $video->setTrick($this);
+        $this->videos->add($video);
+    }
+
+    public function removeVideo(Video $video)
+    {
+        // ...
+    }
+
+    public function addAPicture(Picture $picture)
+    {
+        $picture->setTrick($this);
+        $this->pictures->add($picture);
+    }
+
     public function getId()
     {
         return $this->id;
@@ -76,7 +116,7 @@ class Trick
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -184,5 +224,31 @@ class Trick
     public function setSlug($slug): void
     {
         $this->slug = $slug;
+    }
+
+    /**
+     */
+    public function getVideos()
+    {
+        return $this->videos;
+    }
+
+    public function setVideos(Video $video = null)
+    {
+        $this->videos = $video;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPictures()
+    {
+        return $this->pictures;
+    }
+
+
+    public function setPictures($pictures)
+    {
+        $this->pictures = $pictures;
     }
 }

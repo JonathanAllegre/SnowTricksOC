@@ -109,30 +109,19 @@ class TrickController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $formTrick = $this->createForm(AddTrickType::class);
+        $trick = new Trick();
+        $formTrick = $this->createForm(AddTrickType::class, $trick);
 
         // HANDLE REQUEST & SAVE TRICK *
         $formTrick->handleRequest($request);
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
-            // ADD TRICK
-            $trick = $trickSer->add($formTrick);
-
-            // CHECK IF $TRICK IS VALID
-            $isValid = $trickSer->isValid($trick);
-
-            // IF ERRORS
-            if (false === $isValid) {
-                $this->addFlash('warning', 'Une erreur est survenue.');
-                return ['form' => $formTrick->createView(), 'errors' => $trickSer->getErrorsByField()];
-            }
+            $trick->setUser($this->getUser());
 
             // CHECK IF 1 OR MANY PICTURES ARE UPLAODED: IF TRUE UPLOAD & PERSIST FILE
-            $trickSer->trickHasPicture($formTrick, $trick);
+            $trickSer->trickHasPicture($trick);
 
-            //CHECK IF 1 OR MANY VIDEOS ARE UPLAODED: PERSIST URL
-            $trickSer->trickHasVideo($formTrick, $trick);
-
-            // WE SAVE ALL ENTITIES
+            // PERSIST & FLUSH
+            $this->getDoctrine()->getManager()->persist($trick);
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Le trick à bien été enregistré.');

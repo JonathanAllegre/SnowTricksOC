@@ -18,7 +18,7 @@ class Picture
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Trick")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="pictures")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $trick;
