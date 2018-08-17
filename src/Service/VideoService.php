@@ -11,7 +11,6 @@ namespace App\Service;
 use App\Entity\Trick;
 use App\Entity\Video;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Form\FormInterface;
 
 class VideoService
 {
@@ -22,6 +21,10 @@ class VideoService
         $this->doctrine = $doctrine;
     }
 
+    /**
+     * @param array $videos
+     * @param Trick $trick
+     */
     public function saveVideo(array $videos, Trick $trick)
     {
         foreach ($videos as $video) {
@@ -31,7 +34,6 @@ class VideoService
                 ->setTrick($trick);
 
             $this->doctrine->getManager()->persist($video);
-
         }
         $this->doctrine->getManager()->flush();
     }

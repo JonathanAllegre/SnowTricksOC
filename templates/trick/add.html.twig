@@ -46,9 +46,12 @@
         {{ form_errors(form.pictures, {'attr' : {'class': 'form-text text-muted'}}) }}
         <br/>
         {{ form_label(form.videos) }}
-        <div class="videos col-12" data-prototype="{{ form_widget(form.videos.vars.prototype.url, {'attr' : {'class': 'form-control'}})|e('html_attr') }}"></div>
+        <div class="videos col-12" data-prototype="{{ form_widget(form.videos.vars.prototype.url, {'attr' : {'class': 'form-control'}})|e('html_attr') }}">
+            {{ form_widget(form.videos) }}
+        </div>
         <button type="submit" class="btn btn-block btn-outline-success">Ajouter ce trick</button>
-        {{ form_end(form, {'render_rest': false}) }}
+
+        {{ form_end(form) }}
 
     </div>
 

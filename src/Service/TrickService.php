@@ -10,11 +10,8 @@ namespace App\Service;
 
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TrickService
 {
@@ -34,7 +31,6 @@ class TrickService
         $this->videoService = $videoService;
     }
 
-
     /**
      * @param FormInterface $form
      * @param Trick $trick
@@ -42,7 +38,6 @@ class TrickService
      */
     public function trickHasPicture(Trick $trick)
     {
-
         if ($trick->getPictures()) {
             $this->pictureService->savePicture($trick->getPictures(), $trick);
         }
