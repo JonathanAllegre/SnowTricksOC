@@ -97,7 +97,7 @@ class Trick
 
     public function removeVideo(Video $video)
     {
-        // ...
+        $this->videos->removeElement($video);
     }
 
     public function addAPicture(Picture $picture)
