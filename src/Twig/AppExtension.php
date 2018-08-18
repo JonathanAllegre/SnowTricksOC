@@ -50,8 +50,10 @@ class AppExtension extends AbstractExtension
 
         // IF TRICK HAS NO LISTING PICTURE & NO PICTURE
         if (!$firstPicture) {
-            return 'http://blog.kesi-art.com/wp-content/uploads/elementor/thumbs/VISUEL-NON-DISPONIBLE
-            -nchgtciah9pdkun8mutbeagowv4fc9zk23qz6hmx8m.png';
+            $img = 'http://blog.kesi-art.com/wp-content/uploads/elementor/thumbs/VISUEL-NON-DISPONIBLE';
+            $img .= '-nchgtciah9pdkun8mutbeagowv4fc9zk23qz6hmx8m.png';
+
+            return $img;
         }
 
         // IF IF TRICK HAS A PICTURE IN DB WE RETURN THE FIRST PICTURE OF THE TRICK

@@ -18,23 +18,29 @@ class AddTrickType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, [
+                'label' => 'Nom de la figure'
+            ])
             ->add('description', CKEditorType::class, [
+                'label' => 'Description',
                 'config' => ['toolbar' => 'standard']
             ])
             ->add('family', EntityType::class, [
+                'label' => 'Famille',
                 'class' => Family::class,
                 'choice_label' => 'title'
             ])
 
 
             ->add('pictures', FileType::class, [
+                'label' => 'Image(s)',
                 'required' => false,
                 'multiple' => true
             ])
 
 
             ->add('videos', CollectionType::class, [
+                'label' => 'Vidéo(s)',
                 'entry_type' => VideoType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
