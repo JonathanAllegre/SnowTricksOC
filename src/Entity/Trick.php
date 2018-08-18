@@ -22,7 +22,7 @@ class Trick
     protected $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Picture",cascade={"persist"}, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture",cascade={"persist", "remove"}, mappedBy="trick")
      * @Assert\All({
      *      @Assert\File(
      *     maxSize = "30000k",
