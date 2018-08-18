@@ -19,7 +19,9 @@ class AddTrickType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('description', CKEditorType::class)
+            ->add('description', CKEditorType::class, [
+                'config' => ['toolbar' => 'standard']
+            ])
             ->add('family', EntityType::class, [
                 'class' => Family::class,
                 'choice_label' => 'title'
