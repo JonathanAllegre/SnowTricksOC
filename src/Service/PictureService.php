@@ -46,14 +46,12 @@ class PictureService
      */
     public function savePicture(array $pictures, Trick $trick)
     {
-        // WE MAKE AN ARRAY COLLECTION FOR ADD
-        $trick->setPictures(new ArrayCollection());
-
+        $pics = new ArrayCollection();
         foreach ($pictures as $picture) {
-            $pic = (new Picture())
-                ->setName($this->upload($picture));
+            $pic = (new Picture())->setName($this->upload($picture))->setTrick($trick);
 
-            $trick->addAPicture($pic);
+            $pics->add($pic);
         }
+        $trick->setPictures($pics);
     }
 }
