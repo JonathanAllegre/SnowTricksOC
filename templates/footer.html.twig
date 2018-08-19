@@ -7,7 +7,7 @@
 <div class="col-12 fixed-bottom navbBlack text-center" id="navBottomMobil">
     <div class="row">
         <div class="col-4 text-center">
-            <a href="" class="pictoFooter"><i class="fas fa-home fa-2x"></i></a>
+            <a href="{{ path('app_home_index') }}" class="pictoFooter"><i class="fas fa-home fa-2x"></i></a>
         </div>
         <div class="col-4 text-center">
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}

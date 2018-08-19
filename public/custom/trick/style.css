@@ -30,17 +30,20 @@
 .titleContainer{
     background-color:black;
     opacity:0.7;
-    height:180px;
+    height:186px;
     width:100%;
-    margin-top:138px;
+    margin-top:100px;
+    padding-left:20px;
+    padding-right:20px;
 }
+
 
 .titleTrick{
     z-index: 999;
     opacity:1;
     color:white;
     padding-top:29px;
-    font-family: 'Impact';
+    font-family: 'Anton', sans-serif;
 }
 
 .scrolling-wrapper {
