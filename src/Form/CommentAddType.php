@@ -13,6 +13,7 @@ class CommentAddType extends AbstractType
     {
         $builder
             ->add('content', TextareaType::class, [
+                'attr' => ["rows" => 1],
                 'required'    => true,
                 'constraints' => [new NotBlank()]
             ])
