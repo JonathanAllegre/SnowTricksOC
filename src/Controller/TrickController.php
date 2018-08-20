@@ -32,9 +32,6 @@ class TrickController extends Controller
      */
     public function delete(Trick $trick, Request $request)
     {
-        // CHECK IF USER IS CONNECT
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         // CHECK CSRF
         if ($this->isCsrfTokenValid('delete-trick', $request->request->get('token'))) {
             $manager = $this->getDoctrine()->getManager();
@@ -107,7 +104,6 @@ class TrickController extends Controller
      */
     public function add(Request $request, TrickService $trickSer)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $trick = new Trick();
         $formTrick = $this->createForm(AddTrickType::class, $trick);
