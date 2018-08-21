@@ -78,6 +78,7 @@ class User implements UserInterface
         $this->roles  = array('ROLE_USER');
         $this->token  = $this->generateToken();
         $this->active = 0;
+        $this->userPicture = 'default.svg';
     }
 
 
@@ -96,9 +97,10 @@ class User implements UserInterface
         return $this->username;
     }
 
-    public function setUsername($username)
+    public function setUsername($username):self
     {
         $this->username = $username;
+        return $this;
     }
 
     public function getPlainPassword()
