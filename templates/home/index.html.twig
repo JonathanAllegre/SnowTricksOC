@@ -25,7 +25,7 @@
                         {% for trick in tricks %}
                             <div class="col-md-2{{ loop.index0 is divisible by(5) ? ' offset-md-1' }} thumb">
                                 <div class="card">
-                                    <a href="{{ path('app_trick_detail', {'id': trick.id, 'slug': trick.slug}) }}"><img class="card-img-top" src="{% if trick.listingPicture.name %}{{ trick.listingPicture.name }}{% else %}{{ firstPicture(trick.id) }}{% endif %}"></a>
+                                    <a href="{{ path('app_trick_detail', {'id': trick.id, 'slug': trick.slug}) }}"><img class="card-img-top" src="{{ firstPicture(trick) }}"></a>
                                     <div class="card-body">
                                         <p class="card-text ">
                                             <a href="{{ path('app_trick_detail', {'id': trick.id, 'slug': trick.slug}) }}" ><bold>{{ trick.name|upper }}</bold></a>

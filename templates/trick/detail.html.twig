@@ -1,34 +1,19 @@
 {% extends 'base.html.twig' %}
-{% block title %}SnowTricksOC - Acceuil{% endblock %}
+{% block title %}SnowTricksOC - {{ trick.name }}{% endblock %}
 {% block css  %}<link rel="stylesheet" href="{{ asset('custom/trick/style.css') }}">{% endblock %}
-{% form_theme form _self %}
-{# form_errors.html.twig #}
-{% block form_errors %}
-    {% spaceless %}
-        {% if errors|length > 0 %}
-            <ul>
-                {% for error in errors %}
-                    <small class="form-text invalid ">
-                        {{ error.message }}
-                    </small>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endspaceless %}
-{% endblock form_errors %}
 {% block content %}
     <div class="content">
         <div class="container containerHeaderTrick">
-            <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({% if trick.listingPicture.name %}{{ trick.listingPicture.name }}{% else %}{{ firstPicture(trick.id) }}{% endif %});">
-                <div class="container titleContainer">
+            <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({{ firstPicture(trick) }});">
+                <div class="titleContainer">
                     <div class="titleTrick">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <div class="float-right updateIconsCol">
-                            <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit fa-2x"></i></a>
-                            <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt fa-2x"></i></a>
-                        </div>
+                            <div class="float-right updateIconsCol">
+                                <a href="{{ path('app_trick_update', {'id': trick.id}) }}"><i class="fas fa-edit fa-2x"></i></a>
+                                <a href="" class="deletIcon" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" data-toggle="modal" data-target="#exampleModal"><i class="deletIcon fas fa-trash-alt fa-2x"></i></a>
+                            </div>
                         {% endif %}
-                        <h1 class="display-4">{{ trick.name }}</h1>
+                        <h1>{{ trick.name }}</h1>
                     </div>
                 </div>
             </div>
@@ -36,10 +21,10 @@
         <div class="container containerMedia">
             <div class="scrolling-wrapper">
                 {% for pic in pics %}
-                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
-                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
-                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
-                    <div class="card"><img class="media" src="{{ pic.name }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
+                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
                 {% endfor %}
                 {% for vid in vids %}
                     <div class="card">{{ vid.url | raw }}</div>
@@ -48,7 +33,7 @@
         </div>
         <div class="container containerTrickDescription">
             <div class="col-12">
-                {{ trick.description|raw|nl2br}}<br/>
+                {{ trick.description|raw|nl2br}}<br>
             </div>
         </div>
         <div class="container trickAttribute text-center">
@@ -63,11 +48,12 @@
         </div>
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <div class="container formComment">
-                {{ form_start(form, {'attr':{'class':'form-signin'}}) }}
+                {{ form_start(form, {'attr':{'class':'form-signin','novalidate':'novalidate'}}) }}
                 <div class="row spaceBot15">
                     <div class="offset-md-2 col-md-4">
                         <div class="form-group">
-                            {{ form_widget(form.content, {'attr' : {'class': 'form-control', 'rows': '1' }}) }}
+                            {{ form_widget(form.content) }}
+                            {{ form_errors(form.content) }}
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -143,7 +129,7 @@
         var totalComment = {{ totalComments }};
         var totalLoadCom = {{ perPage }};
         if (totalLoadCom >= totalComment) {
-            $("#moreCom").attr('disabled', 'disabled');
+            $("#moreCom").css('display', 'none');
         }
 
         $("#moreCom").click(function(){
@@ -155,7 +141,8 @@
                     totalLoadCom +={{ perPage }};
                     $(code_html).appendTo("#commentList");
                     if (totalLoadCom >= totalComment) {
-                        $("#moreCom").attr('disabled', 'disabled');
+                        //$("#moreCom").attr('disabled', 'disabled');
+                        $("#moreCom").css('display', 'none');
                     }
                 },
                 error : function(resultat, statut, erreur) {

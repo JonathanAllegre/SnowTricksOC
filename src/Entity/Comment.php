@@ -76,7 +76,8 @@ class Comment
      */
     public function getUser(): User
     {
-        return $this->user;
+
+        return $this->user ?? (new User())->setUsername('N.C.');
     }
 
     /**

@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VideoRepository")
+ * @ORM\EntityListeners({"App\EventListener\VideoSubscriber"})
  */
 class Video
 {
@@ -17,7 +19,10 @@ class Video
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Trick")
+     * @Assert\Type(type="App\Entity\Video")
+     * @Assert\Valid()
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="videos")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $trick;
@@ -64,16 +69,19 @@ class Video
     /**
      * @return mixed
      */
-    public function getTrick()
+    public function getTrick(): Trick
     {
         return $this->trick;
     }
 
     /**
-     * @param mixed $trick
+     * @param Trick $trick
+     * @return Video
      */
-    public function setTrick($trick): void
+    public function setTrick(Trick $trick): self
     {
         $this->trick = $trick;
+
+        return $this;
     }
 }

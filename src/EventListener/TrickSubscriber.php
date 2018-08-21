@@ -14,6 +14,11 @@ use App\Entity\Trick;
 
 class TrickSubscriber
 {
+    public function prePersist(Trick $trick)
+    {
+        $trick->setCreated(new \DateTime());
+    }
+
     public function preFlush(Trick $trick)
     {
         $this->slugify($trick);

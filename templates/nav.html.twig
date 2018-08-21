@@ -13,7 +13,7 @@
             </li>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li class="nav-item">
-                    <a href="{{ path('logout') }}"  class="nav-link"></i> Ajouter une Figure</a>
+                    <a href="{{ path('app_trick_add') }}"  class="nav-link"></i> Ajouter une Figure</a>
                 </li>
             {% endif %}
             {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}

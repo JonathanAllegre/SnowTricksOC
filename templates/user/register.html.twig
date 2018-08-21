@@ -3,53 +3,32 @@
 {% block title %}SnowTricksOC - Créer un compte{% endblock %}
 {% block css %}<link rel="stylesheet" href="{{ asset('custom/register/style.css') }}">{% endblock %}
 
-{% form_theme form _self %}
-{# form_errors.html.twig #}
-{% block form_errors %}
-    {% spaceless %}
-        {% if errors|length > 0 %}
-            <ul>
-                {% for error in errors %}
-                <small class="form-text invalid ">
-                    {{ error.message }}
-                </small>
-
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endspaceless %}
-{% endblock form_errors %}
-
 {% block content %}
     <div class="spacertop50"></div>
     <div class="container">
-        <div class="col-12 text-center">
+        <div class="col-12">
             <div class="offset-xl-4 col-xl-4 offset-sm-0 col-sm-12">
                 <h1 class="h3 mb-3 font-weight-normal">Créer mon compte</h1>
                 <hr>
-                {{ form_start(form, {'attr':{'class':'form-signin'}}) }}
+                {{ form_start(form, {'attr':{'class':'form-signin','novalidate':'novalidate'}}) }}
                 <div class="form-group">
                     {{ form_label(form.username) }}
-                    {{ form_widget(form.username, {'attr' : {'class': 'form-control'}}) }}
-                    {{ form_errors(form.username, {'attr' : {'class': 'form-text text-muted'}}) }}
+                    {{ form_widget(form.username) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.email) }}
-                    {{ form_widget(form.email, {'attr' : {'class': 'form-control'}}) }}
-                    {{ form_errors(form.email, {'attr' : {'class': 'form-text text-muted'}}) }}
+                    {{ form_widget(form.email) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.plainPassword.first) }}
-                    {{ form_widget(form.plainPassword.first, {'attr' : {'class': 'form-control'}}) }}
-                    {{ form_errors(form.plainPassword.first, {'attr' : {'class': 'form-text text-muted'}}) }}
+                    {{ form_widget(form.plainPassword.first) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.plainPassword.second) }}
-                    {{ form_widget(form.plainPassword.second, {'attr' : {'class': 'form-control'}}) }}
-                    {{ form_errors(form.plainPassword.second, {'attr' : {'class': 'form-text text-muted'}}) }}
+                    {{ form_widget(form.plainPassword.second) }}
                 </div>
                 <hr>
-                <button type="submit" class="btn btn-outline-secondary btn-lg">Créer mon compte !</button>
+                <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Créer mon compte !</button>
                 {{ form_end(form) }}
                 <div class="mobil_alreadyAccount" >
                     <hr>

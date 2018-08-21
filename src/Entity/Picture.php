@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PictureRepository")
+ * @ORM\EntityListeners({"App\EventListener\PictureSubscriber"})
  */
 class Picture
 {
@@ -17,7 +18,7 @@ class Picture
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Trick")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="pictures")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $trick;

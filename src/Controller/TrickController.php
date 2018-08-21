@@ -7,8 +7,10 @@ use App\Entity\Family;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
+use App\Form\AddTrickType;
 use App\Form\CommentAddType;
 use App\Service\CommentService;
+use App\Service\TrickService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,9 +32,6 @@ class TrickController extends Controller
      */
     public function delete(Trick $trick, Request $request)
     {
-        // CHECK IF USER IS CONNECT
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         // CHECK CSRF
         if ($this->isCsrfTokenValid('delete-trick', $request->request->get('token'))) {
             $manager = $this->getDoctrine()->getManager();
@@ -57,8 +56,7 @@ class TrickController extends Controller
     {
         $formComment = $this->createForm(CommentAddType::class);
 
-        // HANDLE REQUEST & SAVE COMMENT
-
+        // HANDLE REQUEST & SAVE COMMENT *
         $formComment->handleRequest($request);
         if ($formComment->isSubmitted() && $formComment->isValid()) {
             $comment = (new Comment())
@@ -104,12 +102,42 @@ class TrickController extends Controller
      * @Route("/trick/add")
      * @Template
      */
-    public function add()
+    public function add(Request $request, TrickService $trickSer)
+    {
+
+        $trick = new Trick();
+        $formTrick = $this->createForm(AddTrickType::class, $trick);
+
+        // HANDLE REQUEST & SAVE TRICK *
+        $formTrick->handleRequest($request);
+        if ($formTrick->isSubmitted() && $formTrick->isValid()) {
+            $trick->setUser($this->getUser());
+
+            // CHECK IF 1 OR MANY PICTURES ARE UPLAODED: IF TRUE UPLOAD & PERSIST FILE
+            $trickSer->trickHasPicture($trick);
+
+            // PERSIST & FLUSH
+            $this->getDoctrine()->getManager()->persist($trick);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Le trick à bien été enregistré.');
+
+            return $this->redirectToRoute('app_home_index');
+        }
+
+        return ['form' => $formTrick->createView()];
+    }
+
+    /**
+     * @Route("/trick/test")
+     * @Template
+     */
+    public function test()
     {
         $family = $this->getDoctrine()->getRepository(Family::class)->findOneBy(['title' => 'grab']);
 
         $trick = new Trick();
-        $trick->setName("testt coll :) éé $ **%");
+        $trick->setName("testt coll :) é et oui");
         $trick->setDescription('ma description');
         $trick->setCreated(new \DateTime());
         $trick->setUser($this->getUser());
