@@ -7,8 +7,9 @@ use App\Entity\Family;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
-use App\Form\AddTrickType;
+use App\Form\TrickAddType;
 use App\Form\CommentAddType;
+use App\Form\TrickUpdateType;
 use App\Service\CommentService;
 use App\Service\TrickService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -91,11 +92,19 @@ class TrickController extends Controller
      * @Template()
      * @Route("/trick/update/{id}")
      */
-    public function update(Trick $trick)
+    public function update(Trick $trick, Request $request)
     {
-        $trick->setName('le trick de ouf éé aa');
-        $this->getDoctrine()->getManager()->flush();
-        return [];
+        if ($request->getMethod() == 'POST') {
+            dd($request->request->all());
+        }
+        $formTrick = $this->createForm(TrickUpdateType::class, $trick);
+        $doctrine = $this->getDoctrine();
+
+        $pictures = $doctrine->getRepository(Picture::class)->findBy(['trick' => $trick]);
+        $videos   = $doctrine->getRepository(Video::class)->findBy(['trick' => $trick]);
+
+
+        return ['trick' => $trick, 'pics' => $pictures, 'vids' => $videos, 'form' => $formTrick->createView()];
     }
 
     /**
@@ -106,7 +115,7 @@ class TrickController extends Controller
     {
 
         $trick = new Trick();
-        $formTrick = $this->createForm(AddTrickType::class, $trick);
+        $formTrick = $this->createForm(TrickAddType::class, $trick);
 
         // HANDLE REQUEST & SAVE TRICK *
         $formTrick->handleRequest($request);

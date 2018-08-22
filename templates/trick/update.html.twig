@@ -1,1 +1,169 @@
-kjmlkj
+{% extends 'base.html.twig' %}
+{% block title %}SnowTricksOC - Update {{ trick.name }}{% endblock %}
+{% block css  %}
+    <link rel="stylesheet" href="{{ asset('custom/trick/style.css') }}">
+{% endblock %}
+{% block content %}
+<div class="content">
+    <div class="container containerHeaderTrick">
+        <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({{ firstPicture(trick) }});">
+            <div class="titleContainer">
+                <div class="titleTrick">
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <div class="float-right updateIconsCol">
+                            <a href="{{ path('app_trick_update', {'id': trick.id}) }}" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fas fa-edit fa-2x"></i></a>
+                        </div>
+                    {% endif %}
+                    <h1>Modifier l'image à la une</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container contMediaAdd">
+        <hr/>
+        <h1>
+            Medias:
+        </h1>
+        <button class="btn btn-outline-success btn-sm " type="button"><i class="far fa-plus-square"></i> Ajouter une image</button>
+        <button class="btn btn-outline-primary btn-sm " type="button"><i class="far fa-plus-square"></i> Ajouter une video</button>
+    </div>
+    <div class="container containerMedia">
+        <div class="scrolling-wrapper-edit">
+            {% for pic in pics %}
+                <div class="card">
+                    <img class="media" src="{{ renderPicture(pic.name) }}" alt="">
+                    <div class="col-12 text-right">
+                        <i class="deletIcon fas fa-trash-alt"></i>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="media" src="{{ renderPicture(pic.name) }}" alt="">
+                    <div class="col-12 text-right">
+                        <i class="deletIcon fas fa-trash-alt"></i>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="media" src="{{ renderPicture(pic.name) }}" alt="">
+                    <div class="col-12 text-right">
+                        <i class="deletIcon fas fa-trash-alt"></i>
+                    </div>
+                </div>
+            {% endfor %}
+            {% for vid in vids %}
+                <div class="card">
+                    {{ vid.url | raw }}
+                    <div class="col-12 text-right">
+                        <i class="deletIcon fas fa-trash-alt"></i>
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container contTrickUpdate">
+        <hr/>
+        <h1>
+            Contenu:
+        </h1>
+        {{ form_start(form, {'attr':{'class':'form-signin','novalidate':'novalidate'}}) }}
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.family) }}
+                    {{ form_widget(form.family) }}
+                </div>
+                <hr/>
+                <div class="form-group">
+                </div>
+            </div>
+            <div class="col-12 text-right">
+                <button type="submit" class="btn btn-outline-success"><i class="far fa-save"></i> Sauvegarder</button>
+                <button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i> Supprimer </button>
+
+            </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Cette action est irréversible. Souhaitez-vous continuer ?
+                </div>
+                <div class="modal-footer">
+                    <form action="" method="POST" id="formDelete">
+                        <input type="hidden" name="token" value="{{ csrf_token('delete-trick') }}" />
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Supprimer</button></a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SELECT A LA UNE IMG -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modifier l'image à la une</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <form method="POST" action="{{ path('app_picture_setlistingpicture') }}">
+                                {% for picture in pics %}
+                                    <div class="form-check form-check-inline col-4">
+                                        <label>
+                                            <input type="radio" name="oneImg" value="{{ picture.id }}">
+                                            <img src="{{ renderPicture(picture.name) }}" style="max-width: 100%">
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                                <hr/>
+                                <div class="form-group">
+                                    <input type="hidden" value="{{ trick.id }}" name="trickId">
+                                    <input type="hidden" name="token" value="{{ csrf_token('addListingPicture') }}">
+                                    <input type="submit" value="Selectionner" class="btn btn-block btn-outline-success">
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% block script %}
+        <script>
+            // BOX SIZE VIDEO
+            $(document).ready(function(){
+                $(".card > iframe").attr({height:125,width:200});
+            });
+            // DELETE MODAL
+            $(".deletIcon").click(function(){
+                $('#formDelete').attr('action', $(this).attr("trickPath"));
+                $('#exampleModalLabel').html('Suppression du trick "'+ $(this).attr("trickName")+'"');
+            });
+
+        </script>
+    {% endblock %}
