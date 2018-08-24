@@ -23,7 +23,7 @@ class Trick
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Picture",cascade={"persist", "remove"}, mappedBy="trick")
-     * @Assert\All({
+     * @Assert\All(groups={"newtrick"}, {
      *      @Assert\File(
      *     maxSize = "30000k",
      *     mimeTypes={ "image/png", "image/jpeg" })
@@ -58,13 +58,13 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank(message="Le nom  ne doit pas être vide.")
+     * @Assert\NotBlank(groups={"newtrick","updatetrick"}, message="Le nom  ne doit pas être vide.")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank(message="La description ne doit pas être vide.")
+     * @Assert\NotBlank(groups={"newtrick","updatetrick"}, message="La description ne doit pas être vide.")
      */
     private $description;
 

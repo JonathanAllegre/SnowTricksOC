@@ -94,14 +94,17 @@ class TrickController extends Controller
      */
     public function update(Trick $trick, Request $request)
     {
-        if ($request->getMethod() == 'POST') {
-            dd($request->request->all());
-        }
+
         $formTrick = $this->createForm(TrickUpdateType::class, $trick);
         $doctrine = $this->getDoctrine();
 
         $pictures = $doctrine->getRepository(Picture::class)->findBy(['trick' => $trick]);
         $videos   = $doctrine->getRepository(Video::class)->findBy(['trick' => $trick]);
+
+        $formTrick->handleRequest($request);
+        if ($formTrick->isSubmitted() && $formTrick->isValid()) {
+            $doctrine->getManager()->flush();
+        }
 
 
         return ['trick' => $trick, 'pics' => $pictures, 'vids' => $videos, 'form' => $formTrick->createView()];
