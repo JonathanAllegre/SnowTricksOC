@@ -22,9 +22,6 @@
             <div class="scrolling-wrapper">
                 {% for pic in pics %}
                     <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
-                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
-                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
-                    <div class="card"><img class="media" src="{{ renderPicture(pic.name) }}" alt=""></div>
                 {% endfor %}
                 {% for vid in vids %}
                     <div class="card">{{ vid.url | raw }}</div>

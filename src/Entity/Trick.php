@@ -23,7 +23,7 @@ class Trick
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Picture",cascade={"persist", "remove"}, mappedBy="trick")
-     * @Assert\All(groups={"newtrick"}, {
+     * @Assert\All(groups={"newtrick","updatetrick"}, {
      *      @Assert\File(
      *     maxSize = "30000k",
      *     mimeTypes={ "image/png", "image/jpeg" })

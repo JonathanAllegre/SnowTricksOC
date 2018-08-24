@@ -46,4 +46,30 @@ class PictureController extends Controller
 
         return $this->redirectToRoute('app_trick_update', ['id' => $trick->getId()]);
     }
+
+    /**
+     * @Route("/picture/delete", methods={"POST"})
+     */
+    public function deletePicture(Request $request)
+    {
+        $submitToken = $request->request->get('token');
+        $picId       = $request->request->get('picId');
+
+        $manager     = $this->getDoctrine()->getManager();
+        $img         = $manager->getRepository(Picture::class)->findOneBy(['id' => $picId]);
+
+        if ($this->isCsrfTokenValid('delete-img', $submitToken)) {
+            // REMOVE & FLUSH
+            $manager->remove($img);
+            $manager->flush();
+
+            $this->addFlash('success', "L'image à bien été supprimé.");
+
+            return $this->redirectToRoute('app_trick_update', ['id' =>$img->getTrick()->getId()]);
+        }
+
+        $this->addFlash('warning', 'Un problème est survenue');
+
+        return $this->redirectToRoute('app_trick_update', ['id' =>$img->getTrick()->getId()]);
+    }
 }
