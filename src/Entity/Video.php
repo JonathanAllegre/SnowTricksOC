@@ -29,6 +29,7 @@ class Video
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(groups={"newtrick","updatetrick"})
      */
     private $url;
 

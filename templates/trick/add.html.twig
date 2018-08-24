@@ -38,14 +38,15 @@
                 </div>
                 <div class="form-group">
                 {{ form_label(form.videos) }}
-                <div class="videos col-12" data-prototype="{{ form_widget(form.videos.vars.prototype.url, {'attr' : {'class': 'form-control'}})|e('html_attr') }}">
-                    {{ form_widget(form.videos) }}
+                    {{ form_errors(form.videos) }}
+                <div class="videos col-12" data-prototype="{{ form_widget(form.videos.vars.prototype.url)|e('html_attr') }}">
                 </div>
                 </div>
                 <div class="col-12">
+                    {{ form_widget(form._token) }}
                     <button type="submit" class="btn btn-block btn-outline-success">Ajouter cette figure trick</button>
                 </div>
-                {{ form_end(form) }}
+                {{ form_end(form, {'render_rest': false} ) }}
             </div>
         </div>
     </div>

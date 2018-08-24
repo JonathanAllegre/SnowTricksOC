@@ -11,13 +11,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @ORM\EntityListeners({"App\EventListener\TrickSubscriber"})
- * @UniqueEntity(fields="name", message="Trick déjà enregistré.")
+ * @UniqueEntity(groups={"newtrick","updatetrick"}, fields="name", message="Trick déjà enregistré.")
  */
 class Trick
 {
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Video", cascade={"persist"}, mappedBy="trick")
+     * @Assert\Valid(traverse=true, groups={"newtrick","updatetrick"})
      */
     protected $videos;
 
