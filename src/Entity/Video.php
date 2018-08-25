@@ -29,7 +29,7 @@ class Video
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank(groups={"newtrick","updatetrick"})
+     * @Assert\NotBlank(groups={"newtrick","updatetrick"}, message="Le lien ne doit pas être vide")
      */
     private $url;
 

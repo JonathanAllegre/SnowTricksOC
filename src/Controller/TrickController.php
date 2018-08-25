@@ -87,15 +87,13 @@ class TrickController extends Controller
     }
 
     /**
-     * @param Trick $trick
-     * @return array
      * @Template()
      * @Route("/trick/update/{id}")
      */
     public function update(Trick $trick, Request $request, TrickService $trickSer)
     {
 
-        $formTrick = $this->createForm(TrickUpdateType::class, $trick);
+        $formTrick = $this->createForm(TrickAddType::class, $trick);
         $doctrine = $this->getDoctrine();
 
         $pictures = $doctrine->getRepository(Picture::class)->findBy(['trick' => $trick]);
@@ -103,11 +101,11 @@ class TrickController extends Controller
 
         $formTrick->handleRequest($request);
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
-
             // CHECK IF 1 OR MANY PICTURES ARE UPLAODED: IF TRUE UPLOAD & PERSIST FILE
             $trickSer->trickHasPicture($trick);
-
             $doctrine->getManager()->flush();
+
+            return $this->redirectToRoute('app_trick_update', ['id' => $trick->getId()]);
         }
 
 

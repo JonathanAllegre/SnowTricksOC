@@ -5,7 +5,6 @@
 {% endblock %}
 {% block content %}
 <div class="content">
-
     <div class="container containerHeaderTrick">
         <div class="jumbotron jumbotron-fluid jumbotronHeaderTrick" style="background-image: url({{ firstPicture(trick) }});">
             <div class="titleContainer">
@@ -50,45 +49,50 @@
         </div>
     </div>
     <div class="container contTrickUpdate">
-        <hr/>
-        <h1>
-            Contenu:
-        </h1>
-        {{ form_start(form, {'attr':{'class':'form-signin','novalidate':'novalidate'}}) }}
-        <div class="row">
-            <div class="col-12">
-                <div class="form-group">
-                    {{ form_label(form.name) }}
-                    {{ form_widget(form.name) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.description) }}
-                    {{ form_widget(form.description) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.family) }}
-                    {{ form_widget(form.family) }}
-                </div>
-                <hr/>
-                <h3>Ajouter des medias</h3>
-                <div class="form-group">
-                    <div class="col-12">
-                        {{ form_label(form.pictures) }}
-                        {{ form_widget(form.pictures) }}
+        <div class="container content">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Contenu</h3>
+                    {{ form_start(form, {'attr':{'class':'form-signin','novalidate':'novalidate'}}) }}
+                    <div class="form-group">
+                        {{ form_label(form.name) }}
+                        {{ form_widget(form.name) }}
                     </div>
+                    <div class="form-group">
+                        {{ form_label(form.description) }}
+                        {{ form_widget(form.description) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.family) }}
+                        {{ form_widget(form.family) }}
+                    </div>
+                    <hr/>
+                    <h3>Medias</h3>
+                    <div class="form-group">
+                        <div class="col-12">
+                            {{ form_label(form.pictures) }}
+                            {{ form_widget(form.pictures) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.videos) }}
+                        <div class="videos col-12" data-prototype="{{ form_widget(form.videos.vars.prototype.url)|e('html_attr') }}">
+                            {% for video in form.videos %}
+                                <li>{{ form_widget(video) }}</li>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        {{ form_widget(form._token) }}
+                        <div class="col-12 text-right">
+                            <button type="submit" class="btn btn-outline-success"><i class="far fa-save"></i> Sauvegarder</button>
+                            <button type="button" data-toggle="modal" data-target="#deleteTrickModal" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" class="btn btn-outline-danger deleteButton"><i class="fas fa-trash-alt"></i> Supprimer </button>
+                        </div>
+                    </div>
+                    {{ form_end(form, {'render_rest': false} ) }}
                 </div>
-                <hr/>
-                <div class="form-group">
-                </div>
-            </div>
-            <div class="col-12 text-right">
-                <button type="submit" class="btn btn-outline-success"><i class="far fa-save"></i> Sauvegarder</button>
-                <button type="button" data-toggle="modal" data-target="#deleteTrickModal" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" class="btn btn-outline-danger deleteButton"><i class="fas fa-trash-alt"></i> Supprimer </button>
             </div>
         </div>
-        {{ form_end(form) }}
-    </div>
-
     <!-- MODAL SELECT A LA UNE IMG -->
     <div class="modal fade" id="modifyListingPictureModal" tabindex="-1" role="dialog" aria-labelledby="modifyListingPictureModalTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -172,11 +176,9 @@
                 </div>
             </div>
         </div>
-    </div>
-
-
+    </div></div>
 </div>
-    {% endblock %}
+{% endblock %}
     {% block script %}
         <script>
             // BOX SIZE VIDEO
@@ -197,6 +199,74 @@
                 $("#modalTitleDeleteImgLabel").html('Suppression de l\'image');
             });
 
+            var $collectionHolder;
+
+            // setup an "add a tag" link
+            var $addTagButton = $('<button type="button" class="add_tag_link btn btn-sm btn-outline-primary"><i class="far fa-plus-square"></i> Ajouter un lien</button>');
+            var $newLinkLi = $('<div style="padding-top:5px; padding-bottom:20px;"></div>').append($addTagButton);
+
+            $(document).ready(function() {
+
+                // Get the ul that holds the collection of tags
+                $collectionHolder = $('div.videos');
+
+                // add the "add a tag" anchor and li to the tags ul
+                $collectionHolder.append($newLinkLi);
+
+                // add a delete link to all of the existing tag form li elements
+                $collectionHolder.find('li').each(function() {
+                    addTagFormDeleteLink($(this));
+                });
+
+                // count the current form inputs we have (e.g. 2), use that as the new
+                // index when inserting a new item (e.g. 2)
+                $collectionHolder.data('index', $collectionHolder.find(':input').length);
+                console.log($collectionHolder.data);
+
+                $addTagButton.on('click', function(e) {
+                    // add a new tag form (see next code block)
+                    addTagForm($collectionHolder, $newLinkLi);
+                });
+            });
+
+            function addTagForm($collectionHolder, $newLinkLi) {
+                // Get the data-prototype explained earlier
+                var prototype = $collectionHolder.data('prototype');
+
+                // get the new index
+                var index = $collectionHolder.data('index');
+
+                var newForm = '<div class="col-md-10">' + prototype + '</div>';
+                // You need this only if you didn't set 'label' => false in your tags field in TaskType
+                // Replace '__name__label__' in the prototype's HTML to
+                // instead be a number based on how many items we have
+                // newForm = newForm.replace(/__name__label__/g, index);
+
+                // Replace '__name__' in the prototype's HTML to
+                // instead be a number based on how many items we have
+                newForm = newForm.replace(/__name__/g, index);
+
+                // increase the index with one for the next item
+                $collectionHolder.data('index', index + 1);
+
+                // Display the form in the page in an li, afetr the "Add a tag" link li
+                var $newFormLi = $('<row><row>').append(newForm);
+                $newLinkLi.after($newFormLi);
+
+                // add a delete link to the new form
+                addTagFormDeleteLink($newFormLi);
+            }
+
+            function addTagFormDeleteLink($tagFormLi) {
+                var $removeFormButton = $('<div class="col-md-1" style="padding-bottom:20px; padding-top:10px;"><button class="btn btn-outline-danger btn-sm " type="button"><i class="far fa-trash-alt"></i>\n' +
+                    '\n Supprimer ce lien</button></div>');
+                $tagFormLi.append($removeFormButton);
+
+                $removeFormButton.on('click', function(e) {
+                    // remove the li for the tag form
+                    $tagFormLi.remove();
+                });
+            }
 
         </script>
     {% endblock %}
