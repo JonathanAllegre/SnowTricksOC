@@ -9,7 +9,6 @@ use App\Entity\Trick;
 use App\Entity\Video;
 use App\Form\TrickAddType;
 use App\Form\CommentAddType;
-use App\Form\TrickUpdateType;
 use App\Service\CommentService;
 use App\Service\TrickService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -105,6 +104,8 @@ class TrickController extends Controller
             $trickSer->trickHasPicture($trick);
             $doctrine->getManager()->flush();
 
+            $this->addFlash('success', 'Le Trick a bien été sauvegardé.');
+
             return $this->redirectToRoute('app_trick_update', ['id' => $trick->getId()]);
         }
 
@@ -140,24 +141,5 @@ class TrickController extends Controller
         }
 
         return ['form' => $formTrick->createView()];
-    }
-
-    /**
-     * @Route("/trick/test")
-     * @Template
-     */
-    public function test()
-    {
-        $family = $this->getDoctrine()->getRepository(Family::class)->findOneBy(['title' => 'grab']);
-
-        $trick = new Trick();
-        $trick->setName("testt coll :) é et oui");
-        $trick->setDescription('ma description');
-        $trick->setCreated(new \DateTime());
-        $trick->setUser($this->getUser());
-        $trick->setFamily($family);
-
-        $this->getDoctrine()->getManager()->persist($trick);
-        $this->getDoctrine()->getManager()->flush();
     }
 }
