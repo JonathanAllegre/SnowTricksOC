@@ -14,7 +14,7 @@ class VideoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url', TextType::class, ['label' => 'Lien', 'attr' => ['class' => 'videoInput']]);
+            ->add('url', TextType::class, ['label' => false, 'attr' => ['class' => 'videoInput']]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

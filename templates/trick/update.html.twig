@@ -24,8 +24,6 @@
         <h1>
             Medias:
         </h1>
-        <button class="btn btn-outline-success btn-sm " type="button"><i class="far fa-plus-square"></i> Ajouter une image</button>
-        <button class="btn btn-outline-primary btn-sm " type="button"><i class="far fa-plus-square"></i> Ajouter une video</button>
     </div>
     <div class="container containerMedia">
         <div class="scrolling-wrapper-edit">
@@ -42,10 +40,16 @@
                     {{ vid.url | raw }}
                     <div class="col-12 text-right">
                         <i class="deletIcon fas fa-trash-alt"></i>
-                        <i class="fas fa-edit"></i>
                     </div>
                 </div>
             {% endfor %}
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-block btnDisplayMediaOnMobil btn-outline-info" type="button">Afficher les medias</button>
+            </div>
         </div>
     </div>
     <div class="container contTrickUpdate">
@@ -67,32 +71,38 @@
                         {{ form_widget(form.family) }}
                     </div>
                     <hr/>
-                    <h3>Medias</h3>
+                    <h3>Images</h3>
                     <div class="form-group">
                         <div class="col-12">
                             {{ form_label(form.pictures) }}
                             {{ form_widget(form.pictures) }}
                         </div>
                     </div>
+                    <hr/>
+                    <h3>Vidéos</h3>
                     <div class="form-group">
                         {{ form_label(form.videos) }}
                         <div class="videos col-12" data-prototype="{{ form_widget(form.videos.vars.prototype.url)|e('html_attr') }}">
+                            <h6>Déjà présentes:</h6>
                             {% for video in form.videos %}
-                                <li>{{ form_widget(video) }}</li>
+                                <li class="liVideoInput">{{ form_widget(video) }}</li>
                             {% endfor %}
+                            <hr>
                         </div>
                     </div>
+                    <hr>
                     <div class="col-12">
                         {{ form_widget(form._token) }}
-                        <div class="col-12 text-right">
-                            <button type="submit" class="btn btn-outline-success"><i class="far fa-save"></i> Sauvegarder</button>
-                            <button type="button" data-toggle="modal" data-target="#deleteTrickModal" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" class="btn btn-outline-danger deleteButton"><i class="fas fa-trash-alt"></i> Supprimer </button>
+                        <div class="col-md-12 text-right">
+                            <button type="submit" class="btn btn-outline-success btn-custom-block"><i class="far fa-save"></i> Sauvegarder</button>
+                            <button type="button" data-toggle="modal" data-target="#deleteTrickModal" trickPath="{{ path('app_trick_delete', {'id': trick.id}) }}" trickName="{{ trick.name }}" class="btn btn-outline-danger deleteButton btn-custom-block"><i class="fas fa-trash-alt"></i> Supprimer </button>
                         </div>
                     </div>
                     {{ form_end(form, {'render_rest': false} ) }}
                 </div>
             </div>
         </div>
+    </div>
     <!-- MODAL SELECT A LA UNE IMG -->
     <div class="modal fade" id="modifyListingPictureModal" tabindex="-1" role="dialog" aria-labelledby="modifyListingPictureModalTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -176,28 +186,36 @@
                 </div>
             </div>
         </div>
-    </div></div>
+    </div>
+
 </div>
 {% endblock %}
-    {% block script %}
-        <script>
-            // BOX SIZE VIDEO
-            $(document).ready(function(){
-                $(".card > iframe").attr({height:125,width:200});
-            });
+{% block script %}
+    <script>
+        // BOX SIZE VIDEO
+        $(document).ready(function(){
+            $(".card > iframe").attr({height:118,width:200});
+        });
 
-            // MODAL DELETETRICK
-            $(".deleteButton").click(function(){
-                $("#formDelete").attr('action', $(this).attr("trickPath"));
-                $("#modalDeleteTrickLabel").html('Suppression du trick "'+ $(this).attr("trickName")+'"');
-            });
+        // MODAL DELETETRICK
+        $(".deleteButton").click(function(){
+            $("#formDelete").attr('action', $(this).attr("trickPath"));
+            $("#modalDeleteTrickLabel").html('Suppression du trick "'+ $(this).attr("trickName")+'"');
+        });
 
-            // MODAL DELET IMG
-            $(".deleteImgIcon").click(function(){
+        // MODAL DELET IMG
+        $(".deleteImgIcon").click(function(){
                 $("#formDeletePicture").attr('action', $(this).attr("deleteLink"));
                 $("#picIdInput").attr('value', $(this).attr('picId'))
                 $("#modalTitleDeleteImgLabel").html('Suppression de l\'image');
-            });
+        });
         </script>
-        <script src="{{ asset('custom/trick/trickCollection.js') }}"></script>
-    {% endblock %}
+    <script src="{{ asset('custom/trick/trickCollection.js') }}"></script>
+    <script>
+        $( ".btnDisplayMediaOnMobil" ).click(function() {
+            $('.containerMedia').toggle(500);
+            $('.btnDisplayMediaOnMobil').html('Cacher / Afficher les médias');
+        });
+    </script>
+
+{% endblock %}
