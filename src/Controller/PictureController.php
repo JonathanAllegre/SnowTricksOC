@@ -26,7 +26,6 @@ class PictureController extends Controller
      */
     public function setListingPicture(Request $request, PictureService $pictureService)
     {
-
         $submitedToken = $request->request->get('token');
         $doctrine      = $this->getDoctrine();
 

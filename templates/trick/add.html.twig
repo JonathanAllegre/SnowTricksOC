@@ -36,6 +36,8 @@
                         {{ form_widget(form.pictures) }}
                     </div>
                 </div>
+                <hr/>
+                <h3>Vidéos</h3>
                 <div class="form-group">
                     {{ form_label(form.videos) }}
                     <div class="videos col-12" data-prototype="{{ form_widget(form.videos.vars.prototype.url)|e('html_attr') }}">
@@ -54,5 +56,5 @@
     </div>
 {% endblock %}
 {% block script %}
-
+    <script src="{{ asset('custom/trick/trickCollection.js') }}"></script>
 {% endblock %}

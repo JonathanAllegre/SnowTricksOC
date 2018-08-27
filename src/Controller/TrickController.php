@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
-use App\Entity\Family;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
@@ -91,7 +90,6 @@ class TrickController extends Controller
      */
     public function update(Trick $trick, Request $request, TrickService $trickSer)
     {
-
         $formTrick = $this->createForm(TrickAddType::class, $trick);
         $doctrine = $this->getDoctrine();
 
@@ -119,7 +117,6 @@ class TrickController extends Controller
      */
     public function add(Request $request, TrickService $trickSer)
     {
-
         $trick = new Trick();
         $formTrick = $this->createForm(TrickAddType::class, $trick);
 
