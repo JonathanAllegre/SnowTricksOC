@@ -25,8 +25,8 @@ class PictureSubscriber
      */
     public function preRemove(Picture $picture)
     {
-        $name = $picture->getName();
-
-        unlink(__DIR__."/../../public/img/tricks/".$name);
+        if (!filter_var($picture->getName(), FILTER_VALIDATE_URL)) {
+            unlink(__DIR__."/../../public/img/tricks/".$picture->getName());
+        }
     }
 }

@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AddTrickType extends AbstractType
+class TrickAddType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -40,11 +40,12 @@ class AddTrickType extends AbstractType
 
 
             ->add('videos', CollectionType::class, [
-                'label' => 'Vidéo(s)',
+                'label' => false,
                 'entry_type' => VideoType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'by_reference' => false
+                'by_reference' => false,
+                'error_bubbling' => true,
             ]);
     }
 
@@ -52,6 +53,7 @@ class AddTrickType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
+            'validation_groups' => 'newtrick',
         ]);
     }
 }

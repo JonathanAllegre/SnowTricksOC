@@ -54,4 +54,17 @@ class PictureService
         }
         $trick->setPictures($pics);
     }
+
+    /**
+     * @param Picture $picture
+     * @param Trick $trick
+     */
+    public function setListingPicture(Picture $picture, Trick $trick)
+    {
+        $manager = $this->doctrine->getManager();
+
+        $trick->setListingPicture($picture);
+        $manager->persist($trick);
+        $manager->flush();
+    }
 }

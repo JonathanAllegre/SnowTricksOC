@@ -95,7 +95,7 @@ class UserService
     /**
      * REGISTER NEW USER
      * @param User $user
-     * @return mixed
+     * @return bool|string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

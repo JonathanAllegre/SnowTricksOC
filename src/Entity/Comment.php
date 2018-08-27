@@ -73,10 +73,10 @@ class Comment
 
     /**
      * @return User
+     * @throws \Exception
      */
     public function getUser(): User
     {
-
         return $this->user ?? (new User())->setUsername('N.C.');
     }
 

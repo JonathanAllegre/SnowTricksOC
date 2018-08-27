@@ -51,6 +51,13 @@
     overflow-y: hidden;
     white-space: nowrap;
 }
+
+.scrolling-wrapper-edit {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding-bottom:30px;
+}
 .card {
     display: inline-block;
 
@@ -100,3 +107,50 @@
 .btnMoreCom{
     margin-top:20px;
 }
+
+.contMediaAdd{
+    padding-bottom:10px;
+}
+
+label > input{ /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+label > input + img{ /* IMAGE STYLES */
+    cursor:pointer;
+    border:2px solid transparent;
+}
+label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
+    border:2px solid #567398;;
+    opacity:0.8;
+}
+
+.btnDisplayMediaOnMobil{
+    margin-bottom: 20px;
+}
+
+@media (max-width: 576px) {
+    .btn-custom-block {
+        display:block;
+        width:100%;
+        margin-bottom:10px;
+    }
+
+    .containerMedia{
+        display:none
+    }
+
+    .contMediaAdd{
+        display:none;
+    }
+}
+@media (min-width: 576px) {
+    .btnDisplayMediaOnMobil{
+        display:none;
+    }
+}
+
+.liVideoInput{
+    list-style: none;
+}
+

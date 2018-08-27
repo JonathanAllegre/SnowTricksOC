@@ -11,19 +11,25 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @ORM\EntityListeners({"App\EventListener\TrickSubscriber"})
- * @UniqueEntity(fields="name", message="Trick déjà enregistré.")
+ * @UniqueEntity(groups={"newtrick","updatetrick"}, fields="name", message="Trick déjà enregistré.")
  */
 class Trick
 {
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Video", cascade={"persist"}, mappedBy="trick")
+     * @ORM\OneToMany(
+     *     targetEntity="App\Entity\Video",
+     *     cascade={"persist", "remove"},
+     *     mappedBy="trick",
+     *     orphanRemoval=true
+     * )
+     * @Assert\Valid(traverse=true, groups={"newtrick","updatetrick"})
      */
     protected $videos;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Picture",cascade={"persist", "remove"}, mappedBy="trick")
-     * @Assert\All({
+     * @Assert\All(groups={"newtrick","updatetrick"}, {
      *      @Assert\File(
      *     maxSize = "30000k",
      *     mimeTypes={ "image/png", "image/jpeg" })
@@ -58,13 +64,13 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank(message="Le nom  ne doit pas être vide.")
+     * @Assert\NotBlank(groups={"newtrick","updatetrick"}, message="Le nom  ne doit pas être vide.")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank(message="La description ne doit pas être vide.")
+     * @Assert\NotBlank(groups={"newtrick","updatetrick"}, message="La description ne doit pas être vide.")
      */
     private $description;
 

@@ -38,4 +38,8 @@ security:
     access_control:
         - { path: ^/trick/add, roles: ROLE_USER }
         - { path: ^/trick/delete, roles: ROLE_USER }
+        - { path: ^/trick/update, roles: ROLE_USER }
+        - { path: ^/picture/setListingPicture, roles: ROLE_USER }
+        - { path: ^/picture/delete, roles: ROLE_USER }
+
         # - { path: ^/profile, roles: ROLE_USER }

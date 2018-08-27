@@ -3,11 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
-use App\Entity\Family;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
-use App\Form\AddTrickType;
+use App\Form\TrickAddType;
 use App\Form\CommentAddType;
 use App\Service\CommentService;
 use App\Service\TrickService;
@@ -86,16 +85,30 @@ class TrickController extends Controller
     }
 
     /**
-     * @param Trick $trick
-     * @return array
      * @Template()
      * @Route("/trick/update/{id}")
      */
-    public function update(Trick $trick)
+    public function update(Trick $trick, Request $request, TrickService $trickSer)
     {
-        $trick->setName('le trick de ouf éé aa');
-        $this->getDoctrine()->getManager()->flush();
-        return [];
+        $formTrick = $this->createForm(TrickAddType::class, $trick);
+        $doctrine = $this->getDoctrine();
+
+        $pictures = $doctrine->getRepository(Picture::class)->findBy(['trick' => $trick]);
+        $videos   = $doctrine->getRepository(Video::class)->findBy(['trick' => $trick]);
+
+        $formTrick->handleRequest($request);
+        if ($formTrick->isSubmitted() && $formTrick->isValid()) {
+            // CHECK IF 1 OR MANY PICTURES ARE UPLAODED: IF TRUE UPLOAD & PERSIST FILE
+            $trickSer->trickHasPicture($trick);
+            $doctrine->getManager()->flush();
+
+            $this->addFlash('success', 'Le Trick a bien été sauvegardé.');
+
+            return $this->redirectToRoute('app_trick_update', ['id' => $trick->getId()]);
+        }
+
+
+        return ['trick' => $trick, 'pics' => $pictures, 'vids' => $videos, 'form' => $formTrick->createView()];
     }
 
     /**
@@ -104,9 +117,8 @@ class TrickController extends Controller
      */
     public function add(Request $request, TrickService $trickSer)
     {
-
         $trick = new Trick();
-        $formTrick = $this->createForm(AddTrickType::class, $trick);
+        $formTrick = $this->createForm(TrickAddType::class, $trick);
 
         // HANDLE REQUEST & SAVE TRICK *
         $formTrick->handleRequest($request);
@@ -126,24 +138,5 @@ class TrickController extends Controller
         }
 
         return ['form' => $formTrick->createView()];
-    }
-
-    /**
-     * @Route("/trick/test")
-     * @Template
-     */
-    public function test()
-    {
-        $family = $this->getDoctrine()->getRepository(Family::class)->findOneBy(['title' => 'grab']);
-
-        $trick = new Trick();
-        $trick->setName("testt coll :) é et oui");
-        $trick->setDescription('ma description');
-        $trick->setCreated(new \DateTime());
-        $trick->setUser($this->getUser());
-        $trick->setFamily($family);
-
-        $this->getDoctrine()->getManager()->persist($trick);
-        $this->getDoctrine()->getManager()->flush();
     }
 }
