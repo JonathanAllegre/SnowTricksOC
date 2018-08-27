@@ -39,7 +39,7 @@
                 <div class="card">
                     {{ vid.url | raw }}
                     <div class="col-12 text-right">
-                        <i class="deletIcon fas fa-trash-alt"></i>
+                        <a href="#form-group-videos"><i class="deletIcon fas fa-trash-alt"></i></a>
                     </div>
                 </div>
             {% endfor %}
@@ -80,7 +80,7 @@
                     </div>
                     <hr/>
                     <h3>Vidéos</h3>
-                    <div class="form-group">
+                    <div class="form-group" id="form-group-videos">
                         {{ form_label(form.videos) }}
                         <div class="videos col-12" data-prototype="{{ form_widget(form.videos.vars.prototype.url)|e('html_attr') }}">
                             <h6>Déjà présentes:</h6>
