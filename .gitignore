@@ -8,3 +8,8 @@
 .idea
 .php_cs.cache
 /public/img/tricks/
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
