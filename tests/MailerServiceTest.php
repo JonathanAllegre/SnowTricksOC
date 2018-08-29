@@ -24,7 +24,6 @@ class MailerServiceTest extends KernelTestCase
      */
     public function testSendRegisterConfirmationWithSwiftReturnTrue()
     {
-
         $twig  = $this->getContainer()->get(\Twig_Environment::class);
         $swift = $this->mockSwiftMailerSend(true);
 
@@ -44,7 +43,6 @@ class MailerServiceTest extends KernelTestCase
      */
     public function testSendRegisterConfirmationWithSwiftReturnFalse()
     {
-
         $twig  = $this->getContainer()->get(\Twig_Environment::class);
         $swift = $this->mockSwiftMailerSend(false);
 
@@ -104,7 +102,6 @@ class MailerServiceTest extends KernelTestCase
 
     private function mockSwiftMailerSend($value)
     {
-
         $swift = $this->createMock(\Swift_Mailer::class);
         $swift->expects($this->any())->method('send')->willReturn($value);
 

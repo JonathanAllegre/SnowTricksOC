@@ -32,4 +32,4 @@ services:
 
     App\Service\PictureService:
             arguments:
-                $targetDirectory: '%kernel.project_dir%/public/img/tricks'
+                $targetDirectory: '%kernel.project_dir%/%env(TARGET_IMG_TRICKS_DIRECTORY)%'

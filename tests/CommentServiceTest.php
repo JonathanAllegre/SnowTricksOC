@@ -17,7 +17,6 @@ use Symfony\Bundle\TwigBundle\Tests\TestCase;
 
 class CommentServiceTest extends TestCase
 {
-
     public function testAdd()
     {
         $manager = $this->createMock(ObjectManager::class);
