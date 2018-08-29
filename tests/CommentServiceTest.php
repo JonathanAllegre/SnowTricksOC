@@ -11,6 +11,7 @@ namespace App\Tests;
 use App\Entity\Comment;
 use App\Service\CommentService;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\TwigBundle\Tests\TestCase;
 
@@ -19,10 +20,13 @@ class CommentServiceTest extends TestCase
 
     public function testAdd()
     {
-        $doctrine = new Registry();
-        $comment = new CommentService();
+        $manager = $this->createMock(ObjectManager::class);
 
-        $this->assertEquals(true, $comment->add('ùmlkùmlk') );
+        $manager->expects($this->any())->method('flush')->willReturn(true);
+
+        $commentSer = new CommentService($manager);
+
+        $comment = (new Comment())->setTrick(1)->setUser(1)->setCreated(new \DateTime());
+        $this->assertTrue($commentSer->add($comment));
     }
-
 }
