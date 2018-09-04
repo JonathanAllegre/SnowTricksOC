@@ -20,12 +20,17 @@ class CommentServiceTest extends TestCase
     public function testAdd()
     {
         $manager = $this->createMock(ObjectManager::class);
-
         $manager->expects($this->any())->method('flush')->willReturn(true);
 
         $commentSer = new CommentService($manager);
 
-        $comment = (new Comment())->setTrick(1)->setUser(1)->setCreated(new \DateTime());
-        $this->assertTrue($commentSer->add($comment));
+        $this->assertTrue($commentSer->add(new Comment()));
+
+        $this->expectException(\TypeError::class);
+
+
+        $commentSer->add(new \StdClass());
     }
+
+
 }

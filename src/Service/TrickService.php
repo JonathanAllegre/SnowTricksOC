@@ -40,6 +40,8 @@ class TrickService
     {
         if ($trick->getPictures()) {
             $this->pictureService->savePicture($trick->getPictures(), $trick);
+
+            return true;
         }
 
         return false;

@@ -32,12 +32,12 @@ These instructions will get you a copy of the project up and running on your loc
 
  #### Database Configuration
  - Run:
-	 > php bin/console doctrine:database:create
+	 > php bin/console doctrine:database:create  
 	 > php bin/console doctrine:schema:create
 
  #### CKEditor Installation
  - Run:
-	 > php bin/console ckeditor:install
+	 > php bin/console ckeditor:install  
 	 > php bin/console assets:install public
 	 
  #### DataFixtures
@@ -55,8 +55,8 @@ These instructions will get you a copy of the project up and running on your loc
 ## Little thing to know
 
 The application give you a generic username / password:
- To connect in member space enter:
-	- username: admin
+ To connect in member space enter:  
+	- username: admin  
 	- password: admin
 	
 Enjoy !

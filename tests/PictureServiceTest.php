@@ -34,40 +34,9 @@ class PictureServiceTest extends KernelTestCase
         $this->assertEquals('public/img/tricks', $pictureService->getTargetDirectory());
     }
 
-    public function testUpload()
-    {
-        $targetDirectory = getenv('TARGET_IMG_TRICKS_DIRECTORY');
-        $objectManager   = $this->getContainer()->get(ObjectManager::class);
-
-        $pictureService = new PictureService($targetDirectory, $objectManager);
-
-        $photoPath    = '/Users/jonathan/Desktop/test.jpg';
-        $photoPngPath = '/Users/jonathan/Desktop/Small-mario.png';
-
-        //$photo[] = new UploadedFile($photoPath, 'photo.jpg', 'image/jpeg', null);
-        $photo = new UploadedFile($this->image, 'Small-mario.png', 'image/png', null, true);
-
-        //dd($this->image);
-
-        $uploadedFile = $this->createMock(UploadedFile::class);
-        $uploadedFile->expects($this->any())->method('move')->willReturn('kjlkj');
-
-
-        $pictureService->upload($photo);
-    }
-
-
-    public function setUp()
-    {
-        $this->file = tempnam(sys_get_temp_dir(), 'upl');
-        imagepng(imagecreatetruecolor(10, 10), $this->file); // create and write image/png to it
-        $this->image = new UploadedFile(
-            $this->file,
-            'new_image.png'
-        );
-
-
-    }
+    /**
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     */
     private function getContainer()
     {
         self::bootKernel();

@@ -39,6 +39,7 @@ class CommentService
         if ($this->manager->flush()) {
             return true;
         }
+
         return false;
     }
 }

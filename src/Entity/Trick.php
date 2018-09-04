@@ -253,8 +253,9 @@ class Trick
     }
 
 
-    public function setPictures($pictures)
+    public function setPictures($pictures): self
     {
         $this->pictures = $pictures;
+        return $this;
     }
 }
