@@ -29,12 +29,12 @@ class UserServiceTest extends KernelTestCase
     public function testAccuntConfirmation()
     {
 
-        $registryInterface   = $this->getContainer()->get(ObjectManager::class);
+        $objectManager       = $this->getContainer()->get(ObjectManager::class);
         $mailerService       = $this->getContainer()->get(MailerService::class);
         $userPasswordEncoder = $this->getContainer()->get(UserPasswordEncoderInterface::class);
         $sessionInterface    = $this->getContainer()->get(SessionInterface::class);
 
-        $userService = new UserService($registryInterface, $mailerService, $userPasswordEncoder, $sessionInterface);
+        $userService = new UserService($objectManager, $mailerService, $userPasswordEncoder, $sessionInterface);
 
         // ASSERT A USER ALLREADY ACTIVE RETURN ALLREADY_ACTIVE const.
         $user = (new User())->setActive(1);
@@ -49,12 +49,10 @@ class UserServiceTest extends KernelTestCase
      */
     public function testForgotPassword()
     {
-        $registryInterface   = $this->getContainer()->get(ObjectManager::class);
+        $objectManager       = $this->getContainer()->get(ObjectManager::class);
         $mailerService       = $this->getContainer()->get(MailerService::class);
         $userPasswordEncoder = $this->getContainer()->get(UserPasswordEncoderInterface::class);
         $sessionInterface    = $this->getContainer()->get(SessionInterface::class);
-
-        $userService = new UserService($registryInterface, $mailerService, $userPasswordEncoder, $sessionInterface);
 
         // TEST IF USER FOUND & MAILER TRUE
         // MUST RETURN TRUE
@@ -120,6 +118,60 @@ class UserServiceTest extends KernelTestCase
 
         $userService = new UserService($objectManager, $mailer, $userPasswordEncoder, $sessionInterface);
         $this->assertEquals("Une erreur est survenue lors de l'envoie du mail", $userService->forgotPassword($form));
+
+        // TEST IF CALL THIS MTHOD WITHOUT ARGUMENT
+        // MUST RETURN EXCEPTION
+        $this->expectException(\ArgumentCountError::class);
+        $userService->forgotPassword();
+    }
+
+    /**
+     * TEST REGISTERUSER
+     *
+     * php bin/phpUnit --filter
+     * testRegisterUser tests/UserServiceTest.php
+     */
+    public function testRegisterUser()
+    {
+        $objectManager       = $this->getContainer()->get(ObjectManager::class);
+        $mailerService       = $this->getContainer()->get(MailerService::class);
+        $userPasswordEncoder = $this->getContainer()->get(UserPasswordEncoderInterface::class);
+        $sessionInterface    = $this->getContainer()->get(SessionInterface::class);
+
+        $user = (new User())->setPlainPassword('unPassWorddeTest');
+
+        //MOCK OBJECT MANAGER
+        $objectManager = $this->createMock(ObjectManager::class);
+        $objectManager->expects($this->any())->method('flush')->willReturn(true);
+
+        // TEST WITH MAILER OK
+        // MUST RETURN TRUE;
+
+        // MOCK MAILER
+        $mailer = $this->createMock(MailerService::class);
+        $mailer->expects($this->any())->method('sendRegisterConfirmation')->willReturn(true);
+
+        $userService = new UserService($objectManager, $mailer, $userPasswordEncoder, $sessionInterface);
+        $this->assertTrue($userService->registerUser($user));
+
+        // TEST WITH MAILER OK
+        // MUST RETURN "Une erreur est survenue lors de l'envoie du mail";
+
+        // MOCK MAILER
+        $mailer = $this->createMock(MailerService::class);
+        $mailer->expects($this->any())->method('sendRegisterConfirmation')->willReturn(false);
+
+        $userService = new UserService($objectManager, $mailer, $userPasswordEncoder, $sessionInterface);
+        $this->assertEquals(
+            "Une erreur est survenue lors de l'envoie du mail",
+            $userService->registerUser($user)
+        );
+
+        // TEST METHOD WITH WRONG ARGUMENT
+        // MUST RETURN EXCEPTION:
+
+        $this->expectException(\typeError::class);
+        $userService->registerUser(new \StdClass());
     }
 
     /**
