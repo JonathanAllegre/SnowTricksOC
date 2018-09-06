@@ -161,11 +161,14 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $active
+     * @param $active
+     * @return User
      */
-    public function setActive($active): void
+    public function setActive($active): self
     {
         $this->active = $active;
+
+        return $this;
     }
 
     public function eraseCredentials()
