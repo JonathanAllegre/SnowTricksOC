@@ -25,8 +25,8 @@ class HomeControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertEquals(1, $crawler->filter('12'));
-
+        $this->assertCount(1, $crawler->filter('h1'));
+        $this->assertEquals(1, $crawler->filter('html:contains("Trick List")')->count());
     }
 
 }
