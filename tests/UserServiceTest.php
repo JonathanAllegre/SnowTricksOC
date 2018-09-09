@@ -94,7 +94,7 @@ class UserServiceTest extends KernelTestCase
             ->willReturn($userRepo);
 
         $userService = new UserService($objectManager, $mailer, $userPasswordEncoder, $sessionInterface);
-        $this->assertEquals("Aucun utilisateur trouvé", $userService->forgotPassword($form));
+        $this->assertSame("Aucun utilisateur trouvé", $userService->forgotPassword($form));
 
         // TEST IF USER FOUND & MAILER FALSE
         // MUST RETURN "Une erreur est survenue lors de l'envoie du mail"
@@ -117,7 +117,7 @@ class UserServiceTest extends KernelTestCase
             ->willReturn(false);
 
         $userService = new UserService($objectManager, $mailer, $userPasswordEncoder, $sessionInterface);
-        $this->assertEquals("Une erreur est survenue lors de l'envoie du mail", $userService->forgotPassword($form));
+        $this->assertSame("Une erreur est survenue lors de l'envoie du mail", $userService->forgotPassword($form));
 
         // TEST IF CALL THIS MTHOD WITHOUT ARGUMENT
         // MUST RETURN EXCEPTION
@@ -162,7 +162,7 @@ class UserServiceTest extends KernelTestCase
         $mailer->expects($this->any())->method('sendRegisterConfirmation')->willReturn(false);
 
         $userService = new UserService($objectManager, $mailer, $userPasswordEncoder, $sessionInterface);
-        $this->assertEquals(
+        $this->assertSame(
             "Une erreur est survenue lors de l'envoie du mail",
             $userService->registerUser($user)
         );
