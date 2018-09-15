@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class PictureServiceTest extends KernelTestCase
 {
 
-    private $file;
-    private $image;
     /**
      * TEST GET TARGET DIRECTORY
      * MUST RETURN "public/img.tricks"

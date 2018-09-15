@@ -49,8 +49,6 @@ class UserServiceTest extends KernelTestCase
      */
     public function testForgotPassword()
     {
-        $objectManager       = $this->getContainer()->get(ObjectManager::class);
-        $mailerService       = $this->getContainer()->get(MailerService::class);
         $userPasswordEncoder = $this->getContainer()->get(UserPasswordEncoderInterface::class);
         $sessionInterface    = $this->getContainer()->get(SessionInterface::class);
 
