@@ -140,7 +140,8 @@ class UserController extends Controller
             $userResetPass = $request->request->get('user_reset_pass');
             $userServices->resetPassword($user, $userResetPass);
 
-            $this->addFlash('success', 'Votre mot de passe à bien été réinitialiser.');
+            $this->addFlash('success', 'Votre mot de passe a bien été réinitialisé.');
+
             return $this->redirectToRoute('app_home_index');
         }
 
