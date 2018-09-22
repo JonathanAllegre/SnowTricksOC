@@ -38,6 +38,23 @@ class TrickControllerTest extends WebTestCase
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
+    public function testAdd()
+    {
+        $client = static::createClient();
+
+        //TEST WITH NO LOGIN
+        $crawler = $client->request('GET', '/trick/add');
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+
+        //TEST WITH LOGIN OK
+        $this->logIn($client);
+
+        $crawler = $client->request('GET', '/trick/add');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Ajouter une figure")')->count());
+    }
+
     /**
      * TEST UPDATE
      */
