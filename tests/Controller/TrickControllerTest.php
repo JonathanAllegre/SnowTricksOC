@@ -10,6 +10,9 @@ namespace App\Tests\Controller;
 
 use App\Entity\Trick;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\BrowserKit\Cookie;
 
 class TrickControllerTest extends WebTestCase
 {
@@ -24,15 +27,64 @@ class TrickControllerTest extends WebTestCase
 
         $trick = $this->getContainer()->get('doctrine')->getRepository(Trick::class)->findOneByName('Stalefish');
 
+        // TEST WITH KNOWN ID
         $crawler = $client->request('GET', '/trick/detail/' . $trick->getId() . '/' . $trick->getSlug());
-
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(1, $crawler->filter('h1')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("Stalefish")')->count());
 
+        // TEST AVEC UNKNOW ID
+        $crawler = $client->request('GET', '/trick/detail/unknownId');
+        $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
-    public function getContainer()
+    /**
+     * TEST UPDATE
+     */
+    public function testUpdate()
+    {
+        $client = static::createClient();
+
+        // TEST UPDATE WITHOUT LOGIN
+        // MUST RETOURN 302
+        $trick = $this->getContainer()->get('doctrine')->getRepository(Trick::class)->findOneByName('Stalefish');
+
+        $crawler = $client->request('GET', '/trick/update/'.$trick->getId());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $crawler = $client->followRedirect();
+        $this->assertEquals(1, $crawler->filter('html:contains("Se connecter ?")')->count());
+
+        // TEST UPDATE WITH LOGIN OK
+        // MUST RETOURN 200
+        $this->logIn($client);
+        $crawler = $client->request('GET', '/trick/update/'.$trick->getId());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Modifier l\'image à la une")')->count());
+
+    }
+
+
+    protected function logIn(Client $client)
+    {
+        $session = $client->getContainer()->get('session');
+
+        $firewallName = 'main';
+        // if you don't define multiple connected firewalls, the context defaults to the firewall name
+        // See https://symfony.com/doc/current/reference/configuration/security.html#firewall-context
+        $firewallContext = 'main';
+
+        // you may need to use a different token class depending on your application.
+        // for example, when using Guard authentication you must instantiate PostAuthenticationGuardToken
+        $token = new UsernamePasswordToken('admin', null, $firewallName, array('ROLE_USER'));
+        $session->set('_security_'.$firewallContext, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $client->getCookieJar()->set($cookie);
+    }
+
+
+    protected function getContainer()
     {
         self::bootKernel();
         // returns the real and unchanged service container
