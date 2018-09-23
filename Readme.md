@@ -1,5 +1,8 @@
 
 # SnowTrickOC -- How to Install  
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/594bf9b6aa304235850ed1e4e3a781b2)](https://app.codacy.com/app/JonathanAllegre/SnowTricksOC?utm_source=github.com&utm_medium=referral&utm_content=JonathanAllegre/SnowTricksOC&utm_campaign=Badge_Grade_Dashboard)
+
   
 The 6th project of the OpenClassRoom training: PHP / Symfony application developer  
   
