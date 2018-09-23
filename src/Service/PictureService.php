@@ -61,7 +61,6 @@ class PictureService
      */
     public function setListingPicture(Picture $picture, Trick $trick)
     {
-
         $trick->setListingPicture($picture);
         $this->manager->persist($trick);
         $this->manager->flush();
