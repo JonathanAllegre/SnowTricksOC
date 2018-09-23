@@ -28,6 +28,13 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-block btnDisplayMediaOnMobil btn-outline-info" type="button">Afficher les medias</button>
+                </div>
+            </div>
+        </div>
         <div class="container containerTrickDescription">
             <div class="col-12">
                 {{ trick.description|raw|nl2br}}<br>
@@ -146,5 +153,11 @@
                     alert('Impossible de charger les commentaires...');
                 },
         })});
+    </script>
+    <script>
+        $( ".btnDisplayMediaOnMobil" ).click(function() {
+            $('.containerMedia').toggle(500);
+            $('.btnDisplayMediaOnMobil').html('Cacher / Afficher les médias');
+        });
     </script>
 {% endblock %}

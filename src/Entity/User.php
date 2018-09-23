@@ -90,6 +90,7 @@ class User implements UserInterface
     public function setEmail($email)
     {
         $this->email = $email;
+        return $this;
     }
 
     public function getUsername()
@@ -108,9 +109,11 @@ class User implements UserInterface
         return $this->plainPassword;
     }
 
-    public function setPlainPassword($password)
+    public function setPlainPassword($password): self
     {
         $this->plainPassword = $password;
+
+        return $this;
     }
 
     public function getPassword()
@@ -160,11 +163,14 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $active
+     * @param $active
+     * @return User
      */
-    public function setActive($active): void
+    public function setActive($active): self
     {
         $this->active = $active;
+
+        return $this;
     }
 
     public function eraseCredentials()

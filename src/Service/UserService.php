@@ -9,7 +9,7 @@
 namespace App\Service;
 
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserService
 {
-    private $doctrine;
+    private $manager;
     private $mailer;
     private $passwordEncoder;
     private $session;
@@ -31,12 +31,12 @@ class UserService
     const ALLREADY_ACTIVE = "Votre compte est déjà actif.";
 
     public function __construct(
-        RegistryInterface $doctrine,
+        ObjectManager $manager,
         MailerService $mailer,
         UserPasswordEncoderInterface $encoder,
         SessionInterface $session
     ) {
-        $this->doctrine        = $doctrine;
+        $this->manager         = $manager;
         $this->mailer          = $mailer;
         $this->passwordEncoder = $encoder;
         $this->session         = $session;
@@ -61,7 +61,7 @@ class UserService
         $user->setToken($user->generateToken());
 
         //EM
-        $this->doctrine->getManager()->flush();
+        $this->manager->flush();
 
         return true;
     }
@@ -78,7 +78,7 @@ class UserService
     {
         $userName = $form['username'];
 
-        $user = $this->doctrine->getRepository(User::class)->findOneBy(['username' => $userName]);
+        $user = $this->manager->getRepository(User::class)->findOneBy(['username' => $userName]);
         // VERIF IF USER EXIST
         if (!$user) {
             return self::NO_USER_FOUND;
@@ -107,9 +107,8 @@ class UserService
         $user->setPassword($password);
 
         // SAVE THE USER
-        $entityManager = $this->doctrine->getManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
+        $this->manager->persist($user);
+        $this->manager->flush();
 
         // MAILER
         if (!$this->mailer->sendRegisterConfirmation($user)) {
@@ -121,10 +120,8 @@ class UserService
 
     /**
      * RESET THE PASSWORD USER
-     * @param User $formUser
-     * @param $token
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @param User $user
+     * @param $userForm
      * @throws \Exception
      */
     public function resetPassword(User $user, $userForm):void
@@ -138,6 +135,6 @@ class UserService
         $user->setToken($user->generateToken());
 
         // SAVE THE NEW PASSWORD
-        $this->doctrine->getEntityManager()->flush();
+        $this->manager->flush();
     }
 }

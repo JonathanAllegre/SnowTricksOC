@@ -11,18 +11,18 @@ namespace App\Service;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PictureService
 {
     private $targetDirectory;
-    private $doctrine;
+    private $manager;
 
-    public function __construct($targetDirectory, RegistryInterface $doctrine)
+    public function __construct($targetDirectory, ObjectManager $manager)
     {
         $this->targetDirectory = $targetDirectory;
-        $this->doctrine        = $doctrine;
+        $this->manager         = $manager;
     }
 
     public function upload(UploadedFile $file)
@@ -61,10 +61,8 @@ class PictureService
      */
     public function setListingPicture(Picture $picture, Trick $trick)
     {
-        $manager = $this->doctrine->getManager();
-
         $trick->setListingPicture($picture);
-        $manager->persist($trick);
-        $manager->flush();
+        $this->manager->persist($trick);
+        $this->manager->flush();
     }
 }

@@ -8,3 +8,11 @@
 .idea
 .php_cs.cache
 /public/img/tricks/
+dockerConnect.sh
+dockerRun.sh
+dockerStop.sh
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
