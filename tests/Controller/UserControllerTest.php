@@ -62,7 +62,7 @@ class UserControllerTest extends WebTestCase
         $client = static::createClient();
         $this->logIn($client);
 
-        $crawler = $client->request('GET', '/register');
+        $client->request('GET', '/register');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
@@ -77,15 +77,13 @@ class UserControllerTest extends WebTestCase
     {
 
         $client = static::createClient();
-        $crawler = $client->request('GET', '/reset/password/noExistingToken');
+        $client->request('GET', '/reset/password/noExistingToken');
 
         // ASSERT 404 WITH INEXISTING TOKEN
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
 
         // GET TOKEN ADMIN
-        $container = self::$kernel->getContainer();
-        $container = self::$container;
-        $user      = self::$container->get('doctrine')->getRepository(User::class)->findOneBy(['username' => 'admin']);
+        $user = self::$container->get('doctrine')->getRepository(User::class)->findOneBy(['username' => 'admin']);
 
         // ASSERT 200 WITH EXISTING TOKEN
         $crawler = $client->request('GET', '/reset/password/'.$user->getToken());

@@ -34,7 +34,7 @@ class TrickControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('html:contains("Stalefish")')->count());
 
         // TEST AVEC UNKNOW ID
-        $crawler = $client->request('GET', '/trick/detail/unknownId');
+        $client->request('GET', '/trick/detail/unknownId');
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
@@ -43,7 +43,7 @@ class TrickControllerTest extends WebTestCase
         $client = static::createClient();
 
         //TEST WITH NO LOGIN
-        $crawler = $client->request('GET', '/trick/add');
+        $client->request('GET', '/trick/add');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
         //TEST WITH LOGIN OK
@@ -66,7 +66,7 @@ class TrickControllerTest extends WebTestCase
         // MUST RETOURN 302
         $trick = $this->getContainer()->get('doctrine')->getRepository(Trick::class)->findOneByName('Stalefish');
 
-        $crawler = $client->request('GET', '/trick/update/'.$trick->getId());
+        $client->request('GET', '/trick/update/'.$trick->getId());
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertEquals(1, $crawler->filter('html:contains("Se connecter ?")')->count());
@@ -77,7 +77,6 @@ class TrickControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/trick/update/'.$trick->getId());
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(1, $crawler->filter('html:contains("Modifier l\'image à la une")')->count());
-
     }
 
 
