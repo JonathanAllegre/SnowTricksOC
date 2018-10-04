@@ -13,10 +13,17 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 {
     private $manager;
 
-    const TRICK_MUTE      = 'Mute';
-    const TRICK_STALEFISH = 'Stalefish';
-    const TRICK_180       = '180';
-    const TRICK_BACKFLIP  = 'Backflip';
+    const TRICK_MUTE          = 'Mute';
+    const TRICK_STALEFISH     = 'Stalefish';
+    const TRICK_180           = '180';
+    const TRICK_BACKFLIP      = 'Backflip';
+    const TRICK_INDY          = 'Indy';
+    const TRICK_TAIL_GRAB     = 'Tail Grab';
+    const TRICK_METHOD_GRAB   = 'Method Grab';
+    const TRICK_NOSE_GRAB     = 'Nose Grab';
+    const TRICK_DOUBLE_CORK   = 'FS Double Cork';
+    const TRICK_HANDPLANT     = 'Handplant';
+
 
     public function __construct(ObjectManager $manager)
     {
@@ -62,10 +69,66 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             $this->getReference(FamilyFixtures::FLIP_FAMILY)
         );
 
+        $trickIndy = $this->newTrick(
+            'Indy',
+            trim($trickDescription[4]),
+            $lorem,
+            $this->getReference(UserFixtures::USER_ONE_REFERENCE),
+            $this->getReference(FamilyFixtures::GRAB_FAMILY)
+        );
+
+        $trickTailGrab = $this->newTrick(
+            'Tail Grab',
+            trim($trickDescription[5]),
+            $lorem,
+            $this->getReference(UserFixtures::USER_ONE_REFERENCE),
+            $this->getReference(FamilyFixtures::GRAB_FAMILY)
+        );
+
+        $trickMethod = $this->newTrick(
+            'Method Grab',
+            trim($trickDescription[6]),
+            $lorem,
+            $this->getReference(UserFixtures::USER_ONE_REFERENCE),
+            $this->getReference(FamilyFixtures::GRAB_FAMILY)
+        );
+
+        $trickNoseGrab = $this->newTrick(
+            'Nose Grab',
+            trim($trickDescription[7]),
+            $lorem,
+            $this->getReference(UserFixtures::USER_ONE_REFERENCE),
+            $this->getReference(FamilyFixtures::GRAB_FAMILY)
+        );
+
+        $trickDoubleCork = $this->newTrick(
+            'FS Double Cork 1080°',
+            trim($trickDescription[8]),
+            $lorem,
+            $this->getReference(UserFixtures::USER_ONE_REFERENCE),
+            $this->getReference(FamilyFixtures::FLIP_FAMILY)
+        );
+
+        $trickHandplant = $this->newTrick(
+            'Handplant',
+            trim($trickDescription[9]),
+            $lorem,
+            $this->getReference(UserFixtures::USER_ONE_REFERENCE),
+            $this->getReference(FamilyFixtures::GRAB_FAMILY)
+        );
+
+
+
         $this->addReference(self::TRICK_MUTE, $trickMute);
         $this->addReference(self::TRICK_STALEFISH, $trickStalefish);
         $this->addReference(self::TRICK_180, $trick180);
         $this->addReference(self::TRICK_BACKFLIP, $trickBackflip);
+        $this->addReference(self::TRICK_INDY, $trickIndy);
+        $this->addReference(self::TRICK_TAIL_GRAB, $trickTailGrab);
+        $this->addReference(self::TRICK_METHOD_GRAB, $trickMethod);
+        $this->addReference(self::TRICK_NOSE_GRAB, $trickNoseGrab);
+        $this->addReference(self::TRICK_DOUBLE_CORK, $trickDoubleCork);
+        $this->addReference(self::TRICK_HANDPLANT, $trickHandplant);
 
         $manager->flush();
     }

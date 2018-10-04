@@ -11,6 +11,7 @@ namespace App\Tests\Controller;
 use App\Entity\Trick;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\BrowserKit\Cookie;
 
@@ -23,6 +24,7 @@ class TrickControllerTest extends WebTestCase
      */
     public function testDetail()
     {
+
         $client = static::createClient();
 
         $trick = $this->getContainer()->get('doctrine')->getRepository(Trick::class)->findOneByName('Stalefish');
@@ -32,10 +34,6 @@ class TrickControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(1, $crawler->filter('h1')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("Stalefish")')->count());
-
-        // TEST AVEC UNKNOW ID
-        $client->request('GET', '/trick/detail/unknownId');
-        $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
     public function testAdd()

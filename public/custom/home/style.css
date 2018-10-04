@@ -51,10 +51,18 @@
 	.card {
 		width:100%;
 	}
+
 }
 @media (min-width: 576px) {
 	.card {
 		width:100%;
+	}
+
+}
+
+@media (min-width: 768px) {
+	.card-img-top {
+		height:9.25vw;
 	}
 }
 

@@ -77,10 +77,6 @@ class UserControllerTest extends WebTestCase
     {
 
         $client = static::createClient();
-        $client->request('GET', '/reset/password/noExistingToken');
-
-        // ASSERT 404 WITH INEXISTING TOKEN
-        $this->assertEquals(404, $client->getResponse()->getStatusCode());
 
         // GET TOKEN ADMIN
         $user = self::$container->get('doctrine')->getRepository(User::class)->findOneBy(['username' => 'admin']);

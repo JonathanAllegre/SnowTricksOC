@@ -69,7 +69,7 @@ class UserController extends Controller
             $register = $userServices->registerUser($user);
             // IF REGISTER IS TRUE
             if (true === $register) {
-                $this->addFlash('success', 'Votre compte à bien été crée.');
+                $this->addFlash('success', 'Votre compte à bien été crée. Un e-mail de confirmation à été envoyé.');
 
                 return $this->redirectToRoute('app_home_index');
             }

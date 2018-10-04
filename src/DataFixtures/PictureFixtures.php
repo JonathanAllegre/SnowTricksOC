@@ -69,6 +69,36 @@ class PictureFixtures extends Fixture implements DependentFixtureInterface
             $this->getReference(TrickFixtures::TRICK_BACKFLIP)
         );
 
+        $this->newPicture(
+            trim($pictureFile[8]),
+            $this->getReference(TrickFixtures::TRICK_INDY)
+        );
+
+        $this->newPicture(
+            trim($pictureFile[9]),
+            $this->getReference(TrickFixtures::TRICK_TAIL_GRAB)
+        );
+
+        $this->newPicture(
+            trim($pictureFile[10]),
+            $this->getReference(TrickFixtures::TRICK_METHOD_GRAB)
+        );
+
+        $this->newPicture(
+            trim($pictureFile[11]),
+            $this->getReference(TrickFixtures::TRICK_NOSE_GRAB)
+        );
+
+        $this->newPicture(
+            trim($pictureFile[12]),
+            $this->getReference(TrickFixtures::TRICK_DOUBLE_CORK)
+        );
+
+        $this->newPicture(
+            trim($pictureFile[13]),
+            $this->getReference(TrickFixtures::TRICK_HANDPLANT)
+        );
+
         $manager->flush();
     }
 

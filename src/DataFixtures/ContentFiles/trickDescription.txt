@@ -2,3 +2,9 @@ Saisie de la carre frontside de la planche entre les deux pieds avec la main ava
 Saisie de la carre backside de la planche entre les deux pieds avec la main arrière ;
 Désigne un demi-tour, soit 180 degrés d'angle ;
 Saut périlleux arrière effectué dans le sens de la board et non dans le sens du corps.
+Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière.
+Saisie du tail de la board avec la main arrière.
+La main avant saisit le talon soit entre les fixations, soit devant la fixation avant.
+Saisie de la partie avant de la planche, avec la main avant
+Double Backflip combiné à une rotation 1080°
+Debout sur une mains avec le snowboard au-dessus de votre tête.
